@@ -1,11 +1,13 @@
 <?php
 
+    /* Require the settings file */
+    require_once 'site/default/settings.php';
+
     /* Bootstrapping the site */
     _jsmart_constants_initialize();
-    
-    
+
+
     /* Site files */
-    require_once 'site/default/settings.php';
     require_once SITE_DEFAULT_FOLDER_PATH . 'constants.inc.php';
 
     /* Load System Files */
@@ -29,19 +31,20 @@
     require_once CLASSES_PATH . 'Role.php';
     require_once CLASSES_PATH . 'URL.php';
     require_once THEME_PATH . 'theme.inc.php';
-    
-    /* Load the site specific includes now */    
+
+    /* Load the site specific includes now */
     require_once SITE_DEFAULT_FOLDER_PATH . 'includes.inc.php';
 
     function _jsmart_constants_initialize()
     {
-       /* Add our constants that are commonly used and will be used a lot throughout the site */
+        /* Add our constants that are commonly used and will be used a lot throughout the site */
 
-       /* Generating our Base Path and Base URL */
-       $protocol = strtolower(substr($_SERVER["SERVER_PROTOCOL"], 0, 5)) == 'https' ? 'https://' : 'http://';
-       $host = $_SERVER['HTTP_HOST'];
-       
-       define("BASE_URL", rtrim($protocol . $host . '/' . SITE_FOLDER, '/') . '/');
-       define("BASE_PATH", rtrim($_SERVER['DOCUMENT_ROOT'] . '/' . SITE_FOLDER, '/') . '/');
-       define("SITE_DEFAULT_FOLDER_PATH", BASE_PATH . 'site/default/');
+        /* Generating our Base Path and Base URL */
+        $protocol = strtolower(substr($_SERVER["SERVER_PROTOCOL"], 0, 5)) == 'https' ? 'https://' : 'http://';
+        $host = $_SERVER['HTTP_HOST'];
+
+        define("BASE_URL", rtrim($protocol . $host . '/' . SITE_FOLDER, '/') . '/');
+        define("BASE_PATH", rtrim($_SERVER['DOCUMENT_ROOT'] . '/' . SITE_FOLDER, '/') . '/');
+        define("SITE_DEFAULT_FOLDER_PATH", BASE_PATH . 'site/default/');
     }
+    

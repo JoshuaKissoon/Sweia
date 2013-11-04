@@ -104,7 +104,7 @@
             return $handlers;
         }
 
-        public static function parseMenu($menu, $base_url = -1, $uid = null)
+        public static function parseMenu($menu, $uid = null)
         {
             /*
              * @params An array with $url => $title
