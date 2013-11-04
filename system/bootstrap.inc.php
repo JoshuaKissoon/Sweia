@@ -5,9 +5,8 @@
     
     
     /* Site files */
-    require_once SITE_DEFAULT_FOLDER_PATH . 'settings.php';
+    require_once 'site/default/settings.php';
     require_once SITE_DEFAULT_FOLDER_PATH . 'constants.inc.php';
-    require_once SITE_DEFAULT_FOLDER_PATH . 'includes.inc.php';
 
     /* Load System Files */
     require_once INCLUDES_PATH . 'functions.inc.php';
@@ -30,17 +29,9 @@
     require_once CLASSES_PATH . 'Role.php';
     require_once CLASSES_PATH . 'URL.php';
     require_once THEME_PATH . 'theme.inc.php';
-
-
-    /*
-     * Add includes for different frameworks being used
-     */
     
-    $THEME->addScript(LIBRARIES_URL . "jquery/jquery-2.0.3.min.js");
-    $THEME->addCss(LIBRARIES_URL . "jqueryui/jquery-ui.css");
-    $THEME->addCss("http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css");
-    $THEME->addScript("http://code.jquery.com/ui/1.10.3/jquery-ui.js");
-    $THEME->addScript(LIBRARIES_URL . "other/css-browser-selector.js");
+    /* Load the site specific includes now */    
+    require_once SITE_DEFAULT_FOLDER_PATH . 'includes.inc.php';
 
     function _jsmart_constants_initialize()
     {
@@ -49,9 +40,6 @@
        /* Generating our Base Path and Base URL */
        $protocol = strtolower(substr($_SERVER["SERVER_PROTOCOL"], 0, 5)) == 'https' ? 'https://' : 'http://';
        $host = $_SERVER['HTTP_HOST'];
-
-       /* Is the site in a specific folder within your web directory */
-       define("SITE_FOLDER", "jsmart");
        
        define("BASE_URL", rtrim($protocol . $host . '/' . SITE_FOLDER, '/') . '/');
        define("BASE_PATH", rtrim($_SERVER['DOCUMENT_ROOT'] . '/' . SITE_FOLDER, '/') . '/');
