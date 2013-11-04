@@ -1,0 +1,9 @@
+Plugin Name         Ver     Website             Min     Description4
+
+
+Jquery              1.8.3   jquery.com          Y       Minimized Version
+JQuery UI           1.9.2   jqueryui.com        Y       Minimized version
+JQuery Selectlist   1.2                         N       Jquery Plugin that allows styling select lists
+Slim Scroll         0.4.4                       Y       JQuery Plugin that allows slim scroller bar throughout the site
+Passw Strength              in file             Y       Shows the password Strength of a password field
+Css Browser Sel     0.4     in file             Y       Appends browser information to the HTML <html> tag

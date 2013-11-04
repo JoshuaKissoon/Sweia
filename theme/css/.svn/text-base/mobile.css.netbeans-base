@@ -1,0 +1,17 @@
+/* 
+    Document   : mobile.css
+    Created on : Oct 20, 2012, 6:37:50 PM
+    Author     : J
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+root { 
+    display: block;
+}
+

@@ -1,0 +1,233 @@
+/*
+    Document   : jsmart
+    Created on : Dec 6, 2012, 12:44:15 AM
+    Author     : J
+    Description:
+        General element styles that can be used cross site and be edited to suit the website
+*/
+.clearfix:before,.clearfix:after
+{
+    content: "";
+    display: table;
+}
+.clearfix:after
+{
+    clear: both;
+}
+.section-title
+{
+    font-size: 20px;
+    font-weight: bold;
+    padding: 3px;
+    border-bottom: 1px solid #999;
+    margin: 0 0 15px 0;
+}
+.section-description
+{
+    padding: 10px;
+    margin: 0 0 15px 0;
+    line-height: 1.3;
+}
+.content-wrapper
+{
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid #BBB;
+}
+
+/* Tables */
+table
+{
+    margin: 20px 10px;
+    text-align: left;
+    border-radius: 5px;
+}
+th
+{
+    color: #ffffff;
+    background-color: #49494b;
+    text-align: center;
+}
+td, th
+{
+    border-bottom: 1px solid #777;
+    vertical-align: middle;
+    padding: 10px;
+}
+tr.even
+{
+    background-color: #CCC;
+}
+
+/* Forms */
+.form-field
+{
+    clear: both;
+    margin: 10px 0 10px 0;
+}
+.form-field .item-label
+{
+    float: left;
+    width: 110px;
+    padding: 5px;
+    text-align: right;
+}
+.form-field .item
+{
+    float: left;
+    width: 300px;
+}
+.form-field .item input[type="text"], .form-field .item input[type="password"], .form-field .item select, .form-field .item input[type="email"]
+{
+    color: #666;
+    padding: 6px 5px;
+    border: 1px solid #999;
+    border-radius: 2px;
+    width: 300px;
+}
+.form-field .item select
+{
+   width: 315px;
+}
+.form-field .item input[type="checkbox"]
+{
+    padding: 0 5px;
+}
+.form-field .item textarea
+{
+    color: #666;
+    padding: 6px 5px;
+    border: 1px solid #999;
+    border-radius: 2px;
+    width: 300px;
+    height: 120px;
+}
+.form-field.form-actions
+{
+    padding: 10px 20px;
+    margin: 25px 15px 15px;
+    border-top: 1px solid #AAA;
+    border-top: 1px solid #777;
+}
+.form-field .btn
+{
+    width: 120px;
+    padding: 7px 0px;
+    color: #F1F1F1;
+    font-weight: bold;
+    background: #515558;
+    border: 1px solid #000;
+    border-radius: 2px;
+}
+
+.float-left
+{
+    float: left;
+}
+.float-right
+{
+    float: right;
+}
+.white
+{
+    color: #ffffff;
+}
+.help-text
+{
+    font-size: 10px;
+    font-weight: normal;
+    font-family: Helvetica, sans-serif;
+    font-style: italic;
+    color: #AAA;
+    padding: 5px 0 0 10px;
+    clear: both;
+}
+.hidden
+{
+    display: none;
+}
+
+/* Styling messages outputted to the user */
+#screen-messages-wrapper
+{
+    position: absolute;
+    right: 10px;
+    top: 20px;
+    z-index: 10000;
+}
+#screen-messages-wrapper li
+{
+    display: block;
+    width: 300px;
+    line-height: 1.4;
+    border: 1px solid;
+    border-radius: 2px;
+    margin: 10px 0px;
+    padding: 0 10px 15px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+}
+#screen-messages-wrapper li .exit-icon
+{
+    position: relative;
+    top: -2px;
+    left: 295px;
+}
+#screen-messages-wrapper li .exit-icon .exit
+{
+    background: url('../images/exit16.png') no-repeat;
+    padding: 0 10px 0 3px;
+}
+.screen-message.info
+{
+    color: #00529B;
+    background-color: #BDE5F8;
+    background-image: url('../images/information.png');
+}
+.screen-message.success
+{
+    color: #4F8A10;
+    background-color: #DFF2BF;
+    background-image:url('../images/success.png');
+}
+.screen-message.warning
+{
+    color: #9F6000;
+    background-color: #FEEFB3;
+    background-image: url('../images/warning.png');
+}
+.screen-message.error
+{
+    color: #D8000C;
+    background-color: #FFBABA;
+    background-image: url('../images/error.png');
+}
+.screen-message.validation
+{
+    color: #D63301;
+    background-color: #FFCCBA;
+    background-image: url('../images/validation.png');
+}
+
+/* Styling the pager links */
+#pager-links-wrapper
+{
+    background-color: #008080;
+    text-align: center;
+    padding: 15px 0;
+}
+#pager-links-wrapper li
+{
+    display: inline;
+    font-size: 13px;
+    color: #FFF;
+    background-color: rgba(200, 200, 200, 0.2);
+    padding: 5px;
+    margin: 0 5px;
+    border: 1px solid #FFF;
+    border-radius: 5px;
+}
+#pager-links-wrapper li a
+{
+    padding: 0 6px;
+}

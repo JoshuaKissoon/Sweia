@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/joshuakissoon_jsmart/!svn/ver/74/jsmart/system/modules/usermanager/templates/forms
+END
+add-user.tpl.php
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/joshuakissoon_jsmart/!svn/ver/74/jsmart/system/modules/usermanager/templates/forms/add-user.tpl.php
+END
+role-permissions.tpl.php
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/joshuakissoon_jsmart/!svn/ver/74/jsmart/system/modules/usermanager/templates/forms/role-permissions.tpl.php
+END
+add-role.tpl.php
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/joshuakissoon_jsmart/!svn/ver/74/jsmart/system/modules/usermanager/templates/forms/add-role.tpl.php
+END

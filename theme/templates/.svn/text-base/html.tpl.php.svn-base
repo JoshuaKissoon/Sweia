@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<!-- This is the main template file for the site This template contains the overall layout and includes the main site stylesheets and scripts -->
+<html>
+    <head>
+        <title><?php print @$title; ?></title>
+        <?php print @$stylesheets; ?>
+        <?php print @$scripts; ?>
+        <?php print @$head; ?>
+        <meta name="HandheldFriendly" content="true" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="Viewport" content="width=device-width" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body class="<?php print implode(" ", JPath::urlArgs()); ?>">
+        <div id="status-messages"><?php print ScreenMessage::getMessages(); ?></div>
+        <?php print @$content; ?>
+    </body>
+</html>

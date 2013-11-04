@@ -1,0 +1,10 @@
+<?php
+
+    /*
+     * Basic Theme Setup
+     */
+
+    $THEME->addCss(CSS_URL . "crossbrowser.css");
+    $THEME->addCss(CSS_URL . "style.css");
+    $THEME->addCss(CSS_URL . "jsmart.css");
+    $THEME->addCss(array('file' => CSS_URL . 'mobile.css', 'media' => 'all and (min-width: 0px) and (max-width: 700px)'));

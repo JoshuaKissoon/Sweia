@@ -1,0 +1,18 @@
+# Various rewrite rules.
+<IfModule mod_rewrite.c>
+  RewriteEngine on
+  RewriteRule "(^|/)\." - [F]
+
+  # Pass all requests not referring directly to files in the filesystem to
+  # index.php. Clean URLs are handled in drupal_environment_initialize().
+
+  # Dont apply any rules if file or directory exists
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+
+  # Don't apply rule for favicon
+  RewriteCond %{REQUEST_URI} !=/favicon.ico
+
+  # if nothing is here, call index.php
+  RewriteRule ^ index.php [L]
+</IfModule>

@@ -1,0 +1,15 @@
+Add email template
+Add handling for email template and stylesheet within the email class
+Build a form class
+Allow Adding attachments to email
+Add feature to add multiple permissions per url
+
+Add user Management module with features
+Add admin module permissions management page
+Add template with JSmart::permissionDeniedError page
+Add admin module configuration page to configure site name, favicon, etc
+
+Add a field to the roles table that disables deleting anonymous role, role_type = {system, .....}
+Remove the styles from JSmart.css that are not needed there and add them to style.css
+rename the logs table to system_logs
+Use form styles from CGAdm
