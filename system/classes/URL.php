@@ -8,44 +8,64 @@
     class URL
     {
 
-       private $base_url;
-       public $args = array();
+        private $base_url;
+        public $args = array();
 
-       public function __construct($url)
-       {
-          /* Get the URL sections */
-          $url = explode("?", $url);
-          $this->base_url = $url[0];
+        /*
+         * @desc Get the URL sections 
+         * @param $url The URL to process
+         */
 
-          /* Get the URL args */
-          $args = rtrim(ltrim(@$url[1], "&"), "&"); // Remove extra & from the start and end of the URL 
-          if (@$args)
-          {
-             $parts = explode("&", @$args);
-             foreach ((array) $parts as $part)
-             {
-                $part = explode("=", $part);
-                $this->args[$part[0]] = $part[1];
-             }
-          }
-       }
+        public function __construct($url)
+        {
+            $url = explode("?", $url);
+            $this->base_url = $url[0];
 
-       public function addArg($title, $value)
-       {
-          /*
-           * Add a new argument to the URL
-           */
-          $this->args[$title] = $value;
-       }
+            /* Get the URL args */
+            if (isset($url[1]))
+            {
+                $args = rtrim(ltrim($url[1], "&"), "&"); // Remove extra &'s from the start and end of the URL 
 
-       public function getURL()
-       {
-          $args = array();
-          foreach ($this->args as $title => $value)
-             $args[] = "$title=$value";
+                $parts = explode("&", $args);
+                foreach ((array) $parts as $part)
+                {
+                    $part = explode("=", $part);
+                    $this->args[$part[0]] = $part[1];
+                }
+            }
+        }
 
-          $url_args = implode("&", $args);
-          return $this->base_url . "?" . $url_args;
-       }
+        /*
+         * @desc Add a new argument to the URL
+         */
+
+        public function addArg($title, $value)
+        {
+            $this->args[$title] = $value;
+        }
+
+        /*
+         * @desc Remove an argument from the URL
+         * @param $title The key of the argument to remove
+         */
+
+        public function removeArg($title)
+        {
+
+            if (isset($this->args[$title]))
+            {
+                unset($this->args[$title]);
+            }
+        }
+
+        /*
+         * @desc Method that builds and returns the URL
+         */
+
+        public function getURL()
+        {
+            return $this->base_url . "?" . http_build_query($this->args);
+        }
 
     }
+    
