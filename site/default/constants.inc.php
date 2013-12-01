@@ -9,6 +9,7 @@
     define("THEME_CSS_URL", BASE_URL . "theme/css/");
     define("THEME_SCRIPTS_URL", BASE_URL . "theme/scripts/");
     define("THEME_IMAGES_URL", BASE_URL . "theme/images/");
+    define("THEME_LIBRARIES_URL", BASE_URL . "theme/libraries/");
     define("TEMPLATES_URL", BASE_URL . "theme/templates/");
     define("TEMPLATES_PATH", BASE_PATH . "theme/templates/");
 
