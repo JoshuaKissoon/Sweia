@@ -8,5 +8,5 @@
     $THEME->addCss(array('file' => CSS_URL . 'mobile.css', 'media' => 'all and (min-width: 0px) and (max-width: 700px)'));
     
     
-    $THEME->addScript(THEME_LIBRARIES_URL . "foundation/js/modernizr.js");
+    $THEME->addScript(THEME_LIBRARIES_URL . "foundation/js/modernizr.js", 1, true);
     $THEME->addScript(THEME_LIBRARIES_URL . "foundation/js/foundation-grid.min.js");

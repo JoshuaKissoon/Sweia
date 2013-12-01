@@ -55,14 +55,42 @@
             }
         }
 
-        public function addCss($params, $weight = 10)
+        public function addCss($params, $weight = 10, $header_stylesheet = false)
         {
             /* Takes in an array of parameters of a stylesheet and stores it */
-            while (isset($this->stylesheets[$weight]))
+            if ($header_stylesheet)
             {
-                $weight++;
+                if (!isset($this->stylesheets['head']))
+                {
+                    $this->stylesheets['head'] = array();
+                }
+
+                while (isset($this->stylesheets['head'][$weight]))
+                {
+                    $weight++;
+                }
+                $this->stylesheets['head'][$weight] = $params;
             }
-            $this->stylesheets[$weight] = $params;
+            else
+            {
+                while (isset($this->stylesheets[$weight]))
+                {
+                    $weight++;
+                }
+                $this->stylesheets[$weight] = $params;
+            }
+        }
+
+        private function renderHeaderCssFiles()
+        {
+            /* Returns the HTML code for all the stylesheets to be put in the site head */
+            if (isset($this->stylesheets['head']) && is_array($this->stylesheets['head']))
+            {
+                ksort($this->stylesheets['head']);
+                $ret = HTML::stylesheets($this->stylesheets['head']);
+                unset($this->stylesheets['head']);
+                return $ret;
+            }
         }
 
         private function renderCssFiles()
@@ -72,14 +100,42 @@
             return HTML::stylesheets($this->stylesheets);
         }
 
-        public function addScript($params, $weight = 10)
+        public function addScript($params, $weight = 10, $header_script = false)
         {
             /* Takes in an array of parameters of a script file and stores it */
-            while (isset($this->scripts[$weight]))
+            if ($header_script)
             {
-                $weight++;
+                if (!isset($this->scripts['head']))
+                {
+                    $this->scripts['head'] = array();
+                }
+
+                while (isset($this->scripts['head'][$weight]))
+                {
+                    $weight++;
+                }
+                $this->scripts['head'][$weight] = $params;
             }
-            $this->scripts[$weight] = $params;
+            else
+            {
+                while (isset($this->scripts[$weight]))
+                {
+                    $weight++;
+                }
+                $this->scripts[$weight] = $params;
+            }
+        }
+
+        public function renderHeaderScriptFiles()
+        {
+            /* Returns the HTML code for all the scripts stored */
+            if (isset($this->scripts['head']) && is_array($this->scripts['head']))
+            {
+                ksort($this->scripts['head']);
+                $ret = HTML::scripts($this->scripts['head']);
+                unset($this->scripts['head']);
+                return $ret;
+            }
         }
 
         public function renderScriptFiles()
@@ -160,7 +216,9 @@
              * Publish this template
              */
             $html = new Template(TEMPLATES_PATH . $this->templates['html']);
+            $html->header_stylesheets = $this->renderHeaderCssFiles();
             $html->stylesheets = $this->renderCssFiles();
+            $html->header_scripts = $this->renderHeaderScriptFiles();
             $html->scripts = $this->renderScriptFiles();
             $html->content = $main->parse();
             $html->stylesheets = $this->renderCssFiles();

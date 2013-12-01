@@ -3,8 +3,8 @@
 <html>
     <head>
         <title><?php print @$title; ?></title>
-        <?php print @$stylesheets; ?>
-        <?php print @$scripts; ?>
+        <?= @$header_stylesheets; ?>
+        <?= @$header_scripts; ?>
         <?php print @$head; ?>
         <meta name="HandheldFriendly" content="true" />
         <meta name="MobileOptimized" content="320" />
@@ -14,5 +14,7 @@
     <body class="<?php print implode(" ", JPath::urlArgs()); ?>">
         <div id="status-messages"><?php print ScreenMessage::getMessages(); ?></div>
         <?php print @$content; ?>
+        <?= @$stylesheets; ?>
+        <?= @$scripts; ?>
     </body>
 </html>
