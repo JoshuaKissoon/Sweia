@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    
+    <information>
+        <title>User Management</title>
+        <description>Module that handles all User Management</description>
+    </information>
+    
+    <permissions>
+        <permission>
+            <perm>view_users</perm>
+            <title>View Users' Details</title>
+        </permission>
+        <permission>
+            <perm>add_user</perm>
+            <title>Add User</title>
+        </permission>
+        <permission>
+            <perm>edit_user</perm>
+            <title>Edit User</title>
+        </permission>
+        <permission>
+            <perm>delete_user</perm>
+            <title>Delete User</title>
+        </permission>
+        <permission>
+            <perm>view_roles</perm>
+            <title>View Roles</title>
+        </permission>
+        <permission>
+            <perm>add_role</perm>
+            <title>Add Role</title>
+        </permission>
+        <permission>
+            <perm>edit_role</perm>
+            <title>Edit Role</title>
+        </permission>
+        <permission>
+            <perm>delete_role</perm>
+            <title>Delete Role</title>
+        </permission>
+        <permission>
+            <perm>manage_permissions</perm>
+            <title>Manage Permissions</title>
+        </permission>
+    </permissions>
+    
+    <urls>
+        <url>
+            <link>admin/usermanager</link>
+            <permission>view_users</permission>
+        </url>
+        <url>
+            <link>admin/usermanager/users</link>
+            <permission>add_user</permission>
+        </url>
+        <url>
+            <link>admin/usermanager/users/add</link>
+            <permission>add_user</permission>
+        </url>
+        <url>
+            <link>admin/usermanager/roles</link>
+            <permission>view_roles</permission>
+        </url>
+        <url>
+            <link>admin/usermanager/roles/add</link>
+            <permission>add_role</permission>
+        </url>
+        <url>
+            <link>admin/usermanager/permissions</link>
+            <permission>manage_permissions</permission>
+        </url>
+    </urls>
+</config>

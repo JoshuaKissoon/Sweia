@@ -145,7 +145,7 @@
             }
 
             $mod = scandir($modpath);
-            if (!file_exists($modpath . "/$modname.info.php") || !file_exists($modpath . "/$modname.php"))
+            if (!file_exists($modpath . "/$modname.info.xml") || !file_exists($modpath . "/$modname.php"))
             {
                 return false;   // Exit if no .info or .modname file exist
             }
@@ -153,16 +153,26 @@
             unset($mod[1]);
 
             /* Load the module's data */
-            require "$modpath/$modname.info.php";
-            $info = $modname . "info";
-            $modinfo = $$info;
-            if (isset($modinfo["title"]))
+            $xmldata = new SimpleXMLElement("$modpath/$modname.info.xml", null, true);
+            $modinfo = json_decode(json_encode($xmldata), TRUE);
+            
+            if (isset($modinfo['information']['title']))
             {
                 /* Only add the module to the site if it has a name */
                 $module = new JModule();
-                foreach ($modinfo as $key => $value)
+                foreach ($modinfo['information'] as $key => $value)
                 {
                     $module->$key = $value;
+                }
+                /* Adding the permissions */
+                foreach($modinfo['permissions']['permission'] as $perm)
+                {
+                    $module->addPermission($perm['perm'], $perm['title']);
+                }
+                /* Adding the URLs for this module */
+                foreach($modinfo['urls']['url'] as $url)
+                {
+                    $module->addUrl($url['link'], array("permission" => $url['permission']));
                 }
                 $module->type = $modtype;
                 $module->name = $modname;

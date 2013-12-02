@@ -131,26 +131,36 @@
             $sql = "INSERT INTO $this->tbl (name, title, description, type, status) VALUES ('::name', '::title', '::desc', '::type', '::status')";
             $DB->query($sql, $values);
 
-            $this->addPermissions();
-            $this->addUrls();
+            $this->savePermissions();
+            $this->saveUrls();
             return true;
+        }
+
+        /**
+         * @desc Adds a permission to this module's premission array, this is not yet saved to the DB
+         * @param $permission
+         * @param $descripton
+         */
+        public function addPermission($perm, $title)
+        {
+            $this->permissions[$perm] = $title;
         }
 
         /**
          * @desc Add Module permissions to the database 
          */
-        private function addPermissions()
+        private function savePermissions()
         {
             foreach ($this->permissions as $perm => $title)
             {
-                $this->addPermission($perm, $title);
+                $this->savePermission($perm, $title);
             }
         }
 
         /**
          * @desc Adds a single permission for a module to the database
          */
-        private function addPermission($perm, $title)
+        private function savePermission($perm, $title)
         {
             global $DB;
             $values = array(
@@ -164,13 +174,23 @@
         }
 
         /**
+         * @desc Adds a permurlission to this module's urls array, this is not yet saved to the DB
+         * @param $url
+         * @param $data
+         */
+        public function addUrl($url, $data)
+        {
+            $this->urls[$url] = $data;
+        }
+        
+        /**
          * @desc Add Module urls to the database 
          */
-        private function addUrls()
+        private function saveUrls()
         {
             foreach ($this->urls as $url => $data)
             {
-                $this->addUrl($url, $data);
+                $this->saveUrl($url, $data);
             }
         }
 
@@ -179,7 +199,7 @@
          * @param $url The URL to add to the database for this module
          * @param $data An array with data for this URL
          */
-        private function addUrl($url, $data)
+        private function saveUrl($url, $data)
         {
             /* If the URL already exists for this module, delete it so it will be updated */
             if ($this->urlExists($url))
@@ -277,7 +297,7 @@
                 }
                 else
                 {
-                    $this->addPermission($perm, $title);
+                    $this->savePermission($perm, $title);
                 }
             }
 
@@ -324,7 +344,7 @@
                 }
                 else
                 {
-                    $this->addUrl($url, $data);
+                    $this->saveUrl($url, $data);
                 }
             }
 
@@ -341,7 +361,7 @@
         private function updateUrl($url, $data)
         {
             $this->deleteUrl($url);
-            $this->addUrl($url, $data);
+            $this->saveUrl($url, $data);
         }
 
         /**
