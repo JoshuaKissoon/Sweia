@@ -13,21 +13,25 @@
 
     if (!$SESSION->isLoggedIn())
     {
-       /* If the user is not logged in, try loading the session and login data from cookies */
-       $SESSION->loadDataFromCookies();
+        /* If the user is not logged in, try loading the session and login data from cookies */
+        $SESSION->loadDataFromCookies();
     }
 
     /* Get the modules that handles this URL */
     $handlers = JPath::getUrlHandlers();
     foreach ($handlers as $handler)
     {
-       /* If the user has the permission to access this module for this URL, load the module */
-       if ($USER->hasPermission($handler['permission']))
-       {
-          include JModuleManager::getModule($handler['module']);
-       }
+        /* If the user has the permission to access this module for this URL, load the module */
+        if ($USER->hasPermission($handler['permission']))
+        {
+            include JModuleManager::getModule($handler['module']);
+        }
     }
 
+    /* Initialize the theme */
+    Theme::init();
+
     /* Render the theme after the necessary module is finished with its operations */
-    $THEME->render();
+    $THEMER->render();
     exit;
+    

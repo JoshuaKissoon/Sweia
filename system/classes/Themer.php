@@ -6,7 +6,7 @@
      * @description Theme modification class,
      *              This is an abstraction class on the template class to let modules modify the content of the theme
      */
-    class Theme
+    class Themer
     {
 
         private $templates = array(
@@ -230,5 +230,5 @@
     }
 
     /* Initialize the theme */
-    $THEME = new Theme();
+    $THEMER = $THEME = new Themer();
     

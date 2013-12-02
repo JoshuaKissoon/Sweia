@@ -77,7 +77,7 @@
          * @param $url The URL for which to check
          * @return The modules that handles this URL
          */
-        public static function getUrlHandlers($url)
+        public static function getUrlHandlers($url = "")
         {
             if (!valid($url))
             {

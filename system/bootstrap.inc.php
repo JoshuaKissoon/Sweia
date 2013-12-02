@@ -21,7 +21,7 @@
     require_once CLASSES_PATH . 'Image.php';
     require_once CLASSES_PATH . 'Session.php';
     require_once CLASSES_PATH . 'Template.php';
-    require_once CLASSES_PATH . 'Theme.php';
+    require_once CLASSES_PATH . 'Themer.php';
     require_once CLASSES_PATH . 'JUser.php';
     require_once CLASSES_PATH . 'User.php';
     require_once CLASSES_PATH . 'HTML.php';
@@ -30,7 +30,7 @@
     require_once CLASSES_PATH . 'JPath.php';
     require_once CLASSES_PATH . 'Role.php';
     require_once CLASSES_PATH . 'URL.php';
-    require_once THEME_PATH . 'theme.inc.php';
+    require_once THEME_PATH . 'Theme.php';
 
     /* Load the site specific includes now */
     require_once SITE_DEFAULT_FOLDER_PATH . 'includes.inc.php';

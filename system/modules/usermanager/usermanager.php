@@ -4,8 +4,8 @@
     $usermod_url = JModuleManager::getModuleURL("usermanager");
     $usermod_rel_url = "admin/usermanager/";
 
-    $THEME->addContent("left_sidebar", users_get_menu());
-    $THEME->addCss($usermod_url . "usermanager.css");
+    $THEMER->addContent("left_sidebar", users_get_menu());
+    $THEMER->addCss($usermod_url . "usermanager.css");
     
     switch(@$URL[2])
     {

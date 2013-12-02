@@ -35,20 +35,16 @@
 
         /**
          * @desc Messages are stored in an array in session, This method grabs, formats and returns these messages
-         * @return A <ul> with the messages that are in session
+         * @return An array with the messages that are in session
          */
         public static function getMessages()
         {
             if (isset($_SESSION['screen_messages']))
             {
-                /* If there are messages, generate the ul */
-                $template = new Template(TEMPLATES_PATH . "/inner/screen-messages");
-                $template->messages = $_SESSION['screen_messages'];
-                $template->message_count = count($_SESSION['screen_messages']);
+                return $_SESSION['screen_messages'];
                 unset($_SESSION['screen_messages']);   // Clear the messages after they have been displayed
-                return $template->parse();
             }
-            return "";
+            return array();
         }
 
     }

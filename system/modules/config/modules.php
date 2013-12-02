@@ -7,7 +7,7 @@
     /* Set the modules sidebar menu */
     $menu = new Template(CONFIG_PATH . "templates/menus/sidebar-menu");
     $menu->items = config_modules_menu();
-    $THEME->addContent("main_left", $menu->parse());
+    $THEMER->addContent("main_left", $menu->parse());
 
     switch (@$url[2])
     {
@@ -25,12 +25,12 @@
         /*
          * Here we list the modules
          */
-        global $THEME;
+        global $THEMER;
         $tpl = new Template(CONFIG_PATH . "templates/inner/module-list");
         $tpl->modules = JModuleManager::getModules();
 
         /* Add this content to the Content area within the theme */
-        $THEME->addContent("content", $tpl->parse());
+        $THEMER->addContent("content", $tpl->parse());
     }
 
     function config_modules_menu()

@@ -12,7 +12,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     </head>
     <body class="<?php print implode(" ", JPath::urlArgs()); ?>">
-        <div id="status-messages"><?php print ScreenMessage::getMessages(); ?></div>
+        <div id="status-messages"><?php print Theme::getFormattedScreenMessages(); ?></div>
         <?php print @$content; ?>
         <?= @$stylesheets; ?>
         <?= @$scripts; ?>
