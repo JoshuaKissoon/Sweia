@@ -9,53 +9,79 @@
     class EMail
     {
 
-       private $recipients = array();
-       public $sender, $subject, $message;
+        private $recipients = array();
+        public $sender, $subject, $message;
 
-       function __construct()
-       {
-          
-       }
+        /**
+         * @desc 
+         */
+        function __construct()
+        {
+            
+        }
 
-       public function addRecipient($recipient)
-       {
-          $this->recipients[] = $recipient;
-       }
+        /**
+         * @desc Adds a recipient to the email
+         * @param $recipient The email address of the recipient
+         */
+        public function addRecipient($recipient)
+        {
+            $this->recipients[] = $recipient;
+        }
 
-       public function setSender($sender)
-       {
-          $this->sender = $sender;
-       }
+        /**
+         * @desc Sets the sender of the email
+         * @param $sender The email address of the sender
+         */
+        public function setSender($sender)
+        {
+            $this->sender = $sender;
+        }
 
-       public function setMessage($message)
-       {
-          $this->message = $message;
-       }
+        /**
+         * @desc Sets the message to be sent
+         * @param $message
+         */
+        public function setMessage($message)
+        {
+            $this->message = $message;
+        }
 
-       public function setSubject($subject)
-       {
-          $this->subject = $subject;
-       }
+        /**
+         * @desc Sets the subject of the email
+         * @param $subject
+         */
+        public function setSubject($subject)
+        {
+            $this->subject = $subject;
+        }
 
-       public function sendMail()
-       {
-          $headers = 'MIME-Version: 1.0' . "\r\n";
-          $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-          $headers .= "From: $this->sender" . "\r\n";
-          $recipients = implode(", ", $this->recipients);
-          mail($recipients, $this->subject, $this->message, $headers);
-       }
+        /**
+         * @desc Composes the email, adds the necessary headers and sends the email
+         */
+        public function sendMail()
+        {
+            $headers = 'MIME-Version: 1.0' . "\r\n";
+            $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+            $headers .= "From: $this->sender" . "\r\n";
+            $recipients = implode(", ", $this->recipients);
+            mail($recipients, $this->subject, $this->message, $headers);
+        }
 
-       public static function quickMail($recipient, $subject, $message, $from = null)
-       {
-          /*
-           * This function is a function used to send a basic email
-           * This function can be used when there is nothing important to be added, or no sanitizing needed, etc
-           */
-          $headers = 'MIME-Version: 1.0' . "\r\n";
-          $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-          $headers .= "From: $from" . "\r\n";
-          mail($recipient, $subject, $message, $headers);
-       }
+        /**
+         * @desc A quick single-method call that composes and sends an email at once
+         * @param $recipient A Recipient to send the email to
+         * @param $subject
+         * @param $message
+         * @param $from
+         */
+        public static function quickMail($recipient, $subject, $message, $from)
+        {
+            $headers = 'MIME-Version: 1.0' . "\r\n";
+            $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+            $headers .= "From: $from" . "\r\n";
+            mail($recipient, $subject, $message, $headers);
+        }
 
     }
+    
