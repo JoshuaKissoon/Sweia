@@ -8,25 +8,29 @@
     class JPath
     {
 
+        /**
+         * @return The Site Base URL 
+         */
         public static function baseURL()
         {
-            /* Returns the Site Base URL */
             return BASE_URL;
         }
 
+        /**
+         * @return Returns the Site Base Path 
+         */
         public static function basePath()
         {
-            /* Returns the Site Base Path */
             return BASE_PATH;
         }
 
+        /**
+         *  @return The relative URL from which the request came from
+         */
         public static function requestUrl()
         {
-            /*
-             *  @return The relative URL from which the request came from
-             */
             $url = $_SERVER["REQUEST_URI"];
-            if (valid(@SITE_FOLDER))
+            if (valid(SITE_FOLDER))
             {
                 /* If the Site is within a subfolder, remove it from the URL arguments */
                 $folder = rtrim(SITE_FOLDER, '/') . '/';
@@ -35,46 +39,54 @@
             return rtrim(ltrim($url, '/'), "/");
         }
 
+        /**
+         * @return The full URL of the page which the user is on
+         */
         public static function fullRequestUrl()
         {
-            /*
-             * @return The full URL of the page which the user is on
-             */
             return BASE_URL . self::requestUrl();
         }
 
+        /**
+         * @desc Gets the URL query
+         * @return The URL Query
+         */
         public static function getUrlQ()
         {
-            $url = @$_GET['urlq'];
+            if (!isset($_GET['urlq']))
+            {
+                return "";
+            }
+
+            $url = $_GET['urlq'];
             return rtrim(ltrim($url, "/"), "/");
         }
 
+        /**
+         * @return An array of arguments within the URL currently being viewed
+         */
         public static function urlArgs($index = null)
         {
-            /*
-             * @return An array of arguments within the URL currently being viewed
-             */
             $url = self::getUrlQ();
             $eurl = explode('/', $url);
             return ($index) ? $eurl[$index] : $eurl;
         }
 
-        public static function getUrlHandlers($url = null)
+        /**
+         * @desc Finds the modules that handles a URL
+         * @param $url The URL for which to check
+         * @return The modules that handles this URL
+         */
+        public static function getUrlHandlers($url)
         {
-            /*
-             * Returns the modules that handles this URL
-             * If the URL argument is passed, return the handler for this url, otherwise, return the handler for the current url
-             */
-            if (!valid(@$url))
-                $url = self::getUrlQ();
-            if (!valid(@$url))
+            if (!valid($url))
+            {
                 $url = HOME_URL;
-
+            }
             $url_parts = explode("/", $url);
             $num_parts = count($url_parts);
 
-            $sql = "SELECT uh.module, uh.permission, md.status FROM url_handlers uh LEFT JOIN modules md ON (uh.module = md.name) 
-             WHERE (num_parts='$num_parts' OR num_parts='0') AND md.status = 1";
+            $sql = "SELECT uh.module, uh.permission, md.status FROM url_handlers uh LEFT JOIN modules md ON (uh.module = md.name) WHERE (num_parts='$num_parts' OR num_parts='0') AND md.status = 1";
             $c = 0;
             $args = array();
             foreach ($url_parts as $part)
@@ -87,32 +99,26 @@
             global $DB;
             $rs = $DB->query($sql, $args);
             $handlers = array();
-            $module = "";
             while ($handler = $DB->fetchObject($rs))
             {
-                /* Only add the module to be loaded if the user has the permission to access this module for this path */
-                if ($handler->module != $module)
-                {
-                    /* Only add one handler per module */
-                    $handlers[] = array(
-                        "module" => $handler->module,
-                        "permission" => $handler->permission
-                    );
-                    $module = $handler->module;
-                }
+                /* Store the handlers */
+                $handlers[$handler->module] = array(
+                    "module" => $handler->module,
+                    "permission" => $handler->permission
+                );
             }
             return $handlers;
         }
 
+        /**
+         * @description Parses a set of menus and:
+         *      -> removes those items the specified user don't have premission to access
+         *      -> Append the Site Base URL to each of the menu items if they don't already contain the base url
+         * @param $menu An array in the form $url => $title
+         * @param $uid The user from whose POV to parse the menu, the currently logged in user is default
+         */
         public static function parseMenu($menu, $uid = null)
         {
-            /*
-             * @params An array with $url => $title
-             * @description This function parses the menu and:
-             *      -> removes those items the specified user don't have premission to access
-             *      -> Append the Site Base URL to each of the menu items if they don't already contain the base url
-             */
-
             /* If no user was specified, parse the menu for the current user */
             global $USER;
             $uid = $USER->uid; //hprint($menu);hprint($USER);
@@ -127,12 +133,8 @@
 
                 if (self::userHasURLAccessPermission($uid, $url))
                 {
-                    /*
-                     * If the user has the necessary permission to access the URL
-                     *   add the URL back to the menu, with the SITE_URL prepended to the URL
-                     */
-                    if ($base_url == -1)
-                        $base_url = self::baseURL();
+                    /* If the user has the necessary permission to access the URL, add the URL back to the menu with the SITE_URL prepended to the URL */
+                    $base_url = self::baseURL();
 
                     $url = $base_url . $url;
                     $menu[$url] = $menuItem;
@@ -141,14 +143,19 @@
             return $menu;
         }
 
-        public static function userHasURLAccessPermission($uid, $url = "")
+        /**
+         * @desc Checks if the user has permission to access this URL 
+         * @param $uid The user's id
+         * @param $url The URL to check if the user has access to
+         */
+        public static function userHasURLAccessPermission($uid, $url)
         {
-            /* Checks if the user has permission to access this URL */
             global $DB;
 
-            $tmp = $DB->query("SELECT permission FROM url_handlers WHERE url='::url'", array("::url" => $url));
-            $tmp = $DB->fetchObject($tmp);
-            if (!@$tmp->permission)
+            $res = $DB->query("SELECT permission FROM url_handlers WHERE url='::url'", array("::url" => $url));
+            $tmp = $DB->fetchObject($res);
+
+            if (!isset($tmp->permission))
             {
                 /* If the URL has no permission, return true that the user has the permission to access the URL */
                 return true;
@@ -160,14 +167,27 @@
                     LEFT JOIN user_roles ur ON (u.uid = ur.uid) LEFT JOIN role_permissions rp ON (rp.rid = ur.rid)
                     LEFT JOIN url_handlers uh ON (uh.permission = rp.permission)
                     WHERE uh.url='::url' AND u.uid='::uid' GROUP BY u.uid";
-            $tmp = $DB->query($sql, $args);
-            $tmp = $DB->fetchObject($tmp);
-            return valid(@$tmp->uid) ? true : false;
+            $res2 = $DB->query($sql, $args);
+            $tmp2 = $DB->fetchObject($res2);
+
+            return valid($tmp2->uid) ? true : false;
         }
 
+        /**
+         * @desc An old function to call absoluteUrl
+         */
         public static function fullUrl($url)
         {
-            /* Returns the full site URL for a given URL string */
+            return self::absoluteUrl($url);
+        }
+
+        /**
+         * @desc Creates an absolute site URL given a relative URL
+         * @param $url the relative URL
+         * @return The full site URL for a given URL string 
+         */
+        public static function absoluteUrl($url)
+        {
             return self::baseURL() . "?urlq=" . ltrim($url, "/");
         }
 

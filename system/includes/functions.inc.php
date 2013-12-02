@@ -1,19 +1,27 @@
 <?php
 
     /*
-     * This file contains general functions that are not specific to this website
-     * These functions are used throught the website for various purposes
+     * @author Joshua Kissoon
+     * @date Very Long Ago
+     * @file This file contains general functions that are not specific to any class or application
      */
 
+    /**
+     * @desc Checks the validity of an expression
+     * @return Boolean Whether the expression is valid or not
+     */
     function valid($expression)
     {
-        /*
-         * Checks the validity of an expression
-         */
+        if (!isset($expression))
+        {
+            return false;
+        }
+
         if (is_array($expression) || is_object($expression))
         {
             return true;
         }
+
         $ex = trim($expression);
         if (isset($ex) && !is_null($ex) && $ex != "")
         {
@@ -37,13 +45,14 @@
         {
             /* If html is needed to be shown, html elements needs to be sanitized to be displayed on the screen */
             print htmlentities('<pre>' . print_r($data, TRUE) . '</pre>');
-        } else
+        }
+        else
         {
             print '<pre>' . print_r($data, TRUE) . '</pre>';
         }
     }
 
-    function random_alphanumeric_string($length=12)
+    function random_alphanumeric_string($length = 12)
     {
         /* Function that returns a random AlphaNumeric String of a specified length */
         $alphNums = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -75,14 +84,15 @@
          *  $add_dots - add dots to the end of the trimmed string ?
          *  $concat_end - any value to concatenate to the end of the trimmed string
          */
-        if($add_dots)
+        if ($add_dots)
         {
             $end = " ...";
         }
         if (strlen($string) > $length)
         {
             return substr($string, 0, $length) . @$end . " $concat_end";
-        } else
+        }
+        else
         {
             return $string . " $concat_end";
         }
@@ -93,19 +103,24 @@
         if ($number == 1)
         {
             return "first";
-        } else if ($number == 2)
+        }
+        else if ($number == 2)
         {
             return "second";
-        } else if ($number == 3)
+        }
+        else if ($number == 3)
         {
             return "third";
-        } else if ($number == 4)
+        }
+        else if ($number == 4)
         {
             return "fourth";
-        } else if ($number == 5)
+        }
+        else if ($number == 5)
         {
             return "fifth";
-        } else if ($number == 6)
+        }
+        else if ($number == 6)
         {
             return "sixth";
         }
@@ -116,3 +131,4 @@
         list($Y, $m, $d) = explode("-", $dob);
         return( date("md") < $m . $d ? date("Y") - $Y - 1 : date("Y") - $Y );
     }
+    

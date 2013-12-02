@@ -5,9 +5,8 @@
      * @date 20121211
      * @desc Class that handles pagination throughout the website
      */
-    
     require_once CLASSES_PATH . 'URL.php';
-    
+
     class JPager
     {
         /* Pageination variables */
@@ -21,14 +20,17 @@
         private $url = "";   // The URL to add to the pager links
         private $pageno_url_key = "pager_page";   // The Pager class url variable to use
 
-        /*
-         * @desc construction of the class instance
+        /**
+         * @desc 
+         * @return
          */
+
         public function __construct()
         {
             return $this;
         }
-        /*
+
+        /**
          * @desc Setup the pager query and links
          * @param $params all parameters are in the $params array containing
          *      -> total_records - the total records to be displayed
@@ -39,7 +41,6 @@
          *      -> url - URL of the page we are on
          *      -> url_var - The page number var to append to the url
          */
-
         public function init($params)
         {
 
@@ -50,14 +51,14 @@
             $this->html_options = is_array(@$params['html_options']) ? $params['html_options'] : array();
             $this->total_records = $params['total_records'];
             $this->pageno_url_key = isset($params['url_var']) ? $params['url_var'] : $this->pageno_url_key;
-            
+
             /* Setting URL variables */
             $this->url = ($params['url']) ? $params['url'] : $this->url;
             if (strpos($this->url, "?") === false)
             {
                 $this->url = $this->url . "?";
             }
-            
+
             /* Remove the page number from the URL if it exists */
             $url = new URL($this->url);
             $url->removeArg($this->pageno_url_key);
@@ -68,19 +69,17 @@
             $this->buildLinks();
         }
 
-        /*
+        /**
          * @desc Calculates the number of pages of records we will have 
          */
-
         private function calculatePages()
         {
             $this->num_pages = ceil($this->total_records / $this->rows_per_page);
         }
 
-        /*
+        /**
          * @desc calculate offset based on rows per page and then update the query
          */
-
         public function getRowOffset()
         {
             if ($this->current_page > $this->num_pages)
@@ -95,28 +94,25 @@
             return $this->offset = ($this->current_page - 1) * $this->rows_per_page;
         }
 
-        /*
+        /**
          * @desc Returns the number of rows per page
          */
-
         public function getRowsPerPage()
         {
             return $this->rows_per_page;
         }
-        
-        /*
+
+        /**
          * @desc Returns the url key for the page number
          */
-
         public function getPageNoUrlKey()
         {
             return $this->pageno_url_key;
         }
 
-        /*
+        /**
          * @desc This method will build pagination links
          */
-
         public function buildLinks()
         {
             $this->links = array();
@@ -143,15 +139,18 @@
             }
         }
 
-        /*
+        /**
          * @desc Method that generates the html links
          */
-
         public function getLinks()
         {
             return $this->links_html;
         }
 
+        /**
+         * @desc Generates the HTML code for the pagination links
+         * @return HTML code for the pagination links
+         */
         public function getLinksHtmlCode()
         {
             $class = isset($this->html_options['class']) ? $this->html_options['class'] : "pager-link";
@@ -168,7 +167,7 @@
                 }
             }
             $this->links_html .= "</ul>";
-            
+
             return $this->links_html;
         }
 
