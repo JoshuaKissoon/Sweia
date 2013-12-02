@@ -86,7 +86,7 @@
             $url_parts = explode("/", $url);
             $num_parts = count($url_parts);
 
-            $sql = "SELECT uh.module, uh.permission, md.status FROM url_handlers uh LEFT JOIN modules md ON (uh.module = md.name) WHERE (num_parts='$num_parts' OR num_parts='0') AND md.status = 1";
+            $sql = "SELECT uh.module, uh.permission, md.status FROM url_handler uh LEFT JOIN module md ON (uh.module = md.name) WHERE (num_parts='$num_parts' OR num_parts='0') AND md.status = 1";
             $c = 0;
             $args = array();
             foreach ($url_parts as $part)
@@ -152,7 +152,7 @@
         {
             global $DB;
 
-            $res = $DB->query("SELECT permission FROM url_handlers WHERE url='::url'", array("::url" => $url));
+            $res = $DB->query("SELECT permission FROM url_handler WHERE url='::url'", array("::url" => $url));
             $tmp = $DB->fetchObject($res);
 
             if (!isset($tmp->permission))
@@ -163,9 +163,9 @@
 
             /* If the URL has some permission, check if the user has the necessary permission to access the URL */
             $args = array("::url" => $url, "::uid" => $uid);
-            $sql = "SELECT u.uid, ur.rid, rp.permission, uh.url FROM users u
-                    LEFT JOIN user_roles ur ON (u.uid = ur.uid) LEFT JOIN role_permissions rp ON (rp.rid = ur.rid)
-                    LEFT JOIN url_handlers uh ON (uh.permission = rp.permission)
+            $sql = "SELECT u.uid, ur.rid, rp.permission, uh.url FROM user u
+                    LEFT JOIN user_role ur ON (u.uid = ur.uid) LEFT JOIN role_permission rp ON (rp.rid = ur.rid)
+                    LEFT JOIN url_handler uh ON (uh.permission = rp.permission)
                     WHERE uh.url='::url' AND u.uid='::uid' GROUP BY u.uid";
             $res2 = $DB->query($sql, $args);
             $tmp2 = $DB->fetchObject($res2);

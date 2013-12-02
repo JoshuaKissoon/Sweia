@@ -62,7 +62,7 @@
          * @desc Queries the database to produce a result
          * @param $query The SQL statement to be executed
          * @param $variables An array of variables to replace in the query, these are passed in an array so that they can be escaped
-         * @example query("SELECT * FROM users WHERE name LIKE ':name'", array(":name" => "John Smith"))
+         * @example query("SELECT * FROM user WHERE name LIKE ':name'", array(":name" => "John Smith"))
          */
         public function query($query, $variables = array(), $log_query = false)
         {
@@ -78,11 +78,11 @@
             {
                 /* If we had an error while making a query, log it into the database */
                 $message = $this->escapeString("Error: " . mysqli_error($this->connection) . " Last Query: $this->last_query");
-                $res = mysqli_query($this->connection, "INSERT INTO logs (type, message) VALUES ('mysql', '$message')");
+                $res = mysqli_query($this->connection, "INSERT INTO system_log (type, message) VALUES ('mysql', '$message')");
             }
             if ($log_query)
             {
-                $res = mysqli_query($this->connection, "INSERT INTO logs (type, message) VALUES ('mysqli_query', '$this->last_query')");
+                $res = mysqli_query($this->connection, "INSERT INTO system_log (type, message) VALUES ('mysqli_query', '$this->last_query')");
             }
             return $this->resultset;
         }

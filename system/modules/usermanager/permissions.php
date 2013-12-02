@@ -8,7 +8,7 @@
     {
        /* Handle saving role-permissions */
        /* We load all roles from the database because there may some roles that all permissions are removed from that won't be in the roles list in $_POST */
-       $rs = $DB->query("SELECT rid FROM roles");
+       $rs = $DB->query("SELECT rid FROM role");
        while ($rid = $DB->fetchObject($rs))
        {
           $role = new Role($rid->rid);
@@ -24,7 +24,7 @@
     }
 
     /* Load Permissions */
-    $rs = $DB->query("SELECT * FROM permissions ORDER BY module");
+    $rs = $DB->query("SELECT * FROM permission ORDER BY module");
     $permissions = array();
     while ($perm = $DB->fetchObject($rs))
     {
@@ -32,7 +32,7 @@
     }
 
     /* Load Roles */
-    $rs = $DB->query("SELECT rid FROM roles");
+    $rs = $DB->query("SELECT rid FROM role");
     $roles = array();
     while ($role = $DB->fetchObject($rs))
     {

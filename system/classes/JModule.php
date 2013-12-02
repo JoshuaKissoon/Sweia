@@ -8,7 +8,7 @@
     class JModule
     {
 
-        private $tbl = "modules";
+        private $tbl = "module";
         public $permissions = array(), $urls = array();
         public $name, $description, $type;
 
@@ -32,7 +32,7 @@
         {
             global $DB;
             $modname = ($modname) ? $modname : $this->name;
-            $res = $DB->fetchObject($DB->query("SELECT name FROM modules WHERE name='::modname'", array("::modname" => $modname)));
+            $res = $DB->fetchObject($DB->query("SELECT name FROM module WHERE name='::modname'", array("::modname" => $modname)));
 
             if (isset($res->name))
             {
@@ -52,7 +52,7 @@
             if ($this->moduleExists($modname))
             {
                 global $DB;
-                $mod = $DB->fetchObject($DB->query("SELECT * FROM modules WHERE name='::modname'", array("::modname" => $modname)));
+                $mod = $DB->fetchObject($DB->query("SELECT * FROM module WHERE name='::modname'", array("::modname" => $modname)));
                 foreach ($mod as $key => $value)
                 {
                     $this->$key = $value;
@@ -74,7 +74,7 @@
         {
             global $DB;
             $this->permissions = array();
-            $perms = $DB->query("SELECT * FROM permissions WHERE module='::modname'", array("::modname" => $this->name));
+            $perms = $DB->query("SELECT * FROM permission WHERE module='::modname'", array("::modname" => $this->name));
             while ($perm = $DB->fetchObject($perms))
             {
                 $this->permissions[$perm->permission] = $perm->title;
@@ -88,7 +88,7 @@
         {
             global $DB;
             $this->urls = array();
-            $urls = $DB->query("SELECT * FROM url_handlers WHERE module='::modname'", array("::modname" => $this->name));
+            $urls = $DB->query("SELECT * FROM url_handler WHERE module='::modname'", array("::modname" => $this->name));
             while ($url = $DB->fetchObject($urls))
             {
                 $this->urls[$url->url] = $url;
@@ -168,7 +168,7 @@
                 '::title' => $title,
                 '::modname' => $this->name
             );
-            $sql = "INSERT INTO permissions (permission, title, module) VALUES ('::perm', '::title', '::modname')
+            $sql = "INSERT INTO permission (permission, title, module) VALUES ('::perm', '::title', '::modname')
                 ON DUPLICATE KEY UPDATE title = '::title', module = '::modname'";
             $DB->query($sql, $values);
         }
@@ -228,7 +228,7 @@
                 '::p8' => isset($parts[8]) ? $parts[8] : "",
                 '::p9' => isset($parts[9]) ? $parts[9] : "",
             );
-            $sql = "INSERT INTO url_handlers (url, module, permission, num_parts, p0, p1, p2, p3, p4, p5, p6, p7, p8, p9)
+            $sql = "INSERT INTO url_handler (url, module, permission, num_parts, p0, p1, p2, p3, p4, p5, p6, p7, p8, p9)
                 VALUES ('::url', '::mod', '::perm', '::num_parts', '::p0', '::p1', '::p2', '::p3', '::p4', '::p5', '::p6', '::p7', '::p8', '::p9')";
             $DB->query($sql, $values);
         }
@@ -244,7 +244,7 @@
                 '::url' => $url,
                 '::mod' => $this->name,
             );
-            $res = $DB->fetchObject($DB->query("SELECT url FROM url_handlers WHERE url='::url' AND module='::mod'", $args));
+            $res = $DB->fetchObject($DB->query("SELECT url FROM url_handler WHERE url='::url' AND module='::mod'", $args));
             if (isset($res->url))
             {
                 return ($url == $res->url) ? true : false;
@@ -319,7 +319,7 @@
                 '::title' => $title,
                 '::modname' => $this->name
             );
-            $sql = "UPDATE permissions SET title = '::title', module = '::modname' WHERE permission = '::perm'";
+            $sql = "UPDATE permission SET title = '::title', module = '::modname' WHERE permission = '::perm'";
             $DB->query($sql, $values);
         }
 
@@ -365,22 +365,22 @@
         }
 
         /**
-         * @desc Delete the specified url from url_handlers database table
+         * @desc Delete the specified url from url_handler database table
          */
         private function deleteUrl($url)
         {
             global $DB;
-            return $DB->query("DELETE FROM url_handlers WHERE url='::url'", array("::url" => $url));
+            return $DB->query("DELETE FROM url_handler WHERE url='::url'", array("::url" => $url));
         }
 
         /**
-         * @desc Delete the specified permission from permission table and role_permissions table
+         * @desc Delete the specified permission from permission table and role_permission table
          */
         private function deletePermission($perm)
         {
             global $DB;
-            $DB->query("DELETE FROM role_permissions WHERE permission='::perm'", array("::perm" => $perm));
-            $DB->query("DELETE FROM permissions WHERE permission='::perm'", array("::perm" => $perm));
+            $DB->query("DELETE FROM role_permission WHERE permission='::perm'", array("::perm" => $perm));
+            $DB->query("DELETE FROM permission WHERE permission='::perm'", array("::perm" => $perm));
         }
 
         /**
@@ -396,19 +396,19 @@
             global $DB;
 
             /* Delete the URLs and Permissions associated with this module */
-            $rs = $DB->query("SELECT url FROM url_handlers WHERE module='::mod'", array("::mod" => $this->name));
+            $rs = $DB->query("SELECT url FROM url_handler WHERE module='::mod'", array("::mod" => $this->name));
             while ($url = $DB->fetchObject($rs))
             {
                 $this->deleteUrl($url->url);
             }
-            $rs2 = $DB->query("SELECT * FROM permissions WHERE module='::mod'", array("::mod" => $this->name));
+            $rs2 = $DB->query("SELECT * FROM permission WHERE module='::mod'", array("::mod" => $this->name));
             while ($perm = $DB->fetchObject($rs2))
             {
                 $this->deletePermission($perm->permission);
             }
 
             /* Delete the module data */
-            return $DB->query("DELETE FROM modules WHERE name='::mod'", array("::mod" => $this->name));
+            return $DB->query("DELETE FROM module WHERE name='::mod'", array("::mod" => $this->name));
         }
 
     }

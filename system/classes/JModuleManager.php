@@ -2,13 +2,13 @@
 
     /**
      * @author Joshua Kissoon
-     * @description Class that handles all management operations on modules
+     * @description Class that handles all management operations on module
      * @date 20121219
      */
     class JModuleManager
     {
 
-        private static $modtbl = "modules";
+        private static $modtbl = "module";
 
         /**
          * @desc Here we simply load the main module handler file for this module: modulename.php
@@ -24,7 +24,7 @@
         public static function getModulePath($modname)
         {
             global $DB;
-            $temp = $DB->fetchObject($DB->query("SELECT type FROM modules WHERE name = '::mod'", array("::mod" => $modname)));
+            $temp = $DB->fetchObject($DB->query("SELECT type FROM module WHERE name = '::mod'", array("::mod" => $modname)));
             if (isset($temp->type) && $temp->type == "system")
             {
                 return SYSTEM_MODULES_PATH . "$modname/";
@@ -42,7 +42,7 @@
         public static function getModuleURL($modname)
         {
             global $DB;
-            $temp = $DB->fetchObject($DB->query("SELECT type FROM modules WHERE name = '::mod'", array("::mod" => $modname)));
+            $temp = $DB->fetchObject($DB->query("SELECT type FROM module WHERE name = '::mod'", array("::mod" => $modname)));
             if (isset($temp->type) && $temp->type == "system")
             {
                 $path = SYSTEM_MODULES_URL . "$modname/";
@@ -61,7 +61,7 @@
         {
             global $DB;
             $ret = array();
-            $res = $DB->query("SELECT * FROM modules");
+            $res = $DB->query("SELECT * FROM module");
             while ($mod = $DB->fetchObject($res))
             {
                 $ret[$mod->name] = $mod;

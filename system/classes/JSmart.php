@@ -16,7 +16,7 @@
         public static function log($type, $message)
         {
             global $DB;
-            $res = $DB->query("INSERT INTO logs (type, message) VALUES (':type', ':message')", array(":type" => $type, ":message" => $message));
+            $res = $DB->query("INSERT INTO system_log (type, message) VALUES (':type', ':message')", array(":type" => $type, ":message" => $message));
             return ($res) ? true : false;
         }
 
@@ -29,21 +29,21 @@
         {
             global $DB;
             $args = array("::vid" => $vid, "::value" => $value);
-            $sql = "INSERT INTO variables (vid, value) VALUES ('::vid', '::value')
+            $sql = "INSERT INTO variable (vid, value) VALUES ('::vid', '::value')
                 ON DUPLICATE KEY UPDATE value='::value'";
             $res = $DB->query($sql, $args);
             return $res;
         }
 
         /**
-         * @desc Retrieves a variable that was set earlier in the site variables table
+         * @desc Retrieves a variable that was set earlier in the site variable table
          * @param $vid The id by of the variable to retrieve
          */
         public static function variableGet($vid)
         {
             global $DB;
             $vid = $DB->escapeString($vid);
-            $res = $DB->query("SELECT value FROM variables WHERE vid='::vid'", array("::vid" => $vid));
+            $res = $DB->query("SELECT value FROM variable WHERE vid='::vid'", array("::vid" => $vid));
             $variable = $DB->fetchObject($res);
             if (isset($variable->value))
             {

@@ -10,8 +10,8 @@
 
        public $uid, $username, $status;
        private $password;
-       private $users_table = "users";
-       private static $usertbl = "users";
+       private $user_table = "user";
+       private static $usertbl = "user";
        private $roles = array(), $permissions = array();
 
        public function __construct($uid = 0)
@@ -53,7 +53,7 @@
              $values[":uid"] = $this->uid;
              $where .= " AND uid=':uid'";
              /* Loading the personal Information */
-             $sql = "SELECT * FROM $this->users_table u WHERE $where LIMIT 1";
+             $sql = "SELECT * FROM $this->user_table u WHERE $where LIMIT 1";
              $rs = $DB->query($sql, $values);
              $cuser = $DB->fetchObject($rs);
              if (valid($cuser))
@@ -76,7 +76,7 @@
        {
           /* Load this user roles */
           global $DB;
-          $roles = $DB->query("SELECT ur.rid, r.role FROM user_roles ur LEFT JOIN roles r ON (r.rid = ur.rid) WHERE uid='$this->uid'");
+          $roles = $DB->query("SELECT ur.rid, r.role FROM user_role ur LEFT JOIN role r ON (r.rid = ur.rid) WHERE uid='$this->uid'");
           while ($role = $DB->fetchObject($roles))
           {
              $this->roles[$role->rid] = $role->role;
@@ -97,7 +97,7 @@
           global $DB;
 
           $rids = implode(", ", array_keys($this->roles));
-          $rs = $DB->query("SELECT permission FROM role_permissions WHERE rid IN ($rids)");
+          $rs = $DB->query("SELECT permission FROM role_permission WHERE rid IN ($rids)");
           while ($perm = $DB->fetchObject($rs))
           {
              $this->permissions[$perm->permission] = $perm->permission;
@@ -132,14 +132,14 @@
            */
           global $DB;
           $this->password = $this->hashPassword($new_password);
-          $DB->updateFields($this->users_table, array("password" => $this->password), $where = "uid='$this->uid'");
+          $DB->updateFields($this->user_table, array("password" => $this->password), $where = "uid='$this->uid'");
        }
 
        private function savePassword()
        {
           /* Save the user's password */
           global $DB;
-          $DB->updateFields($this->users_table, array("password" => $this->password), $where = "uid='$this->uid'");
+          $DB->updateFields($this->user_table, array("password" => $this->password), $where = "uid='$this->uid'");
        }
 
        private function hashPassword($password)
@@ -180,7 +180,7 @@
               ":other_name" => @$this->other_name,
               ":dob" => @$this->dob,
           );
-          $sql = "INSERT INTO $this->users_table (username, password, email, first_name, last_name, other_name, dob)
+          $sql = "INSERT INTO $this->user_table (username, password, email, first_name, last_name, other_name, dob)
                 VALUES(':username', '$this->password', ':email', ':first_name', ':last_name', ':other_name', ':dob')";
           $DB->query($sql, $args);
           $this->uid = $DB->lastInsertId();
@@ -193,7 +193,7 @@
        {
           /* Check if its a valid role id and add the role to the user */
           global $DB;
-          $res = $DB->query("SELECT role FROM roles WHERE rid='::rid'", array('::rid' => $rid));
+          $res = $DB->query("SELECT role FROM role WHERE rid='::rid'", array('::rid' => $rid));
           $role = $DB->fetchObject($res);
           if (valid(@$role->role))
           {
@@ -211,11 +211,11 @@
           /* Everything seems Legit, lets update/add roles for this user now */
           global $DB;
           /* Remove all the roles this user had */
-          $DB->query("DELETE FROM user_roles WHERE uid='$this->uid'");
+          $DB->query("DELETE FROM user_role WHERE uid='$this->uid'");
 
           foreach ((array) $this->roles as $rid => $role)
           {
-             $DB->query("INSERT INTO user_roles (uid, rid) VALUES ('::uid', '::rid')", array('::rid' => $rid, '::uid' => $this->uid));
+             $DB->query("INSERT INTO user_role (uid, rid) VALUES ('::uid', '::rid')", array('::rid' => $rid, '::uid' => $this->uid));
           }
           return true;
        }
@@ -225,7 +225,7 @@
           /* Check if the username and password is valid, and returns that user object */
           global $DB;
           $args = array(":username" => $this->username);
-          $sql = "SELECT uid FROM $this->users_table WHERE username=':username' and password='$this->password' LIMIT 1";
+          $sql = "SELECT uid FROM $this->user_table WHERE username=':username' and password='$this->password' LIMIT 1";
           $cuser = $DB->fetchObject($DB->query($sql, $args));
           if (valid(@$cuser->uid))
           {
@@ -247,7 +247,7 @@
        {
           /* Check the statuses table and check if a user with this status is allowed to login */
           global $DB;
-          $res = $DB->query("SELECT user_allowed, error_msg FROM user_statuses WHERE sid = '::status'", array("::status" => $this->status));
+          $res = $DB->query("SELECT user_allowed, error_msg FROM user_status WHERE sid = '::status'", array("::status" => $this->status));
           $data = $DB->fetchObject($res);
           if (!@$data->user_allowed)
           {
@@ -263,7 +263,7 @@
           /* Checks if the username is available */
           global $DB;
           $this->username = valid($username) ? $username : $this->username;
-          $DB->query("SELECT username FROM $this->users_table WHERE username='::un'", array("::un" => $this->username));
+          $DB->query("SELECT username FROM $this->user_table WHERE username='::un'", array("::un" => $this->username));
           $temp = $DB->fetchObject();
           return (@$temp->username) ? false : true;
        }
@@ -273,7 +273,7 @@
           /* Checks if the username is available */
           global $DB;
           $this->email = valid($email) ? $email : @$this->email;
-          $DB->query("SELECT email FROM $this->users_table WHERE email='::email'", array("::email" => $this->email));
+          $DB->query("SELECT email FROM $this->user_table WHERE email='::email'", array("::email" => $this->email));
           $temp = $DB->fetchObject();
           return (@$temp->email) ? $temp->email : false;
        }
@@ -328,7 +328,7 @@
           {
              /* If the status is not set in the user object, load it */
              global $DB;
-             $this->status = $DB->getFieldValue($this->users_table, "status", "uid = $this->uid");
+             $this->status = $DB->getFieldValue($this->user_table, "status", "uid = $this->uid");
           }
           return $this->status;
        }
@@ -340,14 +340,14 @@
 
           /* Check if its a valid user's status */
           $args = array("::status" => $status);
-          $res = $DB->fetchObject($DB->query("SELECT sid FROM user_statuses WHERE sid='::status'", $args));
+          $res = $DB->fetchObject($DB->query("SELECT sid FROM user_status WHERE sid='::status'", $args));
           if (!@$res->sid)
              return false;
 
 
           /* Its a valid user status, update this user's status */
           $args['::uid'] = $this->uid;
-          return $DB->query("UPDATE users SET status='::status' WHERE uid = '::uid'", $args);
+          return $DB->query("UPDATE user SET status='::status' WHERE uid = '::uid'", $args);
        }
 
     }

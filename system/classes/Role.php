@@ -24,7 +24,7 @@
        {
           /* Check if the $rid given is that of a valid role */
           global $DB;
-          $res = $DB->query("SELECT rid FROM roles WHERE rid = '::rid'", array("::rid" => $rid));
+          $res = $DB->query("SELECT rid FROM role WHERE rid = '::rid'", array("::rid" => $rid));
           $role = $DB->fetchObject($res);
           if (valid(@$role->rid))
              return true;
@@ -36,7 +36,7 @@
        {
           /* Loads all the data for the role */
           global $DB;
-          $res = $DB->fetchObject($DB->query("SELECT * FROM roles WHERE rid='$this->rid'"));
+          $res = $DB->fetchObject($DB->query("SELECT * FROM role WHERE rid='$this->rid'"));
           foreach ($res as $key => $value)
              $this->$key = $value;
           $this->loadPermissions();
@@ -51,7 +51,7 @@
            * Then we add it to the role
            */
           global $DB;
-          $res = $DB->fetchObject($DB->query("SELECT permission FROM permissions WHERE permission='::perm'", array("::perm" => $perm)));
+          $res = $DB->fetchObject($DB->query("SELECT permission FROM permission WHERE permission='::perm'", array("::perm" => $perm)));
           if (!valid($res->permission))
              return false;
 
@@ -68,7 +68,7 @@
        private function loadPermissions()
        {
           global $DB;
-          $res = $DB->query("SELECT permission FROM role_permissions WHERE rid = '::rid'", array("::rid" => $this->rid));
+          $res = $DB->query("SELECT permission FROM role_permission WHERE rid = '::rid'", array("::rid" => $this->rid));
           while ($perm = $DB->fetchObject($res))
              $this->permissions[$perm->permission] = $perm->permission;
        }
@@ -95,7 +95,7 @@
               '::role' => $this->role,
               '::description' => $this->description,
           );
-          $sql = "INSERT INTO roles (role, description) VALUES ('::role', '::description')";
+          $sql = "INSERT INTO role (role, description) VALUES ('::role', '::description')";
           $DB->query($sql, $args);
           $this->rid = $DB->lastInsertId();
           $this->savePermissions();
@@ -110,14 +110,14 @@
            * then add the permissions that are currently here
            */
           global $DB;
-          $DB->query("DELETE FROM role_permissions WHERE rid='::rid'", array("::rid" => $this->rid));
+          $DB->query("DELETE FROM role_permission WHERE rid='::rid'", array("::rid" => $this->rid));
           foreach ($this->permissions as $perm)
           {
              $args = array(
                  '::rid' => $this->rid,
                  '::permission' => $perm,
              );
-             $DB->query("INSERT INTO role_permissions (rid, permission) VALUES ('::rid', '::permission')", $args);
+             $DB->query("INSERT INTO role_permission (rid, permission) VALUES ('::rid', '::permission')", $args);
           }
        }
 
@@ -136,9 +136,9 @@
           /* Remove this role from all user's and permissions and then delete all of it's data */
           global $DB;
           $args = array("::rid" => $rid);
-          $DB->query("DELETE FROM user_roles WHERE rid = '::rid'", $args);
-          $DB->query("DELETE FROM role_permissions WHERE rid = '::rid'", $args);
-          $DB->query("DELETE FROM roles WHERE rid = '::rid'", $args);
+          $DB->query("DELETE FROM user_role WHERE rid = '::rid'", $args);
+          $DB->query("DELETE FROM role_permission WHERE rid = '::rid'", $args);
+          $DB->query("DELETE FROM role WHERE rid = '::rid'", $args);
           return true;
        }
 

@@ -11,5 +11,5 @@ Add admin module configuration page to configure site name, favicon, etc
 
 Add a field to the roles table that disables deleting anonymous role, role_type = {system, .....}
 Remove the styles from JSmart.css that are not needed there and add them to style.css
-rename the logs table to system_logs
+rename the system_log table to system_logs
 Use form styles from CGAdm

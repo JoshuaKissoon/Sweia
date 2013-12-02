@@ -40,7 +40,7 @@
        case "add":
           /* Load the Add User form */
           $tpl = new Template($usermod_path . "templates/forms/add-user");
-          $rs = $DB->query("SELECT rid, role FROM roles");
+          $rs = $DB->query("SELECT rid, role FROM role");
           $roles = array();
           while ($r = $DB->fetchObject($rs))
           {
@@ -51,7 +51,7 @@
           break;
        default:
           /* Show user listing */
-          $rs = $DB->query("SELECT uid FROM users");
+          $rs = $DB->query("SELECT uid FROM user");
           $users = array();
           while ($user = $DB->fetchObject($rs))
              $users[] = $user->uid;

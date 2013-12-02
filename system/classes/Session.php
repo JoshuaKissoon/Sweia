@@ -51,7 +51,7 @@
               "::data" => json_encode($_SESSION),
           );
           global $DB;
-          $DB->query("INSERT INTO user_sessions (uid, sid, ipaddress, status, data) VALUES('::uid', '::sid', '::ipaddress', '::status', '::data')", $args);
+          $DB->query("INSERT INTO user_session (uid, sid, ipaddress, status, data) VALUES('::uid', '::sid', '::ipaddress', '::status', '::data')", $args);
        }
 
        public function loadDataFromCookies()
@@ -65,7 +65,7 @@
 
           /* If there is a cookie, check if there exists a valid database session and load it */
           global $DB;
-          $res = $DB->query("SELECT * FROM user_sessions WHERE sid='::sid' AND status='1' LIMIT 1", array("::sid" => $_COOKIE['jsmartsid']));
+          $res = $DB->query("SELECT * FROM user_session WHERE sid='::sid' AND status='1' LIMIT 1", array("::sid" => $_COOKIE['jsmartsid']));
           if ($DB->resultNumRows() < 1)
              return false;
 
@@ -94,7 +94,7 @@
               "::usid" => $user_session->usid,
               "::sid" => $this->sid,
           );
-          return $DB->query("UPDATE user_sessions SET sid = '::sid' WHERE usid='::usid'", $args);
+          return $DB->query("UPDATE user_session SET sid = '::sid' WHERE usid='::usid'", $args);
        }
 
        public function logoutUser()
@@ -103,7 +103,7 @@
 
           global $DB;
           /* Set the session's status to 0 in the database */
-          $DB->query("UPDATE user_sessions SET status = '0' WHERE sid='::sid'", array("::sid" => session_id()));
+          $DB->query("UPDATE user_session SET status = '0' WHERE sid='::sid'", array("::sid" => session_id()));
 
           unset($_SESSION['uid']);
           unset($this->uid);
@@ -118,7 +118,7 @@
           $session_lifetime = JSmart::variableGet("session_lifetime");
           $old_session_ts = time() - $session_lifetime;
           $old_session_dt = date("Y-m-d H:i:s", $old_session_ts);
-          $sql = "UPDATE user_sessions SET status='0' WHERE create_ts < '$old_session_dt'";
+          $sql = "UPDATE user_session SET status='0' WHERE create_ts < '$old_session_dt'";
           return $DB->query($sql);
           exit;
        }

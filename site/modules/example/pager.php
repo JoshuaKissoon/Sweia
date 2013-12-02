@@ -5,8 +5,8 @@
      */
 
     $content = "Pager Class Example Usage <hr /> <br />";
-    $sql = "SELECT * FROM countries";
-    $count = $DB->query("SELECT count(code) as count FROM countries");
+    $sql = "SELECT * FROM country";
+    $count = $DB->query("SELECT count(code) as count FROM country");
     $count = $DB->fetchObject($count)->count;
     $params = array(
         "total_records" => $count,
@@ -19,7 +19,7 @@
     );
     $pager = new JPager($params);
     $limit_sql = $pager->limit_query;
-    $resultset = $DB->query("SELECT * FROM countries $limit_sql");
+    $resultset = $DB->query("SELECT * FROM country $limit_sql");
     $count = 0;
     while($country = $DB->fetchObject($resultset))
     {

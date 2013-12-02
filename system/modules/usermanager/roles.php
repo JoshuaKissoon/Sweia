@@ -40,7 +40,7 @@
           break;
        default:
           /* Show role listing */
-          $rs = $DB->query("SELECT rid FROM roles");
+          $rs = $DB->query("SELECT rid FROM role");
           $roles = array();
           while ($role = $DB->fetchObject($rs))
              $roles[] = $role->rid;
