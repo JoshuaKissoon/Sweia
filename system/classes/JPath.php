@@ -79,6 +79,10 @@
          */
         public static function getUrlHandlers($url = "")
         {
+            if(!valid($url))
+            {
+                $url = self::getUrlQ();
+            }
             if (!valid($url))
             {
                 $url = HOME_URL;
@@ -134,9 +138,7 @@
                 if (self::userHasURLAccessPermission($uid, $url))
                 {
                     /* If the user has the necessary permission to access the URL, add the URL back to the menu with the SITE_URL prepended to the URL */
-                    $base_url = self::baseURL();
-
-                    $url = $base_url . $url;
+                    $url = self::absoluteUrl($url);
                     $menu[$url] = $menuItem;
                 }
             }
@@ -155,7 +157,7 @@
             $res = $DB->query("SELECT permission FROM url_handler WHERE url='::url'", array("::url" => $url));
             $tmp = $DB->fetchObject($res);
 
-            if (!isset($tmp->permission))
+            if (!isset($tmp->permission) || !valid($tmp->permission))
             {
                 /* If the URL has no permission, return true that the user has the permission to access the URL */
                 return true;

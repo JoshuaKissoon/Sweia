@@ -82,7 +82,8 @@
             }
             if ($log_query)
             {
-                $res = mysqli_query($this->connection, "INSERT INTO system_log (type, message) VALUES ('mysqli_query', '$this->last_query')");
+                $message = $this->escapeString($this->last_query);
+                $res = mysqli_query($this->connection, "INSERT INTO system_log (type, message) VALUES ('mysqli_query', '$message')");
             }
             return $this->resultset;
         }

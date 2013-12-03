@@ -16,7 +16,6 @@
 
     /* URLs to site resources */
     define("INCLUDES_URL", BASE_URL . "system/includes/");
-    define("INCLUDES_PATH", BASE_PATH . "system/includes/");
     define("CLASSES_URL", BASE_URL . "system/classes/");
     define("CLASSES_PATH", BASE_PATH . "system/classes/");
     define("MODULES_URL", BASE_URL . "site/modules/");

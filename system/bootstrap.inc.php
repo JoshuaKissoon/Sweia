@@ -36,6 +36,9 @@
     require_once SITE_DEFAULT_FOLDER_PATH . 'includes.inc.php';
     require_once SITE_DEFAULT_FOLDER_PATH . 'constants.inc.php';
 
+    /* Initialize the theme */
+    Theme::init();
+
     function _jsmart_constants_initialize()
     {
         /* Add our constants that are commonly used and will be used a lot throughout the site */
