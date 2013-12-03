@@ -16,9 +16,9 @@
             global $THEMER;
 
             /* Adding foundation */
-            $THEMER->addCss(THEME_LIBRARIES_URL . "foundation/css/foundation-grid.min.css");
+            $THEMER->addCss(THEME_LIBRARIES_URL . "foundation/css/foundation.min.css");
             $THEMER->addScript(THEME_LIBRARIES_URL . "foundation/js/modernizr.js", 1, true);
-            $THEMER->addScript(THEME_LIBRARIES_URL . "foundation/js/foundation-grid.min.js");
+            $THEMER->addScript(THEME_LIBRARIES_URL . "foundation/js/foundation.min.js");
 
             $THEMER->addCss(CSS_URL . "style.css");
             $THEMER->addCss(array("file" => CSS_URL . "print.css", "media" => "print"));
