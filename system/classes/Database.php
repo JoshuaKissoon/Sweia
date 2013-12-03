@@ -142,7 +142,7 @@
             {
                 return false;
             }
-            $this->current_row = mysqli_fetch_array(@$resultset);
+            $this->current_row = mysqli_fetch_array($resultset);
             return $this->current_row;
         }
 
@@ -156,7 +156,7 @@
             {
                 return false;
             }
-            $this->current_row = mysqli_fetch_object(@$resultset);
+            $this->current_row = mysqli_fetch_object($resultset);
             return $this->current_row;
         }
 

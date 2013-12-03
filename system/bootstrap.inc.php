@@ -7,8 +7,8 @@
     _jsmart_constants_initialize();
 
 
-    /* Site files */
-    require_once SITE_DEFAULT_FOLDER_PATH . 'constants.inc.php';
+    /* Load the main constant files */
+    require_once INCLUDES_PATH . 'constants.inc.php';
 
     /* Load System Files */
     require_once INCLUDES_PATH . 'functions.inc.php';
@@ -34,6 +34,7 @@
 
     /* Load the site specific includes now */
     require_once SITE_DEFAULT_FOLDER_PATH . 'includes.inc.php';
+    require_once SITE_DEFAULT_FOLDER_PATH . 'constants.inc.php';
 
     function _jsmart_constants_initialize()
     {
@@ -45,6 +46,6 @@
 
         define("BASE_URL", rtrim($protocol . $host . '/' . SITE_FOLDER, '/') . '/');
         define("BASE_PATH", rtrim($_SERVER['DOCUMENT_ROOT'] . '/' . SITE_FOLDER, '/') . '/');
-        define("SITE_DEFAULT_FOLDER_PATH", BASE_PATH . 'site/default/');
+        define("INCLUDES_PATH", BASE_PATH . 'system/includes/');
     }
     
