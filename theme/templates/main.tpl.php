@@ -1,6 +1,6 @@
 <!-- Just a Blank template with place holders, this can be used on any page -->
 <div id="body-wrapper" class="<?php print @$wrapper_class; ?>">
-    <div id="header-wrapper">
+    <div id="header-wrapper" class="row">
         <div id="header">
             <div id="header-content">
                 <div id="header-left">
@@ -17,7 +17,7 @@
             </div>
         </div>
     </div>
-    <div id="main-wrapper" class="clearfix">
+    <div id="main-wrapper" class="clearfix row">
         <div id="main" class="clearfix">
             <div id="main-left" class="section">
                 <?php print @$main_left; ?>
@@ -30,7 +30,7 @@
             </div>
         </div>
     </div>
-    <div id="footer-wrapper">
+    <div id="footer-wrapper" class="row">
         <div id="footer">
             <?php print @$footer; ?>
         </div>

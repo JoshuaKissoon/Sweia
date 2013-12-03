@@ -14,12 +14,15 @@
         public static function init()
         {
             global $THEMER;
+
+            /* Adding foundation */
             $THEMER->addCss(THEME_LIBRARIES_URL . "foundation/css/foundation-grid.min.css");
-            $THEMER->addCss(CSS_URL . "style.css");
-            $THEMER->addCss(CSS_URL . "jsmart.css");
-            $THEMER->addCss(array('file' => CSS_URL . 'mobile.css', 'media' => 'all and (min-width: 0px) and (max-width: 700px)'));
             $THEMER->addScript(THEME_LIBRARIES_URL . "foundation/js/modernizr.js", 1, true);
             $THEMER->addScript(THEME_LIBRARIES_URL . "foundation/js/foundation-grid.min.js");
+
+            $THEMER->addCss(CSS_URL . "style.css");
+            $THEMER->addCss(array("file" => CSS_URL . "print.css", "media" => "print"));
+            $THEMER->addCss(array('file' => CSS_URL . 'mobile.css', 'media' => 'all and (min-width: 0px) and (max-width: 700px)'));
         }
 
         /**
@@ -35,7 +38,7 @@
             {
                 return false;
             }
-            
+
             /* If there are messages, generate the ul */
             $template = new Template(TEMPLATES_PATH . "/inner/screen-messages");
             $template->messages = $messages;
