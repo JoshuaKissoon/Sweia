@@ -14,7 +14,7 @@
     <body class="<?php print implode(" ", JPath::urlArgs()); ?>">
         <div id="status-messages"><?php print Theme::getFormattedScreenMessages(); ?></div>
         <?php print @$content; ?>
-        <?= @$stylesheets; ?>
-        <?= @$scripts; ?>
+        <?= @$footer_stylesheets; ?>
+        <?= @$footer_scripts; ?>
     </body>
 </html>

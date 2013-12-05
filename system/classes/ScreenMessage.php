@@ -41,8 +41,9 @@
         {
             if (isset($_SESSION['screen_messages']))
             {
-                return $_SESSION['screen_messages'];
+                $msgs = $_SESSION['screen_messages'];
                 unset($_SESSION['screen_messages']);   // Clear the messages after they have been displayed
+                return $msgs;
             }
             return array();
         }

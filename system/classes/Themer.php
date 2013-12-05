@@ -55,21 +55,21 @@
             }
         }
 
-        public function addCss($params, $weight = 10, $header_stylesheet = false)
+        public function addCss($params, $weight = 10, $footer_stylesheet = false)
         {
             /* Takes in an array of parameters of a stylesheet and stores it */
-            if ($header_stylesheet)
+            if ($footer_stylesheet)
             {
-                if (!isset($this->stylesheets['head']))
+                if (!isset($this->stylesheets['footer']))
                 {
-                    $this->stylesheets['head'] = array();
+                    $this->stylesheets['footer'] = array();
                 }
 
-                while (isset($this->stylesheets['head'][$weight]))
+                while (isset($this->stylesheets['footer'][$weight]))
                 {
                     $weight++;
                 }
-                $this->stylesheets['head'][$weight] = $params;
+                $this->stylesheets['footer'][$weight] = $params;
             }
             else
             {
@@ -81,14 +81,14 @@
             }
         }
 
-        private function renderHeaderCssFiles()
+        private function renderFooterCssFiles()
         {
             /* Returns the HTML code for all the stylesheets to be put in the site head */
-            if (isset($this->stylesheets['head']) && is_array($this->stylesheets['head']))
+            if (isset($this->stylesheets['footer']) && is_array($this->stylesheets['footer']))
             {
-                ksort($this->stylesheets['head']);
-                $ret = HTML::stylesheets($this->stylesheets['head']);
-                unset($this->stylesheets['head']);
+                ksort($this->stylesheets['footer']);
+                $ret = HTML::stylesheets($this->stylesheets['footer']);
+                unset($this->stylesheets['footer']);
                 return $ret;
             }
         }
@@ -185,45 +185,41 @@
             $this->sitetitle = $title;
         }
 
+        /**
+         * @desc Render the theme to the user by
+         *      1. Load main file
+         *      2. Set Regions variables
+         *      3. Save the template output
+         */
         public function render()
         {
-            /* Render the theme */
-            /*
-             * Load main file
-             * Set Regions variables
-             * Save the template output
-             */
             $main = new Template(TEMPLATES_PATH . $this->templates['main']);
             foreach ($this->regions as $region => $region_array)
             {
-                /*
-                 * The different content added to the regions are initially stored in an array
-                 * Now we implode each region into a string
-                 */
+                /* The different content added to the regions are initially stored in an array, now we implode each region into a string */
                 $main->$region = implode("", $region_array);
             }
+
             foreach ($this->variables as $var => $value)
             {
-                /*
-                 * Add the variables to the template
-                 */
+                /* Add the variables to the template */
                 $main->$var = $value;
             }
 
-            /*
-             * Load HTML template
-             * Put css, scripts, header_tags and main into html variables
-             * Publish this template
-             */
+            /* Load HTML template */
             $html = new Template(TEMPLATES_PATH . $this->templates['html']);
-            $html->header_stylesheets = $this->renderHeaderCssFiles();
-            $html->stylesheets = $this->renderCssFiles();
+
+            /* Put css, scripts, header_tags and main into html variables */
+            $html->header_stylesheets = $this->renderCssFiles();
+            $html->footer_stylesheets = $this->renderFooterCssFiles();
             $html->header_scripts = $this->renderHeaderScriptFiles();
-            $html->scripts = $this->renderScriptFiles();
+            $html->footer_scripts = $this->renderScriptFiles();
             $html->content = $main->parse();
             $html->stylesheets = $this->renderCssFiles();
             $html->title = ($this->sitetitle) ? $this->sitetitle : JSmart::getSiteName();
             $html->head = implode("", $this->head);
+
+            /* Publish this template */
             $html->publish();
         }
 
