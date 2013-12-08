@@ -47,7 +47,7 @@
       </thead>
       <tbody>
          <?php foreach ((array) $users as $uid): ?>
-                <?php $user = new User($uid); ?>
+                <?php $user = new JSmartUser($uid); ?>
                 <?php @$rclass = (@$rclass == "odd") ? "even" : "odd"; ?>
                 <tr id="<?php print $user->uid; ?>" class="user <?php print $rclass; ?>">
                    <td class="number"><?php print ++$count; ?></td>

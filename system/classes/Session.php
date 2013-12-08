@@ -21,7 +21,7 @@
        public function loginUser($cuser)
        {
           /* Here we check if this is a valid user, then generate a new session id and login this user */
-          if (!User::isUser($cuser->uid))
+          if (!JSmartUser::isUser($cuser->uid))
           {
              /* If this user object is not valid */
              ScreenMessage::setMessage("Sorry login Failed", "error");
@@ -75,7 +75,7 @@
           $data = json_decode($user_session->data);
           foreach ($data as $key => $value)
              $_SESSION[$key] = $value;
-          $cuser = new User($user_session->uid);
+          $cuser = new JSmartUser($user_session->uid);
           $this->uid = $_SESSION['uid'] = $cuser->uid;
           $this->logged_in = $_SESSION['logged_in'] = true;
           $this->username = $_SESSION['logged_in_username'] = $cuser->username;

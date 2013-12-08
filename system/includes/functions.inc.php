@@ -10,7 +10,7 @@
      * @desc Checks the validity of an expression
      * @return Boolean Whether the expression is valid or not
      */
-    function valid($expression)
+    function valid($expression = "")
     {
         if (!isset($expression))
         {

@@ -11,7 +11,7 @@
        {
           ScreenMessage::setMessage("Please fill up all the fields", "warning");
        }
-       $user = new User();
+       $user = new JSmartUser();
        $user->username = $_POST['username'];
        $user->setPassword($_POST['password']);
        $user->first_name = $_POST['fname'];
@@ -28,8 +28,8 @@
           case "delete-user":
              hprint($_GET);
              /* Here we handle deleting a user */
-             if ($USER->hasPermission("delete_user") && User::isUser(@$_GET['uid']))
-                User::delete(@$_GET['uid']);
+             if ($USER->hasPermission("delete_user") && JSmartUser::isUser(@$_GET['uid']))
+                JSmartUser::delete(@$_GET['uid']);
              exit;
              break;
        }

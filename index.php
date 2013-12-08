@@ -8,7 +8,7 @@
     require_once 'system/bootstrap.inc.php';
 
     /* Load the data used throughout the site */
-    $USER = new User(@$_SESSION['uid']);
+    $USER = new JSmartUser(@$_SESSION['uid']);
     $URL = JPath::urlArgs();
 
     if (!$SESSION->isLoggedIn())
