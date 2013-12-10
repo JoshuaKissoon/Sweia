@@ -11,11 +11,10 @@
         private $base_url;
         public $args = array();
 
-        /*
+        /**
          * @desc Get the URL sections 
          * @param $url The URL to process
          */
-
         public function __construct($url)
         {
             $url = explode("?", $url);
@@ -35,33 +34,31 @@
             }
         }
 
-        /*
+        /**
          * @desc Add a new argument to the URL
+         * @param $key The title of the argument to add
+         * @param $value The value of the argument to add
          */
-
-        public function addArg($title, $value)
+        public function addArg($key, $value)
         {
-            $this->args[$title] = $value;
+            $this->args[$key] = $value;
         }
 
-        /*
+        /**
          * @desc Remove an argument from the URL
-         * @param $title The key of the argument to remove
+         * @param $key The key of the argument to remove
          */
-
-        public function removeArg($title)
+        public function removeArg($key)
         {
-
-            if (isset($this->args[$title]))
+            if (isset($this->args[$key]))
             {
-                unset($this->args[$title]);
+                unset($this->args[$key]);
             }
         }
 
-        /*
+        /**
          * @desc Method that builds and returns the URL
          */
-
         public function getURL()
         {
             return $this->base_url . "?" . http_build_query($this->args);

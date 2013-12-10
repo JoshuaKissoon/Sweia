@@ -13,23 +13,23 @@
          */
         public static function init()
         {
-            global $THEMER;
+            global $REGISTRY;
 
             /* Adding Modernizr */
-            $THEMER->addScript(THEME_LIBRARIES_URL . "foundation/js/modernizr.js", 1, true);
+            $REGISTRY->addScript(THEME_LIBRARIES_URL . "foundation/js/modernizr.js", 1, true);
 
             /* Adding JQuery */
-            $THEMER->addScript(THEME_LIBRARIES_URL . "jquery/jquery-2.0.3.min.js", 2, true);
+            $REGISTRY->addScript(THEME_LIBRARIES_URL . "jquery/jquery-2.0.3.min.js", 2, true);
             
             
             /* Adding foundation */
-            $THEMER->addCss(THEME_LIBRARIES_URL . "foundation/css/foundation.min.css");
-            $THEMER->addScript(THEME_LIBRARIES_URL . "foundation/js/foundation.min.js");
+            $REGISTRY->addCss(THEME_LIBRARIES_URL . "foundation/css/foundation.min.css");
+            $REGISTRY->addScript(THEME_LIBRARIES_URL . "foundation/js/foundation.min.js");
 
-            $THEMER->addCss(CSS_URL . "style.css");
-            $THEMER->addCss(array("file" => CSS_URL . "print.css", "media" => "print"));
-            $THEMER->addCss(array('file' => CSS_URL . 'tablet.css', 'media' => 'all and (min-width: 400px) and (max-width: 900px)'));
-            $THEMER->addCss(array('file' => CSS_URL . 'mobile.css', 'media' => 'all and (min-width: 0px) and (max-width: 400px)'));
+            $REGISTRY->addCss(CSS_URL . "style.css");
+            $REGISTRY->addCss(array("file" => CSS_URL . "print.css", "media" => "print"));
+            $REGISTRY->addCss(array('file' => CSS_URL . 'tablet.css', 'media' => 'all and (min-width: 400px) and (max-width: 900px)'));
+            $REGISTRY->addCss(array('file' => CSS_URL . 'mobile.css', 'media' => 'all and (min-width: 0px) and (max-width: 400px)'));
         }
 
         /**

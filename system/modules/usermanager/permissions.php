@@ -41,4 +41,4 @@
     $tpl = new Template($usermod_path . "templates/forms/role-permissions");
     $tpl->permissions = $permissions;
     $tpl->roles = $roles;
-    $THEMER->addContent("content", $tpl->parse());
+    $REGISTRY->addContent("content", $tpl->parse());

@@ -36,7 +36,7 @@
        case "add":
           /* Load the Add Role form */
           $tpl = new Template($usermod_path . "templates/forms/add-role");
-          $THEMER->addContent("content", $tpl->parse());
+          $REGISTRY->addContent("content", $tpl->parse());
           break;
        default:
           /* Show role listing */
@@ -46,6 +46,6 @@
              $roles[] = $role->rid;
           $tpl = new Template($usermod_path . "templates/inner/roles-list");
           $tpl->roles = $roles;
-          $THEMER->addContent("content", $tpl->parse());
+          $REGISTRY->addContent("content", $tpl->parse());
           break;
     }

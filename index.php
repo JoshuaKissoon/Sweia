@@ -29,6 +29,6 @@
     }
 
     /* Render the theme after the necessary module is finished with its operations */
-    $THEMER->render();
+    $REGISTRY->renderPage();
     exit;
     

@@ -47,7 +47,7 @@
              $roles[$r->rid] = $r->role;
           }
           $tpl->roles = $roles;
-          $THEMER->addContent("content", $tpl->parse());
+          $REGISTRY->addContent("content", $tpl->parse());
           break;
        default:
           /* Show user listing */
@@ -57,6 +57,6 @@
              $users[] = $user->uid;
           $tpl = new Template($usermod_path . "templates/inner/users-list");
           $tpl->users = $users;
-          $THEMER->addContent("content", $tpl->parse());
+          $REGISTRY->addContent("content", $tpl->parse());
           break;
     }

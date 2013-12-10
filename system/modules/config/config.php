@@ -13,12 +13,12 @@
     }
 
     /* Set the site title */
-    $THEMER->setSiteTitle(JSmart::getSiteName() . " Configuration");
+    $REGISTRY->setSiteTitle(JSmart::getSiteName() . " Configuration");
 
     /* Load the admin site navbar and sidebar */
     $navbar = new Template(CONFIG_PATH . "templates/menus/navbar");
     $navbar->items = config_navbar();
-    $THEMER->addContent("header_left", $navbar->parse());
+    $REGISTRY->addContent("header_left", $navbar->parse());
 
 
 

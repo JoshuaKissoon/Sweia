@@ -3,103 +3,99 @@
     /**
      * @author Joshua Kissoon
      * @date 20121220
-     * @description Theme modification class,
-     *              This is an abstraction class on the template class to let modules modify the content of the theme
+     * @description This is the main site Registry class that manages everything within the site, all page components are placed here then it is rendered
      */
-    class Themer
+    class Registry
     {
 
-        private $templates = array(
-            "html" => "html",
-            "main" => "main",
-        );
+        private $templates = array();
         private $stylesheets = array();
         private $scripts = array();
         private $regions = array();
         private $variables = array();
         private $head = array();
-        public $sitetitle;
+        public $pagetitle = "";
 
-        public function __construct()
-        {
-            $this->variables['sitename'] = JSmart::getSiteName();
-        }
-
+        /**
+         * @desc Specifies the HTML Template
+         * @param $file The template file location
+         */
         public function setHtmlTemplate($file)
         {
-            /* Function used to change the html template file */
             $name = rtrim($file, ".tpl.php");
-            $file = $name . ".tpl.php";
-            if (is_file(TEMPLATES_PATH . $file))
+            if (is_file($name . ".tpl.php"))
             {
                 $this->templates['html'] = $name;
             }
             else
             {
-                /* Throw some error */
+                /* @todo Throw some error */
             }
         }
 
+        /**
+         * @desc Returns the HTML template file name
+         */
+        private function getHtmlTemplate()
+        {
+            return (isset($this->templates['html'])) ? $this->templates['html'] : TEMPLATES_PATH . "html";
+        }
+
+        /**
+         * @desc Specifies the MAIN Template
+         * @param $file The template file location
+         */
         public function setMainTemplate($file)
         {
-            /* Function used to change the main template file */
             $name = rtrim($file, ".tpl.php");
-            $file = $name . ".tpl.php";
-            if (is_file(TEMPLATES_PATH . $file))
+            if (is_file($name . ".tpl.php"))
             {
                 $this->templates['main'] = $name;
             }
             else
             {
-                /* Throw some error */
+                /* @todo Throw some error */
             }
         }
 
-        public function addCss($params, $weight = 10, $footer_stylesheet = false)
+        /**
+         * @desc Returns the MAIN template file name
+         */
+        private function getMainTemplate()
         {
-            /* Takes in an array of parameters of a stylesheet and stores it */
-            if ($footer_stylesheet)
-            {
-                if (!isset($this->stylesheets['footer']))
-                {
-                    $this->stylesheets['footer'] = array();
-                }
-
-                while (isset($this->stylesheets['footer'][$weight]))
-                {
-                    $weight++;
-                }
-                $this->stylesheets['footer'][$weight] = $params;
-            }
-            else
-            {
-                while (isset($this->stylesheets[$weight]))
-                {
-                    $weight++;
-                }
-                $this->stylesheets[$weight] = $params;
-            }
+            return (isset($this->templates['main'])) ? $this->templates['main'] : TEMPLATES_PATH . "main";
         }
 
-        private function renderFooterCssFiles()
+        /**
+         * @desc Takes in an array of parameters of a stylesheet and stores the stylesheet
+         * @param $params The parameters of the stylesheet
+         * @param $weight Where on the page amoung stylesheets should it be placed
+         */
+        public function addCss($params, $weight = 10)
         {
-            /* Returns the HTML code for all the stylesheets to be put in the site head */
-            if (isset($this->stylesheets['footer']) && is_array($this->stylesheets['footer']))
+            while (isset($this->stylesheets[$weight]))
             {
-                ksort($this->stylesheets['footer']);
-                $ret = HTML::stylesheets($this->stylesheets['footer']);
-                unset($this->stylesheets['footer']);
-                return $ret;
+                $weight++;
             }
+            $this->stylesheets[$weight] = $params;
         }
 
+        /**
+         * @desc Parses all the stored stylesheets to get the HTML code for all the site required stylesheets 
+         * @return The HTML for the link tag for the stylesheets
+         */
         private function renderCssFiles()
         {
-            /* Returns the HTML code for all the site required stylesheets */
             ksort($this->stylesheets);
             return HTML::stylesheets($this->stylesheets);
         }
 
+        /**
+         * @desc Takes in an array of parameters of a script file and stores the script
+         * @param $params The parameters of the script file
+         * @param $weight Where on the page amoung script files should it be placed
+         * @param $header_script Whether to put the script in the site header
+         */
         public function addScript($params, $weight = 10, $header_script = false)
         {
             /* Takes in an array of parameters of a script file and stores it */
@@ -126,9 +122,12 @@
             }
         }
 
+        /**
+         * @desc Parses all the stored scripts to get the HTML code for them
+         * @return The HTML for the <script> link tags for the scripts to be placed in the header
+         */
         public function renderHeaderScriptFiles()
         {
-            /* Returns the HTML code for all the scripts stored */
             if (isset($this->scripts['head']) && is_array($this->scripts['head']))
             {
                 ksort($this->scripts['head']);
@@ -138,78 +137,91 @@
             }
         }
 
+        /**
+         * @desc Parses all the stored scripts to get the HTML code for them
+         * @return The HTML for the <script> link tags for the scripts to be placed in the site default location (footer)
+         */
         public function renderScriptFiles()
         {
-            /* Returns the HTML code for all the scripts stored */
             ksort($this->scripts);
             return HTML::scripts($this->scripts);
         }
 
+        /**
+         * @desc Method that adds content to the system theme
+         * @param $region Which region to add this content to
+         * @param $content The content to add
+         */
         public function setContent($region, $content)
         {
-            /* Dummy function for mixed up function name calls */
             $this->addContent($region, $content);
         }
 
+        /**
+         * @desc Method that adds content to the system theme
+         * @param $region Which region to add this content to
+         * @param $content The content to add
+         */
         public function addContent($region, $content)
         {
-            /* Add content to a specific region within the theme */
             if ($region == "head")
             {
                 $this->head[] = $content;
                 return true;
             }
-            if (!is_array(@$this->regions[$region]))
+            if (!isset($this->regions[$region]) || !is_array($this->regions[$region]))
             {
                 $this->regions[$region] = array();
             }
             $this->regions[$region][] = $content;
         }
 
+        /**
+         * @desc Clears all the content currently in some region
+         * @param $region Which region to clear the content from
+         */
         public function clearRegion($region)
         {
-            /*
-             * Clears all the content currently in this region
-             */
             $this->regions[$region] = array();
         }
 
-        public function setVariable($var, $value)
+        /**
+         * @desc Set the browser page title
+         * @param $title The title to set it to
+         */
+        public function setPageTitle($title)
         {
-            /* Sets a variable to be loaded */
-            $this->variables[$var] = $val;
-        }
-
-        public function setSiteTitle($title)
-        {
-            $this->sitetitle = $title;
+            $this->pagetitle = $title;
         }
 
         /**
-         * @desc Render the theme to the user by
-         *      1. Load main file
-         *      2. Set Regions variables
-         *      3. Save the template output
+         * @desc Return the name of the site
          */
-        public function render()
+        public function getPageTitle()
         {
-            $main = new Template(TEMPLATES_PATH . $this->templates['main']);
+            return $this->pagetitle;
+        }
+
+        /**
+         * @desc Render the theme to the browser
+         */
+        public function renderPage()
+        {
+            $this->variables['sitename'] = JSmart::getSiteName();
+
+            /* Load main file */
+            $main = new Template($this->getMainTemplate());
             foreach ($this->regions as $region => $region_array)
             {
                 /* The different content added to the regions are initially stored in an array, now we implode each region into a string */
                 $main->$region = implode("", $region_array);
             }
 
-            foreach ($this->variables as $var => $value)
-            {
-                /* Add the variables to the template */
-                $main->$var = $value;
-            }
-
             /* Load HTML template */
-            $html = new Template(TEMPLATES_PATH . $this->templates['html']);
+            $html = new Template($this->getHtmlTemplate());
 
             /* Put css, scripts, header_tags and main into html variables */
+            $html->page_title = $html->site_name = $this->getPageTitle();
             $html->header_stylesheets = $this->renderCssFiles();
             $html->footer_stylesheets = $this->renderFooterCssFiles();
             $html->header_scripts = $this->renderHeaderScriptFiles();
@@ -226,5 +238,5 @@
     }
 
     /* Initialize the theme */
-    $THEMER = $THEME = new Themer();
+    $REGISTRY = new Registry();
     
