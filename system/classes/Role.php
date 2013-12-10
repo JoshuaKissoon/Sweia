@@ -8,138 +8,220 @@
     class Role
     {
 
-       public $rid, $role, $description;
-       private $permissions = array();
+        public $rid, $role, $description;
+        private $permissions = array();
 
-       public function __construct($rid = null)
-       {
-          if (self::isRole($rid))
-          {
-             $this->rid = $rid;
-             $this->load();
-          }
-       }
+        /* Define error handlers */
+        public static $ERROR_INCOMPLETE_DATA = 00001;
 
-       public static function isRole($rid)
-       {
-          /* Check if the $rid given is that of a valid role */
-          global $DB;
-          $res = $DB->query("SELECT rid FROM role WHERE rid = '::rid'", array("::rid" => $rid));
-          $role = $DB->fetchObject($res);
-          if (valid(@$role->rid))
-             return true;
-          else
-             return false;
-       }
+        /**
+         * @desc Role class constructor, if a role id is given, then we load the role
+         * @param $rid The id of a role to load from the database
+         * @return Boolean Whether the role was successfully loaded
+         */
+        public function __construct($rid = null)
+        {
+            if (self::isRole($rid))
+            {
+                $this->rid = $rid;
+                return $this->load();
+            }
+        }
 
-       public function load()
-       {
-          /* Loads all the data for the role */
-          global $DB;
-          $res = $DB->fetchObject($DB->query("SELECT * FROM role WHERE rid='$this->rid'"));
-          foreach ($res as $key => $value)
-             $this->$key = $value;
-          $this->loadPermissions();
-          return true;
-       }
+        /**
+         * @desc Check if a $rid is that of a valid role 
+         * @param $rid The rid to check for
+         * @return Boolean Whether the given rid is that of a valid role or not
+         */
+        public static function isRole($rid)
+        {
+            global $DB;
+            $res = $DB->query("SELECT rid FROM role WHERE rid = '::rid'", array("::rid" => $rid));
+            $role = $DB->fetchObject($res);
+            return (isset($role->rid) && valid($role->rid)) ? true : false;
+        }
 
-       public function addPermission($perm)
-       {
-          /*
-           * Adds a permission to this role 
-           * First we check if this is a valid permission
-           * Then we add it to the role
-           */
-          global $DB;
-          $res = $DB->fetchObject($DB->query("SELECT permission FROM permission WHERE permission='::perm'", array("::perm" => $perm)));
-          if (!valid($res->permission))
-             return false;
+        /**
+         * @desc Loads all the data for a role
+         * @return Whether the data was successfully loaded or not
+         */
+        public function load()
+        {
+            global $DB;
+            $res = $DB->fetchObject($DB->query("SELECT * FROM role WHERE rid='::rid'", array("::rid" => $this->rid)));
+            if (isset($res->rid) && $res->rid == $this->rid)
+            {
+                foreach ($res as $key => $value)
+                {
+                    $this->$key = $value;
+                }
+                $this->loadPermissions();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
-          /* It is a valid permission, so now we add it to the role */
-          $this->permissions[$perm] = $perm;
-       }
+        /**
+         * @desc Adds a new permission to this role
+         * @return Boolean Whether the new permission was successfully added
+         */
+        public function addAndSavePermission($perm)
+        {
+            global $DB;
 
-       public function clearPermissions()
-       {
-          /* Removes all permissions from this role */
-          $this->permissions = array();
-       }
+            /* Check if this is a valid permission */
+            $res = $DB->fetchObject($DB->query("SELECT permission FROM permission WHERE permission='::perm'", array("::perm" => $perm)));
+            if (!valid($res->permission))
+            {
+                return false;
+            }
 
-       private function loadPermissions()
-       {
-          global $DB;
-          $res = $DB->query("SELECT permission FROM role_permission WHERE rid = '::rid'", array("::rid" => $this->rid));
-          while ($perm = $DB->fetchObject($res))
-             $this->permissions[$perm->permission] = $perm->permission;
-       }
+            /* It is a valid permission, so now we add it to the role */
+            $this->permissions[$perm] = $perm;
+            return true;
+        }
 
-       public function save()
-       {
-          if (self::isRole(@$this->rid))
-             return $this->update();
-          else
-             return $this->add();
-       }
+        /**
+         * @desc Removes all permissions from this role 
+         */
+        public function clearPermissions()
+        {
+            $this->permissions = array();
+        }
 
-       private function update()
-       {
-          $this->savePermissions();
-          return true;
-       }
+        /**
+         * @desc Load all permissions for this role from the database
+         * @return Integer The number of permissions that are associated with this role
+         */
+        private function loadPermissions()
+        {
+            global $DB;
+            $res = $DB->query("SELECT permission FROM role_permission WHERE rid = '::rid'", array("::rid" => $this->rid));
+            while ($perm = $DB->fetchObject($res))
+            {
+                $this->permissions[$perm->permission] = $perm->permission;
+            }
+            return count($this->permissions);
+        }
 
-       private function add()
-       {
-          /* Add a new role to the database */
-          global $DB;
-          $args = array(
-              '::role' => $this->role,
-              '::description' => $this->description,
-          );
-          $sql = "INSERT INTO role (role, description) VALUES ('::role', '::description')";
-          $DB->query($sql, $args);
-          $this->rid = $DB->lastInsertId();
-          $this->savePermissions();
-          return true;
-       }
+        /**
+         * @desc Updates the permissions for this role by adding, editing and deleting permissions as necessary
+         * @return Whether the operation was successful or not
+         */
+        public function savePermissions()
+        {
+            /* First we delete all the permissions that are there in the database */
+            global $DB;
+            $res = $DB->query("DELETE FROM role_permission WHERE rid='::rid'", array("::rid" => $this->rid));
 
-       private function savePermissions()
-       {
-          /*
-           * Adds/Updates the necessary permissions for this role
-           * First we delete all the permissions that are there in the database
-           * then add the permissions that are currently here
-           */
-          global $DB;
-          $DB->query("DELETE FROM role_permission WHERE rid='::rid'", array("::rid" => $this->rid));
-          foreach ($this->permissions as $perm)
-          {
-             $args = array(
-                 '::rid' => $this->rid,
-                 '::permission' => $perm,
-             );
-             $DB->query("INSERT INTO role_permission (rid, permission) VALUES ('::rid', '::permission')", $args);
-          }
-       }
+            if (!$res)
+            {
+                return false;
+            }
 
-       public function hasPermission($perm)
-       {
-          /* Checks if a role has a permission */
-          return (array_key_exists($perm, $this->permissions)) ? true : false;
-       }
+            /* Add the permissions that are currently here */
+            foreach ($this->permissions as $perm)
+            {
+                $args = array(
+                    '::rid' => $this->rid,
+                    '::permission' => $perm,
+                );
+                return $DB->query("INSERT INTO role_permission (rid, permission) VALUES ('::rid', '::permission')", $args);
+            }
+        }
 
-       public static function delete($rid)
-       {
-          /* Delete this role from the system */
-          if (!self::isRole($rid))
-             return false;
+        /**
+         * @desc Either update a role if we're using a current role or create a new role
+         * @return Boolean Whether the operation was successful or not
+         */
+        public function save()
+        {
+            if (isset($this->rid) && self::isRole($this->rid))
+            {
+                return $this->update();
+            }
+            else
+            {
+                return $this->create();
+            }
+        }
 
-          /* Remove this role from all user's and permissions and then delete all of it's data */
-          global $DB;
-          $args = array("::rid" => $rid);
-          $DB->query("DELETE FROM user_role WHERE rid = '::rid'", $args);
-          $DB->query("DELETE FROM role_permission WHERE rid = '::rid'", $args);
-          $DB->query("DELETE FROM role WHERE rid = '::rid'", $args);
-          return true;
-       }
+        /**
+         * @desc Here we update a role
+         * @return Boolean Whether the update was successful or not
+         */
+        private function update()
+        {
+            return $this->savePermissions();
+        }
+
+        /**
+         * @desc Add a new role to the database
+         * @return Whether the creation of the role was successful or not
+         */
+        private function create()
+        {
+            if (!isset($this->role) || !valid($this->role))
+            {
+                return self::$ERROR_INCOMPLETE_DATA;
+            }
+
+            global $DB;
+            $args = array(
+                '::role' => $this->role,
+                '::description' => $this->description,
+            );
+            $sql = "INSERT INTO role (role, description) VALUES ('::role', '::description')";
+            if ($DB->query($sql, $args))
+            {
+                $this->rid = $DB->lastInsertId();
+                $this->savePermissions();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /**
+         * @desc Checks if a role has a permission 
+         * @param $perm The permission to check for
+         * @return Boolean whether the role has the permission or not
+         */
+        public function hasPermission($perm)
+        {
+            return (array_key_exists($perm, $this->permissions)) ? true : false;
+        }
+
+        /**
+         * @desc Delete this role from the system 
+         * @param $rid The role to delete
+         * @return Boolean Whether the deletion was successful or not
+         */
+        public static function delete($rid)
+        {
+            if (!self::isRole($rid))
+            {
+                return false;
+            }
+
+            /* Remove this role from all user's and permissions and then delete all of it's data */
+            global $DB;
+            $args = array("::rid" => $rid);
+            if ($DB->query("DELETE FROM user_role WHERE rid = '::rid'", $args))
+            {
+                $DB->query("DELETE FROM role_permission WHERE rid = '::rid'", $args);
+                if ($DB->query("DELETE FROM role WHERE rid = '::rid'", $args))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
     }
+    

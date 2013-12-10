@@ -16,7 +16,7 @@
           foreach ((array) @$_POST['roles'][$role->rid] as $perm)
           {
              /* For each of the roles, we load it and add the necessary permissions */
-             $role->addPermission($perm);
+             $role->addAndSavePermission($perm);
           }
           $role->save();
        }

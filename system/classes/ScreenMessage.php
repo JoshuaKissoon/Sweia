@@ -15,11 +15,11 @@
          */
         public static function setMessage($message, $type = 'info')
         {
-            if (!valid(@$_SESSION['screen_messages']))
+            if (!isset($_SESSION['screen_messages']) || !is_array($_SESSION['screen_messages']))
             {
                 $_SESSION['screen_messages'] = array();
             }
-            if (!valid(@$_SESSION['screen_messages'][$type]))
+            if (!isset($_SESSION['screen_messages'][$type]) || !is_array($_SESSION['screen_messages'][$type]))
             {
                 $_SESSION['screen_messages'][$type] = array();
             }

@@ -5,7 +5,7 @@
      * @date 20121227
      * @description Class that contains user functionality for core JSmart users
      */
-    class JSmartUser
+    class JSmartUser implements User
     {
 
         public $uid, $username, $status;
@@ -14,7 +14,7 @@
         private static $usertbl = "user";
         private $roles = array(), $permissions = array();
 
-        /* Defined error handlers */
+        /* Define error handlers */
         public static $ERROR_INCOMPLETE_DATA = 00001;
 
         /**
@@ -400,7 +400,7 @@
             {
                 return false;
             }
-            
+
             global $DB;
 
             /* Check if its a valid user's status */
@@ -414,6 +414,24 @@
             /* Its a valid user status, update this user's status */
             $args['::uid'] = $this->uid;
             return $DB->query("UPDATE user SET status='::status' WHERE uid = '::uid'", $args);
+        }
+
+        /* METHOD IMPLEMENTATIONS FROM THE USER INTERFACE */
+
+        /**
+         * @desc Method that returns the user's ID number, most likely as used in the database
+         */
+        public function getUserID()
+        {
+            return $this->uid;
+        }
+
+        /**
+         * @desc Method that returns the username used to identify this user
+         */
+        public function getUsername()
+        {
+            return $this->username;
         }
 
     }
