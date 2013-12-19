@@ -1,4 +1,5 @@
 <?php
+
     /*
      * This is the website index page that handles all requests throughout the site
      */
@@ -9,7 +10,7 @@
     /**
      * @section Loading User Data
      */
-    if (isset($_SESSION['uid']))
+    if (Session::isLoggedIn())
     {
         if ($_SESSION['user_type'] == JSmartAdmin::$user_type)
         {
@@ -28,10 +29,28 @@
     /**
      * @section Loading Data from cookies
      */
-    if (Session::isLoggedIn())
+    if (!Session::isLoggedIn())
     {
         /* If the user is not logged in, try loading the session and login data from cookies */
-        $SESSION->loadDataFromCookies();
+        Session::loadDataFromCookies();
+    }
+
+    /**
+     * @section Load the modules for this url 
+     */
+    $handlers = JPath::getUrlHandlers();
+    foreach ($handlers as $handler)
+    {
+        if (!isset($handler['permission']) || !valid($handler['permission']))
+        {
+            /* There is no permission for this module at the current URL, just load it */
+            include JModuleManager::getModule($handler['module']);
+        }
+        else if ($USER->usesPermissionSystem() && $USER->hasPermission($handler['permission']))
+        {
+            /* If the user has the permission to access this module for this URL, load the module */
+            include JModuleManager::getModule($handler['module']);
+        }
     }
 
     /**
