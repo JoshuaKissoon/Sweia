@@ -223,12 +223,11 @@
             /* Put css, scripts, header_tags and main into html variables */
             $html->page_title = $html->site_name = $this->getPageTitle();
             $html->header_stylesheets = $this->renderCssFiles();
-            $html->footer_stylesheets = $this->renderFooterCssFiles();
             $html->header_scripts = $this->renderHeaderScriptFiles();
             $html->footer_scripts = $this->renderScriptFiles();
             $html->content = $main->parse();
             $html->stylesheets = $this->renderCssFiles();
-            $html->title = ($this->sitetitle) ? $this->sitetitle : JSmart::getSiteName();
+            $html->title = isset($this->sitetitle) ? $this->sitetitle : JSmart::getSiteName();
             $html->head = implode("", $this->head);
 
             /* Publish this template */

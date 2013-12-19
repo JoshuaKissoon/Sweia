@@ -31,34 +31,55 @@
 
 
 
+<ifModule mod_expires.c>
+    #CACHING WITH MOD_EXPIRES
 
-#CACHING WITH MOD_EXPIRES AND MOD_HEADERS
+    # Turn on Expires and set default to 0
+    ExpiresActive On
+    ExpiresDefault A0
 
-# Turn on Expires and set default to 0
-ExpiresActive On
-ExpiresDefault A0
- 
-# Set up caching on media files for 1 year (forever?)
-<FilesMatch "\.(flv|ico|pdf|avi|mov|ppt|doc|mp3|wmv|wav)$">
-ExpiresDefault A29030400
-Header append Cache-Control "public"
-</FilesMatch>
- 
-# Set up caching on IMAGE files for 1 week
-<FilesMatch "\.(gif|jpg|jpeg|png|swf)$">
-ExpiresDefault A604800
-Header append Cache-Control "public"
-</FilesMatch>
- 
-# Set up 1 week caching on commonly updated files
-<FilesMatch "\.(xml|txt|html|js|css)$">
-ExpiresDefault A604800
-Header append Cache-Control "proxy-revalidate"
-</FilesMatch>
- 
-# Force no caching for dynamic files
-<FilesMatch "\.(php|cgi|pl|htm)$">
-ExpiresActive Off
-Header set Cache-Control "private, no-cache, no-store, proxy-revalidate, no-transform"
-Header set Pragma "no-cache"
-</FilesMatch>
+    # Set up caching on media files for 1 year (forever?)
+    <FilesMatch "\.(flv|ico|pdf|avi|mov|ppt|doc|mp3|wmv|wav)$">
+        ExpiresDefault A29030400
+    </FilesMatch>
+
+    # Set up caching on IMAGE files for 1 week
+    <FilesMatch "\.(gif|jpg|jpeg|png|swf)$">
+        ExpiresDefault A604800
+    </FilesMatch>
+
+    # Set up 1 week caching on commonly updated files
+    <FilesMatch "\.(xml|txt|html|js|css)$">
+        ExpiresDefault A604800
+    </FilesMatch>
+
+    # Force no caching for dynamic files
+    <FilesMatch "\.(php|cgi|pl|htm)$">
+        ExpiresActive Off
+    </FilesMatch>
+</ifModule>
+
+<ifModule mod_headers.c>
+    #CACHING WITH MOD_HEADERS
+
+    # Set up caching on media files for 1 year (forever?)
+    <FilesMatch "\.(flv|ico|pdf|avi|mov|ppt|doc|mp3|wmv|wav)$">
+        Header append Cache-Control "public"
+    </FilesMatch>
+
+    # Set up caching on IMAGE files for 1 week
+    <FilesMatch "\.(gif|jpg|jpeg|png|swf)$">
+        Header append Cache-Control "public"
+    </FilesMatch>
+
+    # Set up 1 week caching on commonly updated files
+    <FilesMatch "\.(xml|txt|html|js|css)$">
+        Header append Cache-Control "proxy-revalidate"
+    </FilesMatch>
+
+    # Force no caching for dynamic files
+    <FilesMatch "\.(php|cgi|pl|htm)$">
+        Header set Cache-Control "private, no-cache, no-store, proxy-revalidate, no-transform"
+        Header set Pragma "no-cache"
+    </FilesMatch>
+</ifModule>

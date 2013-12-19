@@ -1,5 +1,4 @@
 <?php
-
     /* Require the settings file */
     require_once 'site/default/settings.php';
 
@@ -9,6 +8,9 @@
 
     /* Load the main constant files */
     require_once INCLUDES_PATH . 'constants.inc.php';
+    
+    /* Load Interfaces */
+    require_once INTERFACES_PATH . 'User.php';
 
     /* Load System Files */
     require_once INCLUDES_PATH . 'functions.inc.php';
@@ -21,9 +23,8 @@
     require_once CLASSES_PATH . 'Image.php';
     require_once CLASSES_PATH . 'Session.php';
     require_once CLASSES_PATH . 'Template.php';
-    require_once CLASSES_PATH . 'Themer.php';
+    require_once CLASSES_PATH . 'Registry.php';
     require_once CLASSES_PATH . 'Role.php';
-    require_once CLASSES_PATH . 'User.php';
     require_once CLASSES_PATH . 'JSmartUser.php';
     require_once CLASSES_PATH . 'JSmartAdmin.php';
     require_once CLASSES_PATH . 'HTML.php';
@@ -34,7 +35,6 @@
     require_once THEME_PATH . 'Theme.php';
 
     /* Load the site specific includes now */
-    require_once SITE_DEFAULT_FOLDER_PATH . 'includes.inc.php';
     require_once SITE_DEFAULT_FOLDER_PATH . 'constants.inc.php';
 
     /* Initialize the theme */

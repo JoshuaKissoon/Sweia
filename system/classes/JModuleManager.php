@@ -155,7 +155,6 @@
             /* Load the module's data */
             $xmldata = new SimpleXMLElement("$modpath/$modname.info.xml", null, true);
             $modinfo = json_decode(json_encode($xmldata), TRUE);
-            
             if (isset($modinfo['information']['title']))
             {
                 /* Only add the module to the site if it has a name */
@@ -165,14 +164,30 @@
                     $module->$key = $value;
                 }
                 /* Adding the permissions */
-                foreach($modinfo['permissions']['permission'] as $perm)
+                if (isset($modinfo['permissions']['permission']) && is_array($modinfo['permissions']['permission']))
                 {
-                    $module->addPermission($perm['perm'], $perm['title']);
+                    foreach ($modinfo['permissions']['permission'] as $perm)
+                    {
+                        $module->addPermission($perm['perm'], $perm['title']);
+                    }
                 }
                 /* Adding the URLs for this module */
-                foreach($modinfo['urls']['url'] as $url)
+                if (isset($modinfo['urls']['url']) && is_array($modinfo['urls']['url']))
                 {
-                    $module->addUrl($url['link'], array("permission" => $url['permission']));
+                    foreach ($modinfo['urls']['url'] as $url)
+                    {
+                        $data = array();
+                        if (isset($url['permission']))
+                        {
+                            $data['permission'] = $url['permission'];
+                            $link = $url['link'];
+                        }
+                        else
+                        {
+                            $link = $url;
+                        }
+                        $module->addUrl($link, $data);
+                    }
                 }
                 $module->type = $modtype;
                 $module->name = $modname;

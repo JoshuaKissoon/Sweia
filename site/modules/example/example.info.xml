@@ -7,28 +7,11 @@
     </information>
     
     <permissions>
-        <permission>
-            <perm>view_example_module</perm>
-            <title>View Example Module</title>
-        </permission>
-        <permission>
-            <perm>use_example_module</perm>
-            <title>Use Example Module</title>
-        </permission>
     </permissions>
     
     <urls>
         <url>
-            <link>example</link>
-            <permission>view_example_module</permission>
-        </url>
-        <url>
-            <link>module-example</link>
-            <permission>view_example_module</permission>
-        </url>
-        <url>
             <link>example/use</link>
-            <permission>use_example_module</permission>
         </url>
     </urls>
 </config>

@@ -18,6 +18,7 @@
     define("INCLUDES_URL", BASE_URL . "system/includes/");
     define("CLASSES_URL", BASE_URL . "system/classes/");
     define("CLASSES_PATH", BASE_PATH . "system/classes/");
+    define("INTERFACES_PATH", BASE_PATH . "system/interfaces/");
     define("MODULES_URL", BASE_URL . "site/modules/");
     define("MODULES_PATH", BASE_PATH . "site/modules/");
     define("SITE_MODULES_URL", BASE_URL . "site/modules/");

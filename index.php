@@ -1,5 +1,4 @@
 <?php
-
     /*
      * This is the website index page that handles all requests throughout the site
      */
@@ -29,7 +28,7 @@
     /**
      * @section Loading Data from cookies
      */
-    if (!$SESSION->isLoggedIn())
+    if (Session::isLoggedIn())
     {
         /* If the user is not logged in, try loading the session and login data from cookies */
         $SESSION->loadDataFromCookies();
