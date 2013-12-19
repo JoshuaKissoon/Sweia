@@ -22,13 +22,14 @@
     require_once CLASSES_PATH . 'Session.php';
     require_once CLASSES_PATH . 'Template.php';
     require_once CLASSES_PATH . 'Themer.php';
-    require_once CLASSES_PATH . 'JUser.php';
+    require_once CLASSES_PATH . 'Role.php';
     require_once CLASSES_PATH . 'User.php';
+    require_once CLASSES_PATH . 'JSmartUser.php';
+    require_once CLASSES_PATH . 'JSmartAdmin.php';
     require_once CLASSES_PATH . 'HTML.php';
     require_once CLASSES_PATH . 'JPager.php';
     require_once CLASSES_PATH . 'System.php';
     require_once CLASSES_PATH . 'JPath.php';
-    require_once CLASSES_PATH . 'Role.php';
     require_once CLASSES_PATH . 'URL.php';
     require_once THEME_PATH . 'Theme.php';
 

@@ -11,6 +11,10 @@
         public $rid, $role, $description;
         private $permissions = array();
 
+        /* Database Tables */
+        public static $role_tbl = "role";
+        public static $role_permission_tbl = "role_permission";
+
         /* Define error handlers */
         public static $ERROR_INCOMPLETE_DATA = 00001;
 

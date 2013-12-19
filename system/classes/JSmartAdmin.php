@@ -5,15 +5,17 @@
      * @date 20121227
      * @description Class that contains user functionality for core JSmart users
      */
-    class JSmartUser implements User
+    class JSmartAdmin implements User
     {
 
         public $uid, $username, $status;
         private $password;
+        private $roles = array(), $permissions = array();
 
         /* Database Tables */
-        private static $user_tbl = "user";
-        private static $user_status_tbl = "user_status";
+        private static $user_tbl = "admin";
+        private static $user_status_tbl = "admin_status";
+        private static $user_role_tbl = "admin_role";
 
         /* Define error handlers */
         public static $ERROR_INCOMPLETE_DATA = 00001;
@@ -23,18 +25,14 @@
          * @param $uid The id of the user to load
          * @return Whether the load was successful or not
          */
-        public function __construct($uid = 0)
+        public function __construct($uid = null)
         {
-            if (isset($uid) && valid($uid))
+            if (isset($uid) && self::isUser($uid))
             {
                 $this->uid = $uid;
                 return $this->load();
             }
-            else
-            {
-                $this->uid = 0;
-                $this->username = "Anonymous";
-            }
+            return false;
         }
 
         /**
@@ -70,7 +68,16 @@
                 return false;
             }
             $this->uid = valid($this->uid) ? $this->uid : $uid;
-            return $this->loadUserInfo();
+            if ($this->loadUserInfo())
+            {
+                $this->loadRoles();
+                $this->loadPermissions();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /**
@@ -219,10 +226,7 @@
                 $this->load();
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         /**
@@ -346,7 +350,7 @@
 
             /* Its a valid user status, update this user's status */
             $args['::uid'] = $this->uid;
-            return $DB->query("UPDATE " . self::$user_tbl . " SET status='::status' WHERE uid = '::uid'", $args);
+            return $DB->query("UPDATE user SET status='::status' WHERE uid = '::uid'", $args);
         }
 
         /**
@@ -363,6 +367,90 @@
         public function getUsername()
         {
             return $this->username;
+        }
+
+        /* USER ROLE MANAGEMENT */
+
+        /**
+         * @desc Adds a new role to a user
+         */
+        public function addRole($rid)
+        {
+            global $DB;
+            $res = $DB->query("SELECT role FROM " . Role::$role_tbl . " WHERE rid='::rid'", array('::rid' => $rid));
+            $role = $DB->fetchObject($res);
+            if (isset($role->role) && valid($role->role))
+            {
+                $this->roles[$rid] = $role->role;
+                return true;
+            }
+            return false;
+        }
+
+        /**
+         * @desc Saves this user's roles to the Database
+         */
+        public function saveRoles()
+        {
+            if (!self::isUser($this->uid))
+            {
+                return false;
+            }
+
+            global $DB;
+
+            /* Remove all the roles this user had */
+            $DB->query("DELETE FROM " . self::$user_role_tbl . " WHERE uid='$this->uid'");
+
+            foreach ((array) $this->roles as $rid => $role)
+            {
+                $DB->query("INSERT INTO " . self::$user_role_tbl . " (uid, rid) VALUES ('::uid', '::rid')", array('::rid' => $rid, '::uid' => $this->uid));
+            }
+
+            return true;
+        }
+
+        /**
+         * @desc Loads the roles that a user have
+         */
+        private function loadRoles()
+        {
+            global $DB;
+            $roles = $DB->query("SELECT ur.rid, r.role FROM " . self::$user_role_tbl . " ur LEFT JOIN role r ON (r.rid = ur.rid) WHERE uid='$this->uid'");
+            while ($role = $DB->fetchObject($roles))
+            {
+                $this->roles[$role->rid] = $role->role;
+            }
+        }
+
+        /**
+         * @return The roles this user have
+         */
+        public function getRoles()
+        {
+            return $this->roles;
+        }
+
+        /* USER PERMISSION MANAGEMENT */
+
+        /**
+         * @desc Load the permissions for this user from the database
+         */
+        private function loadPermissions()
+        {
+            if (count($this->roles) < 1)
+            {
+                return false;
+            }
+
+            global $DB;
+
+            $rids = implode(", ", array_keys($this->roles));
+            $rs = $DB->query("SELECT permission FROM " . Role::$role_permission_tbl . " WHERE rid IN ($rids)");
+            while ($perm = $DB->fetchObject($rs))
+            {
+                $this->permissions[$perm->permission] = $perm->permission;
+            }
         }
 
     }

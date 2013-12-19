@@ -17,6 +17,16 @@
          */
         public function getUsername();
         
+        /**
+         * @desc Method that checks if this id is that of a user
+         * @param $uid The id of the user
+         * @return Boolean Whether this is a user or not
+         */
+        public static function isUser($uid);
         
+        /**
+         * @desc Save the data of this user to the database, if it's a new user, then create this new user
+         */
+        public function save();
     }
     
