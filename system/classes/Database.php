@@ -15,9 +15,30 @@
         /**
          * @desc Automatically connect to the database in the constructor
          */
-        function __construct()
+        function __construct($connect = true)
         {
-            $this->connect();
+            if ($connect)
+            {
+                return $this->connect();
+            }
+        }
+
+        /**
+         * @desc Connect to the database
+         * @return Boolean Whether the connection was successful
+         */
+        public function tryConnect()
+        {
+            $conn = mysqli_connect(DB_SERVER, DB_USER, DB_PASS);
+            if ($conn)
+            {
+                $db_select = mysqli_select_db($conn, DB_NAME);
+                if ($db_select)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /**
@@ -26,18 +47,15 @@
         public function connect()
         {
             $this->connection = mysqli_connect(DB_SERVER, DB_USER, DB_PASS);
-            if (!$this->connection)
-            {
-                die("Database Connection failed");
-            }
-            else
+            if ($this->connection)
             {
                 $db_select = mysqli_select_db($this->connection, DB_NAME);
-                if (!$db_select)
+                if ($db_select)
                 {
-                    die("Database selection failed: " . mysqli_error($this->connection));
+                    return true;
                 }
             }
+            return false;
         }
 
         /**
@@ -197,7 +215,4 @@
         }
 
     }
-
-    /* Automatically initialize the database class when the file is included */
-    $DB = new Database();
     

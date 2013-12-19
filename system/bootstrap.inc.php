@@ -1,4 +1,5 @@
 <?php
+
     /* Require the settings file */
     require_once 'site/default/settings.php';
 
@@ -8,7 +9,7 @@
 
     /* Load the main constant files */
     require_once INCLUDES_PATH . 'constants.inc.php';
-    
+
     /* Load Interfaces */
     require_once INTERFACES_PATH . 'User.php';
 
@@ -37,8 +38,18 @@
     /* Load the site specific includes now */
     require_once SITE_DEFAULT_FOLDER_PATH . 'constants.inc.php';
 
+    /**
+     * @section System Initialization
+     */
     /* Initialize the theme */
     Theme::init();
+
+    /* Initialize the database class when the file is included */
+    $DB = new Database();
+    if (!$DB->tryConnect())
+    {
+        die("Database connectivity error, please check the database access details");
+    }
 
     /* Load the modules for this url */
     $handlers = JPath::getUrlHandlers();
