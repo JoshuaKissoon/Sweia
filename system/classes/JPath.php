@@ -77,9 +77,9 @@
          * @param $url The URL for which to check
          * @return The modules that handles this URL
          */
-        public static function getUrlHandlers($url = "")
+        public static function getUrlHandlers($url = null)
         {
-            if(!valid($url))
+            if (!valid($url))
             {
                 $url = self::getUrlQ();
             }
@@ -103,13 +103,11 @@
             global $DB;
             $rs = $DB->query($sql, $args);
             $handlers = array();
+            
+            /* Store the handlers */
             while ($handler = $DB->fetchObject($rs))
             {
-                /* Store the handlers */
-                $handlers[$handler->module] = array(
-                    "module" => $handler->module,
-                    "permission" => $handler->permission
-                );
+                $handlers[$handler->module] = array("module" => $handler->module, "permission" => $handler->permission);
             }
             return $handlers;
         }

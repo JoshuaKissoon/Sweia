@@ -40,6 +40,22 @@
     /* Initialize the theme */
     Theme::init();
 
+    /* Load the modules for this url */
+    $handlers = JPath::getUrlHandlers();
+    foreach ($handlers as $handler)
+    {
+        if (!isset($handler['permission']) || !valid($handler['permission']))
+        {
+            /* There is no permission for this module at the current URL, just load it */
+            include JModuleManager::getModule($handler['module']);
+        }
+        else if ($USER->usesPermissionSystem() && $USER->hasPermission($handler['permission']))
+        {
+            /* If the user has the permission to access this module for this URL, load the module */
+            include JModuleManager::getModule($handler['module']);
+        }
+    }
+
     function _jsmart_constants_initialize()
     {
         /* Add our constants that are commonly used and will be used a lot throughout the site */

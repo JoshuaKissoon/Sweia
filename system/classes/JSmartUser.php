@@ -10,6 +10,9 @@
 
         public $uid, $username, $status;
         private $password;
+        
+        /* Class Metadata */
+        public static $user_type = "end_user";
 
         /* Database Tables */
         private static $user_tbl = "user";
@@ -365,5 +368,22 @@
             return $this->username;
         }
 
+        /**
+         * @desc Checks whether this user works with the permission system
+         * @return Boolean on whether the user uses the permission system or not
+         */
+        public function usesPermissionSystem()
+        {
+            return false;
+        }
+        
+        /**
+         * @desc Each user will have a system type
+         * @return String What type of user it is
+         */
+        public function getUserType()
+        {
+            return self::$user_type;
+        }
     }
     

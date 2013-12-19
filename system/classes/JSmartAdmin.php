@@ -11,6 +11,9 @@
         public $uid, $username, $status;
         private $password;
         private $roles = array(), $permissions = array();
+        
+        /* Class Metadata */
+        public static $user_type = "admin";
 
         /* Database Tables */
         private static $user_tbl = "admin";
@@ -298,20 +301,6 @@
         }
 
         /**
-         * @desc Check if the user has the specified permission
-         * @param $permission The permission to check if the user have
-         * @return Boolean Whether the user has the permission
-         */
-        public function hasPermission($permission)
-        {
-            if (!valid($permission))
-            {
-                return false;
-            }
-            return (key_exists($permission, $this->permissions)) ? true : false;
-        }
-
-        /**
          * @desc Grabs the user's status from the database
          * @return The user's current status
          */
@@ -367,6 +356,15 @@
         public function getUsername()
         {
             return $this->username;
+        }
+        
+        /**
+         * @desc Each user will have a system type
+         * @return String What type of user it is
+         */
+        public function getUserType()
+        {
+            return self::$user_type;
         }
 
         /* USER ROLE MANAGEMENT */
@@ -434,6 +432,15 @@
         /* USER PERMISSION MANAGEMENT */
 
         /**
+         * @desc Checks whether this user works with the permission system
+         * @return Boolean on whether the user uses the permission system or not
+         */
+        public function usesPermissionSystem()
+        {
+            return true;
+        }
+
+        /**
          * @desc Load the permissions for this user from the database
          */
         private function loadPermissions()
@@ -451,6 +458,20 @@
             {
                 $this->permissions[$perm->permission] = $perm->permission;
             }
+        }
+
+        /**
+         * @desc Check if the user has the specified permission
+         * @param $permission The permission to check if the user have
+         * @return Boolean Whether the user has the permission
+         */
+        public function hasPermission($permission)
+        {
+            if (!valid($permission))
+            {
+                return false;
+            }
+            return (key_exists($permission, $this->permissions)) ? true : false;
         }
 
     }
