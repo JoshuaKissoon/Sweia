@@ -30,6 +30,9 @@
             $REGISTRY->addCss(array("file" => CSS_URL . "print.css", "media" => "print"));
             $REGISTRY->addCss(array('file' => CSS_URL . 'tablet.css', 'media' => 'all and (min-width: 400px) and (max-width: 900px)'));
             $REGISTRY->addCss(array('file' => CSS_URL . 'mobile.css', 'media' => 'all and (min-width: 0px) and (max-width: 400px)'));
+            
+            
+            $REGISTRY->addScript(THEME_SCRIPTS_URL . "main.min.js", 20);
         }
 
         /**

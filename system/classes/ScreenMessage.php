@@ -11,7 +11,7 @@
         /**
          * @desc Saves a message in session to show to the user on the next page load
          * @param $message Message to store
-         * @param $type Either info, success, warning, validation, or error
+         * @param $type Either info, success, warning or error
          */
         public static function setMessage($message, $type = 'info')
         {

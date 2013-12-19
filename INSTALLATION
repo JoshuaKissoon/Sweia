@@ -4,4 +4,4 @@
     2.1. Enter the database access settings
     2.2. Enter the default site home URL
     2.3. Enter the site folder if the site is located in any subfolder of the main www or public_html folder
-3. Run the site
+3. Run the install.php file
