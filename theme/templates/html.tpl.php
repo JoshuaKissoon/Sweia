@@ -1,20 +1,43 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <!-- This is the main template file for the site This template contains the overall layout and includes the main site stylesheets and scripts -->
 <html>
+
     <head>
-        <title><?php print @$title; ?></title>
-        <?= @$header_stylesheets; ?>
-        <?= @$header_scripts; ?>
-        <?php print @$head; ?>
+        <?php if (isset($title)): ?>
+                <title>
+                    <?= $title; ?>
+                </title>
+            <?php endif; ?>
+        <meta charset="UTF-8">
         <meta name="HandheldFriendly" content="true" />
         <meta name="MobileOptimized" content="320" />
         <meta name="Viewport" content="width=device-width" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <!-- Adding Stylesheets -->
+        <?php if (isset($stylesheets)): ?>
+                <?= $stylesheets; ?>
+            <?php endif; ?>
+
+        <!--Adding Header Scripts-->
+        <?php if (isset($header_scripts)): ?>
+                <?= $header_scripts; ?>
+            <?php endif; ?>
+
+        <!--Other head data-->
+        <?php if (isset($head)): ?>
+                <?php print $head; ?>
+            <?php endif; ?>
     </head>
+
     <body class="<?php print implode(" ", JPath::urlArgs()); ?>">
         <div id="status-messages"><?php print Theme::getFormattedScreenMessages(); ?></div>
-        <?php print @$content; ?>
-        <?= @$footer_stylesheets; ?>
-        <?= @$footer_scripts; ?>
+        <?php if (isset($content)): ?>
+                <?php print $content; ?>
+            <?php endif; ?>
+
+        <!--Adding Footer Scripts-->
+        <?php if (isset($footer_scripts)): ?>
+                <?= $footer_scripts; ?>
+            <?php endif; ?>
     </body>
 </html>

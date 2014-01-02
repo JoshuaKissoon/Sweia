@@ -189,7 +189,6 @@
             if ($DB->query($sql, $args))
             {
                 $this->uid = $DB->lastInsertId();
-                $this->saveRoles();
                 return true;
             }
             else
