@@ -7,6 +7,12 @@
      */
     class ScreenMessage
     {
+        /* Constants */
+
+        public static $MESSAGE_TYPE_INFO = "info";
+        public static $MESSAGE_TYPE_SUCCESS = "success";
+        public static $MESSAGE_TYPE_WARNING = "warning";
+        public static $MESSAGE_TYPE_ERROR = "error";
 
         /**
          * @desc Saves a message in session to show to the user on the next page load
