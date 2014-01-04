@@ -8,10 +8,10 @@
     class JSmartUser implements User
     {
 
-        public $uid, $username, $status;
+        public $uid, $status;
         private $password;
         private $roles = array(), $permissions = array();
-        
+
         /* Class Metadata */
         public static $user_type = "jsmartuser";
 
@@ -116,7 +116,7 @@
          */
         public function setPassword($password)
         {
-            if (!isset($this->username) || !valid($this->username))
+            if (!isset($this->email) || !valid($this->email))
             {
                 return false;
             }
@@ -148,7 +148,7 @@
          */
         private function hashPassword($password)
         {
-            $salt = md5($this->username . JSMART_SITE_SALT);
+            $salt = md5($this->email . JSMART_SITE_SALT);
             return sha1($salt . $password);
         }
 
@@ -172,17 +172,16 @@
          */
         private function addUser()
         {
-            if (!$this->isUsernameAvail() || $this->isEmailInUse())
+            if ($this->isEmailInUse())
             {
                 return false;
             }
-            if (!valid($this->username) || !valid($this->email) || !valid($this->password))
+            if (!valid($this->email) || !valid($this->password))
             {
                 return JSmartUser::$ERROR_INCOMPLETE_DATA;
             }
             global $DB;
             $args = array(
-                ":username" => $this->username,
                 ":email" => $this->email,
                 ":first_name" => isset($this->first_name) ? $this->first_name : "",
                 ":last_name" => isset($this->last_name) ? $this->last_name : "",
@@ -191,8 +190,8 @@
                 ":password" => $this->password,
             );
 
-            $sql = "INSERT INTO " . self::$user_tbl . " (username, password, email, first_name, last_name, other_name, dob)
-                VALUES(':username', ':password', ':email', ':first_name', ':last_name', ':other_name', ':dob')";
+            $sql = "INSERT INTO " . self::$user_tbl . " (password, email, first_name, last_name, other_name, dob)
+                VALUES(':password', ':email', ':first_name', ':last_name', ':other_name', ':dob')";
             if ($DB->query($sql, $args))
             {
                 $this->uid = $DB->lastInsertId();
@@ -214,14 +213,14 @@
         }
 
         /**
-         * @desc Check if the username and password is valid
+         * @desc Check if the email and password is valid
          * @return Boolean whether the data is valid or not
          */
         public function authenticate()
         {
             global $DB;
-            $args = array(":username" => $this->username, "::password" => $this->password);
-            $sql = "SELECT uid FROM " . self::$user_tbl . " WHERE username=':username' and password='::password' LIMIT 1";
+            $args = array(":email" => $this->email, "::password" => $this->password);
+            $sql = "SELECT uid FROM " . self::$user_tbl . " WHERE email=':email' and password='::password' LIMIT 1";
             $cuser = $DB->fetchObject($DB->query($sql, $args));
             if (isset($cuser->uid) && valid($cuser->uid))
             {
@@ -230,24 +229,6 @@
                 return true;
             }
             return false;
-        }
-
-        /**
-         * @desc Checks if a username is available
-         * @param $username The username to check whether it is available 
-         */
-        public function isUsernameAvail($username = null)
-        {
-            if (!valid($username) && !valid($this->username))
-            {
-                return false;
-            }
-            $this->username = valid($username) ? $username : $this->username;
-
-            global $DB;
-            $DB->query("SELECT username FROM " . self::$user_tbl . " WHERE username='::un'", array("::un" => $this->username));
-            $temp = $DB->fetchObject();
-            return (isset($temp->username) && valid($temp->username)) ? false : true;
         }
 
         /**
@@ -351,13 +332,13 @@
         }
 
         /**
-         * @desc Method that returns the username used to identify this user
+         * @desc Method that returns the user's ID number, most likely as used in the database
          */
-        public function getUsername()
+        public function getEmail()
         {
-            return $this->username;
+            return $this->email;
         }
-        
+
         /**
          * @desc Each user will have a system type
          * @return String What type of user it is
