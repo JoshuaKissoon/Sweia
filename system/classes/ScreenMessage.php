@@ -38,34 +38,24 @@
                 return false;
             }
         }
-        
+
         /**
          * @desc Add multiple messages at once
          * @param $messages An array of messages to store
          * @param $type Either info, success, warning or error
          */
-        public static function setMessages($messages)
+        public static function setMessages($messages, $itype = "info")
         {
             if (!is_array($messages))
             {
-                return false;
+                $messages = array($messages);
             }
 
             foreach ($messages as $message)
             {
-                if (!isset($message['text']))
-                {
-                    break;
-                }
-                
-                if (isset($message['type']))
-                {
-                    self::setMessage($message['text'], $message['type']);
-                }
-                else
-                {
-                    self::setMessage($message['text'], $message['type']);
-                }
+                $msg = is_array($message) ? $message['msg'] : $message;
+                $type = (is_array($message) && isset($message['type'])) ? $message['type'] : $itype;
+                self::setMessage($msg, $type);
             }
         }
 

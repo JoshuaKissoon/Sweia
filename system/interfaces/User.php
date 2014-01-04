@@ -23,7 +23,7 @@
         /**
          * @desc Method that returns the username used to identify this user
          */
-        public function getUsername();
+        public function getEmail();
 
         /**
          * @desc Each user will have a system type
