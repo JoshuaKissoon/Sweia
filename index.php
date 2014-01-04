@@ -8,6 +8,12 @@
     require_once 'system/bootstrap.inc.php';
 
     /**
+     * @section Loading Global Variables
+     * @note This has to be done first since some modules and classes use these Global Variables
+     */
+    $URL = JPath::urlArgs();
+    
+    /**
      * @section Loading User Data
      */
     if (Session::isLoggedIn())
@@ -52,11 +58,6 @@
             include JModuleManager::getModule($handler['module']);
         }
     }
-
-    /**
-     * @section Loading Global Variables
-     */
-    $URL = JPath::urlArgs();
 
     /**
      * @section Render the theme after the necessary module is finished with its operations 

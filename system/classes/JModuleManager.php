@@ -180,6 +180,10 @@
                         if (isset($url['permission']))
                         {
                             $data['permission'] = $url['permission'];
+                        }
+                        
+                        if(isset($url['link']))
+                        {                            
                             $link = $url['link'];
                         }
                         else

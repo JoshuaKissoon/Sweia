@@ -38,6 +38,36 @@
                 return false;
             }
         }
+        
+        /**
+         * @desc Add multiple messages at once
+         * @param $messages An array of messages to store
+         * @param $type Either info, success, warning or error
+         */
+        public static function setMessages($messages)
+        {
+            if (!is_array($messages))
+            {
+                return false;
+            }
+
+            foreach ($messages as $message)
+            {
+                if (!isset($message['text']))
+                {
+                    break;
+                }
+                
+                if (isset($message['type']))
+                {
+                    self::setMessage($message['text'], $message['type']);
+                }
+                else
+                {
+                    self::setMessage($message['text'], $message['type']);
+                }
+            }
+        }
 
         /**
          * @desc Messages are stored in an array in session, This method grabs, formats and returns these messages
