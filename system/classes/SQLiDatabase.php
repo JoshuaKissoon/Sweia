@@ -6,7 +6,7 @@
      * @date very long ago
      * @note Magic quotes is not utilized here, we use escape_string since magic_quotes will be deprecated from php 5.4
      */
-    class Database
+    class SQLiDatabase implements Database
     {
 
         private $connection;

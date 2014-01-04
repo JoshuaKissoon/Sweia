@@ -16,6 +16,7 @@
 
     /* Load Interfaces */
     require_once INTERFACES_PATH . 'User.php';
+    require_once INTERFACES_PATH . 'Database.php';
 
     /* Autoloader for system classes */
     spl_autoload_register(function($class)
@@ -29,7 +30,7 @@
 
     /* Load System Files & Classes */
     require_once INCLUDES_PATH . 'functions.inc.php';
-    require_once CLASSES_PATH . 'Database.php';
+    require_once CLASSES_PATH . 'SQLiDatabase.php';
     require_once CLASSES_PATH . 'Registry.php';
     require_once THEME_PATH . 'Theme.php';
 
@@ -45,7 +46,7 @@
     /**
      * @section Testing the database connectivity
      */
-    $DB = new Database();
+    $DB = new SQLiDatabase();
     if (!$DB->tryConnect())
     {
         die("Database connectivity error, please check the database access details");
