@@ -12,9 +12,9 @@
      */
     if (Session::isLoggedIn())
     {
-        if ($_SESSION['user_type'] == JSmartAdmin::$user_type)
+        if ($_SESSION['user_type'] == JSmartUser::$user_type)
         {
-            $USER = new JSmartAdmin($_SESSION['uid']);
+            $USER = new JSmartUser($_SESSION['uid']);
         }
         else
         {
