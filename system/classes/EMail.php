@@ -16,8 +16,8 @@
          * @desc 
          */
         function __construct()
-        {
-            
+        {            
+            return $this;
         }
 
         /**
@@ -27,6 +27,7 @@
         public function addRecipient($recipient)
         {
             $this->recipients[] = $recipient;
+            return $this;
         }
 
         /**
@@ -36,6 +37,7 @@
         public function setSender($sender)
         {
             $this->sender = $sender;
+            return $this;
         }
 
         /**
@@ -45,6 +47,7 @@
         public function setMessage($message)
         {
             $this->message = $message;
+            return $this;
         }
 
         /**
@@ -54,6 +57,7 @@
         public function setSubject($subject)
         {
             $this->subject = $subject;
+            return $this;
         }
 
         /**

@@ -172,7 +172,7 @@
          */
         private function addUser()
         {
-            if ($this->isEmailInUse())
+            if (self::isEmailInUse($this->email))
             {
                 return false;
             }
@@ -234,18 +234,16 @@
         /**
          * @desc Checks if an email address is in use 
          */
-        public function isEmailInUse($email = null)
+        public static function isEmailInUse($email)
         {
-            if (!valid($email) && !valid($this->email))
+            if (!valid($email))
             {
                 return false;
             }
-            $this->email = valid($email) ? $email : $this->email;
-
             global $DB;
-            $DB->query("SELECT email FROM " . self::$user_tbl . " WHERE email='::email'", array("::email" => $this->email));
-            $temp = $DB->fetchObject();
-            return (isset($temp->email) && valid($this->email)) ? $temp->email : false;
+            $res = $DB->query("SELECT email FROM " . self::$user_tbl . " WHERE email='::email'", array("::email" => $email));
+            $temp = $DB->fetchObject($res);
+            return (isset($temp->email) && valid($temp->email)) ? true : false;
         }
 
         /**
