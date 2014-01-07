@@ -33,7 +33,7 @@
             session_regenerate_id(true);
             $_SESSION['uid'] = $user->getUserID();
             $_SESSION['logged_in'] = true;
-            $_SESSION['logged_in_username'] = $user->getUsername();
+            $_SESSION['logged_in_email'] = $user->getEmail();
             $_SESSION['user_type'] = $user->getUserType();
 
             /* Add the necessary data to the class */
@@ -109,7 +109,7 @@
             unset($_SESSION['uid']);
             unset($_SESSION['logged_in']);
             unset($_SESSION['user_type']);
-            unset($_SESSION['logged_in_username']);
+            unset($_SESSION['logged_in_email']);
             unset($_SESSION['ipaddress']);
             unset($_SESSION['status']);
             self::destroy();
