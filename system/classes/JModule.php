@@ -211,22 +211,35 @@
             $url = rtrim(ltrim($url, '/'), '/');
             $parts = explode("/", $url);
             $num_parts = ($parts[count($parts) - 1] == "%") ? 0 : count($parts);
+            
+            $pos = array_search("*", $parts);
+            if($pos !== FALSE)
+            {
+                /* This handler handles all URLS after some initial part */
+                $parts[$pos] = "%";
+                $num_parts = 0;
+                $placeholder = "%";
+            }
+            else
+            {
+                $placeholder = "";
+            }
 
             global $DB;
             $values = array(
                 '::url' => $url, '::mod' => $this->name,
                 '::perm' => isset($data['permission']) ? $data['permission'] : "",
                 '::num_parts' => $num_parts,
-                '::p0' => isset($parts[0]) ? $parts[0] : "",
-                '::p1' => isset($parts[1]) ? $parts[1] : "",
-                '::p2' => isset($parts[2]) ? $parts[2] : "",
-                '::p3' => isset($parts[3]) ? $parts[3] : "",
-                '::p4' => isset($parts[4]) ? $parts[4] : "",
-                '::p5' => isset($parts[5]) ? $parts[5] : "",
-                '::p6' => isset($parts[6]) ? $parts[6] : "",
-                '::p7' => isset($parts[7]) ? $parts[7] : "",
-                '::p8' => isset($parts[8]) ? $parts[8] : "",
-                '::p9' => isset($parts[9]) ? $parts[9] : "",
+                '::p0' => isset($parts[0]) ? $parts[0] : $placeholder,
+                '::p1' => isset($parts[1]) ? $parts[1] : $placeholder,
+                '::p2' => isset($parts[2]) ? $parts[2] : $placeholder,
+                '::p3' => isset($parts[3]) ? $parts[3] : $placeholder,
+                '::p4' => isset($parts[4]) ? $parts[4] : $placeholder,
+                '::p5' => isset($parts[5]) ? $parts[5] : $placeholder,
+                '::p6' => isset($parts[6]) ? $parts[6] : $placeholder,
+                '::p7' => isset($parts[7]) ? $parts[7] : $placeholder,
+                '::p8' => isset($parts[8]) ? $parts[8] : $placeholder,
+                '::p9' => isset($parts[9]) ? $parts[9] : $placeholder,
             );
             $sql = "INSERT INTO url_handler (url, module, permission, num_parts, p0, p1, p2, p3, p4, p5, p6, p7, p8, p9)
                 VALUES ('::url', '::mod', '::perm', '::num_parts', '::p0', '::p1', '::p2', '::p3', '::p4', '::p5', '::p6', '::p7', '::p8', '::p9')";
