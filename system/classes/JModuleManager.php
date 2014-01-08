@@ -166,6 +166,13 @@
                 /* Adding the permissions */
                 if (isset($modinfo['permissions']['permission']) && is_array($modinfo['permissions']['permission']))
                 {
+                    if(!isset($modinfo['permissions']['permission'][0]))
+                    {
+                        $temp = $modinfo['permissions']['permission'];
+                        unset($modinfo['permissions']['permission']);
+                        $modinfo['permissions']['permission'] = array($temp);
+                    }
+                    
                     foreach ($modinfo['permissions']['permission'] as $perm)
                     {
                         $module->addPermission($perm['perm'], $perm['title']);
