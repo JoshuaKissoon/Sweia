@@ -55,11 +55,11 @@
         {
             if (!isset($_GET['urlq']))
             {
-                return "";
+                return HOME_URL;
             }
-
             $url = $_GET['urlq'];
-            return rtrim(ltrim($url, "/"), "/");
+            $curl = rtrim(ltrim($url, "/"), "/");
+            return (isset($curl) && valid($curl)) ? $curl : HOME_URL;
         }
 
         /**
