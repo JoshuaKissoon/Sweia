@@ -30,6 +30,16 @@
         case "login":
             $REGISTRY->addContent("content", user_login_page());
             break;
+        case "logout":
+            if (isset($_GET['redirect_to']))
+            {
+                user_logout($_GET['redirect_to']);
+            }
+            else
+            {
+                user_logout();
+            }
+            break;
     }
 
     function user_signup_page()
@@ -213,5 +223,23 @@
         {
             ScreenMessage::setMessages("Invalid email and/or password. Please try again.", ScreenMessage::$MESSAGE_TYPE_WARNING);
         }
+    }
+
+    /**
+     * @desc Logout the user
+     */
+    function user_logout($redirect_url = NULL)
+    {
+        if (!$redirect_url)
+        {
+            $redirect_url = BASE_URL;
+        }
+
+        if (Session::isLoggedIn())
+        {
+            Session::logoutUser();
+        }
+
+        redirect_to(JPath::absoluteUrl($redirect_url));
     }
     

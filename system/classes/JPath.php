@@ -188,7 +188,13 @@
          */
         public static function absoluteUrl($url)
         {
-            return self::baseURL() . "?urlq=" . ltrim($url, "/");
+            /* Replace the Base URL if it's already in the string */
+            $url = str_replace(self::baseURL(), "", $url);
+            
+            /* Remove excess slashes from the URL */
+            $url_trimmed = rtrim(ltrim($url, "/"), "/");
+            
+            return self::baseURL() . "?urlq=" . ltrim($url_trimmed, "/");
         }
 
     }

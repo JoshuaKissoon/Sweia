@@ -18,6 +18,9 @@
         <url>
             <link>user/login</link>
         </url>
+        <url>
+            <link>user/logout</link>
+        </url>
     </urls>
     
 </config>
