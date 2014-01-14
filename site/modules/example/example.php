@@ -2,9 +2,11 @@
 
     $content = "Example Module Called";
 
-    switch (@$_GET['page'])
+    $URL[1] = (isset($URL[1]) && valid($URL[1])) ? $URL[1] : "pager";
+
+    switch ($URL[1])
     {
         case "pager":
-            require M_EXAMPLE_PATH . "/pager.php";
+            require "./pager.php";
             break;
     }

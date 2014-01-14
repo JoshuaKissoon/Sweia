@@ -30,10 +30,10 @@
     </head>
 
     <body class="<?php print implode(" ", JPath::urlArgs()); ?>">
-        <div id="status-messages"><?php print Theme::getFormattedScreenMessages(); ?></div>
-        <?php if (isset($content)): ?>
-                <?php print $content; ?>
-            <?php endif; ?>
+        <section id="status-messages"><?php print Theme::getFormattedScreenMessages(); ?></section>
+            <?php if (isset($content)): ?>
+                    <?php print $content; ?>
+                <?php endif; ?>
 
         <!--Adding Footer Scripts-->
         <?php if (isset($footer_scripts)): ?>
