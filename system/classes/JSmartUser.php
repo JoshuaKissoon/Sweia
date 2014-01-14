@@ -446,6 +446,10 @@
          */
         public function hasPermission($permission)
         {
+            if ($this->uid == 1)
+            {
+                return true;
+            }
             if (!valid($permission))
             {
                 return false;
