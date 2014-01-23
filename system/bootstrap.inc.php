@@ -19,14 +19,15 @@
     require_once INTERFACES_PATH . 'Database.php';
 
     /* Autoloader for system classes */
-    spl_autoload_register(function($class)
+    spl_autoload_register("jsmart_load_system_classes");
+    function jsmart_load_system_classes($class)
     {
         $file = CLASSES_PATH . $class . '.php';
         if (file_exists($file))
         {
             require_once $file;
         }
-    });
+    }
 
     /* Load System Files & Classes */
     require_once INCLUDES_PATH . 'functions.inc.php';
@@ -88,12 +89,12 @@
         if (!isset($handler['permission']) || !valid($handler['permission']))
         {
             /* There is no permission for this module at the current URL, just load it */
-            include JModuleManager::getModule($handler['module']);
+            include_once JModuleManager::getModule($handler['module']);
         }
         else if ($USER->usesPermissionSystem() && $USER->hasPermission($handler['permission']))
         {
             /* If the user has the permission to access this module for this URL, load the module */
-            include JModuleManager::getModule($handler['module']);
+            include_once JModuleManager::getModule($handler['module']);
         }
     }
 

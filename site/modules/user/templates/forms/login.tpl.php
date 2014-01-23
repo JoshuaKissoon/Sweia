@@ -29,5 +29,11 @@
             </div>
         </div>
         
+        <div class="row">
+            <div class="column small-12">
+                Don't have an account? <a href="<?=$signup_link?>">Signup Here</a>
+            </div>
+        </div>
+        
     </form>
 </div>

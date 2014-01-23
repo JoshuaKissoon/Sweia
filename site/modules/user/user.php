@@ -19,27 +19,30 @@
         }
     }
 
-    switch ($URL[1])
+    if (isset($URL[1]))
     {
-        case "signup":
-            $REGISTRY->addContent("content", user_signup_page());
-            break;
-        case "email-verification":
-            user_email_verify($_GET);
-            break;
-        case "login":
-            $REGISTRY->addContent("content", user_login_page());
-            break;
-        case "logout":
-            if (isset($_GET['redirect_to']))
-            {
-                user_logout($_GET['redirect_to']);
-            }
-            else
-            {
-                user_logout();
-            }
-            break;
+        switch ($URL[1])
+        {
+            case "signup":
+                $REGISTRY->addContent("content", user_signup_page());
+                break;
+            case "email-verification":
+                user_email_verify($_GET);
+                break;
+            case "login":
+                $REGISTRY->addContent("content", user_login_page());
+                break;
+            case "logout":
+                if (isset($_GET['redirect_to']))
+                {
+                    user_logout($_GET['redirect_to']);
+                }
+                else
+                {
+                    user_logout();
+                }
+                break;
+        }
     }
 
     function user_signup_page()
@@ -201,6 +204,7 @@
     {
         $form = new Template(USER_MODULE_PATH . "templates/forms/login");
         $form->form_action = JPath::absoluteUrl("user/login");
+        $form->signup_link = JPath::absoluteUrl("user/signup");
         return $form->parse();
     }
 
@@ -239,7 +243,7 @@
         {
             Session::logoutUser();
         }
-
+        ScreenMessage::setMessage("Logged out Successfully.", ScreenMessage::$MESSAGE_TYPE_SUCCESS);
         redirect_to(JPath::absoluteUrl($redirect_url));
     }
     

@@ -62,7 +62,7 @@
          * @desc Select a database to use
          * @param $database The name of the database
          */
-        public function selectDatabase($database = NULL)
+        public function selectDatabase($database)
         {
             if ($database)
             {
