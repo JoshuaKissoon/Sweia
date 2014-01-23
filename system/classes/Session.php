@@ -129,7 +129,7 @@
          */
         public static function loggedInUid()
         {
-            return $_SESSION['uid'];
+            return isset($_SESSION['uid']) ? $_SESSION['uid'] : false;
         }
 
     }
