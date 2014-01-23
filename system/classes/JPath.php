@@ -103,7 +103,7 @@
             global $DB;
             $rs = $DB->query($sql, $args);
             $handlers = array();
-            
+
             /* Store the handlers */
             while ($handler = $DB->fetchObject($rs))
             {
@@ -133,49 +133,26 @@
                 /* Remove this URL from the menu */
                 unset($menu[$url]);
 
-                if (self::userHasURLAccessPermission($uid, $url))
+                $handlers = JPath::getUrlHandlers($url);
+                foreach ($handlers as $handler)
                 {
-                    /* If the user has the necessary permission to access the URL, add the URL back to the menu with the SITE_URL prepended to the URL */
-                    $url = self::absoluteUrl($url);
-                    $menu[$url] = $menuItem;
+                    if (!isset($handler['permission']) || !valid($handler['permission']))
+                    {
+                        /* There is no permission for this handler, add the URL to the menu */
+                        $url = self::absoluteUrl($url);
+                        $menu[$url] = $menuItem;
+                        break;
+                    }
+                    else if ($USER->usesPermissionSystem() && $USER->hasPermission($handler['permission']))
+                    {
+                        /* The user has the permission, add the URL to the menu */
+                        $url = self::absoluteUrl($url);
+                        $menu[$url] = $menuItem;
+                        break;
+                    }
                 }
             }
             return $menu;
-        }
-
-        /**
-         * @desc Checks if the user has permission to access this URL 
-         * @param $uid The user's id
-         * @param $url The URL to check if the user has access to
-         */
-        public static function userHasURLAccessPermission($uid, $url)
-        {
-            if($uid == 1)
-            {
-                return true;
-            }
-            
-            global $DB;
-
-            $res = $DB->query("SELECT permission FROM url_handler WHERE url='::url'", array("::url" => $url));
-            $tmp = $DB->fetchObject($res);
-
-            if (!isset($tmp->permission) || !valid($tmp->permission))
-            {
-                /* If the URL has no permission, return true that the user has the permission to access the URL */
-                return true;
-            }
-
-            /* If the URL has some permission, check if the user has the necessary permission to access the URL */
-            $args = array("::url" => $url, "::uid" => $uid);
-            $sql = "SELECT u.uid, ur.rid, rp.permission, uh.url FROM user u
-                    LEFT JOIN user_role ur ON (u.uid = ur.uid) LEFT JOIN role_permission rp ON (rp.rid = ur.rid)
-                    LEFT JOIN url_handler uh ON (uh.permission = rp.permission)
-                    WHERE uh.url='::url' AND u.uid='::uid' GROUP BY u.uid";
-            $res2 = $DB->query($sql, $args);
-            $tmp2 = $DB->fetchObject($res2);
-
-            return (isset($tmp2->uid) && valid($tmp2->uid)) ? true : false;
         }
 
         /**
@@ -195,10 +172,10 @@
         {
             /* Replace the Base URL if it's already in the string */
             $url = str_replace(self::baseURL(), "", $url);
-            
+
             /* Remove excess slashes from the URL */
             $url_trimmed = rtrim(ltrim($url, "/"), "/");
-            
+
             return self::baseURL() . "?urlq=" . ltrim($url_trimmed, "/");
         }
 
