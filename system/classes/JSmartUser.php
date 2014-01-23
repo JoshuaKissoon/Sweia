@@ -22,6 +22,9 @@
 
         /* Define error handlers */
         public static $ERROR_INCOMPLETE_DATA = 00001;
+        
+        /* Some constants of what data is loaded */
+        private $is_permissions_loaded = false;
 
         /**
          * @desc Constructor method for the user class, loads the user
@@ -104,6 +107,7 @@
                 {
                     $this->$key = $value;
                 }
+                return true;
             }
             else
             {
@@ -398,6 +402,12 @@
             {
                 $this->roles[$role->rid] = $role->role;
             }
+            
+            /* If the currently logged in user is this user, add the authenticated user role to this user */
+            if(Session::loggedInUid() == $this->uid)
+            {
+                $this->roles[2] = "authenticated";
+            }
         }
 
         /**
@@ -454,6 +464,12 @@
             {
                 return false;
             }
+            
+            if(!$this->is_permissions_loaded)
+            {
+                $this->loadPermissions();
+            }
+            
             return (key_exists($permission, $this->permissions)) ? true : false;
         }
 

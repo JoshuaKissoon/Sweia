@@ -150,6 +150,11 @@
          */
         public static function userHasURLAccessPermission($uid, $url)
         {
+            if($uid == 1)
+            {
+                return true;
+            }
+            
             global $DB;
 
             $res = $DB->query("SELECT permission FROM url_handler WHERE url='::url'", array("::url" => $url));
@@ -170,7 +175,7 @@
             $res2 = $DB->query($sql, $args);
             $tmp2 = $DB->fetchObject($res2);
 
-            return valid($tmp2->uid) ? true : false;
+            return (isset($tmp2->uid) && valid($tmp2->uid)) ? true : false;
         }
 
         /**

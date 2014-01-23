@@ -94,7 +94,7 @@
             $emailtpl->link = JPath::absoluteUrl("user/email-verification/&code=$url_code&email=$user->email&uid=$user->uid");
 
             $mail = new EMail();
-            $mail->setSubject("Email Verification")->setMessage($emailtpl->parse())->addRecipient($user->email)->setSender("noreply@rimslane.com");
+            $mail->setSubject("Email Verification")->setMessage($emailtpl->parse())->addRecipient($user->email)->setSender(JSmart::variableGet("site_sender_email"));
             $mail->sendMail();
 
             /* redirect this user to the main landing page showing a message to verify email */

@@ -225,7 +225,7 @@
             $html->header_scripts = $this->renderHeaderScriptFiles();
             $html->footer_scripts = $this->renderScriptFiles();
             $html->content = $main->parse();
-            $html->title = isset($this->pagetitle) ? $this->getPageTitle() : JSmart::getSiteName();
+            $html->title = isset($this->pagetitle) && valid($this->pagetitle) ? $this->getPageTitle() : JSmart::getSiteName();
             $html->head = implode("", $this->head);
 
             /* Publish this template */
