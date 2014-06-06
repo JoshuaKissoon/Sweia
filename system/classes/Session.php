@@ -81,7 +81,7 @@
 
             /* The session is valid, Load all of the data into session, generate a new sid and update it in the database */
             $row = $DB->fetchObject($res);
-            $data = json_decode($row->data);
+            $data = json_decode($row->data, true);
             foreach ($data as $key => $value)
             {
                 $_SESSION[$key] = $value;
