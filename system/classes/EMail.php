@@ -4,7 +4,7 @@
      * Mail class that can be used to send emails throught the website. Includes email templates features, etc
      * 
      * @author Joshua Kissoon
-     * @author Sandeep
+     * @author Sandeep Gantait
      * @since 20130808
      * @updated 20140615 
      */
