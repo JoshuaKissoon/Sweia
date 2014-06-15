@@ -1,0 +1,20 @@
+/* 
+    Document   : users
+    Created on : Mar 16, 2013, 7:56:16 PM
+    Author     : Joshua Kissoon
+    Description:
+        Stylesheet for the usermanager module
+*/
+
+/* FORMS */
+#content .content-wrapper
+{
+   margin: 10px auto;
+   padding: 20px 10px 10px;
+   border-radius: 0;
+   width: 700px;
+}
+#content .form-wrapper
+{
+   width: 500px;
+}
