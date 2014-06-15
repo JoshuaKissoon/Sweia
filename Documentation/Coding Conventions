@@ -1,0 +1,52 @@
+General Naming Conventions:
+1. Methods: myMethod
+2. functions: my_function
+3. variables: my_variable
+4. attributes: my_attribute
+5. classes: MyClassName
+6. class file: MyClassName
+7. HTML Class, id: element-class-name
+
+File Names Conventions:
+1. Control Files
+    Keep the name as short as possible but descriptive, use underscores to separate words
+    Use capital letters only for Abbreviations
+    example: file_name.php
+2. Include files
+    Keep the name as short as possible but descriptive, use underscores to separate words
+    Use capital letters only for Abbreviations, add the .inc.php extension
+    example: file_name.inc.php
+3. Class Files
+    Starts with capital letter and every other word begins with a capital letter, no dashes or underscores
+    example: MyClass.php
+4. Template Files
+    No capital letters, use dashes to separate words
+    has the .tpl.php extension
+    example: my-template-file.tpl.php
+5. CSS, script files
+    No capital letters, use dashes to separate words
+6. Modules
+    Include a modulename.info.php file with all the information about the module, this information should be stored in an array
+    Each line of text should be ended with a semi-colon
+    Information that can be specified:
+        -> Name: Max 50 Characters in length, the module name must be the same as the file it is in
+        -> Description
+        -> Array of URL's that this module handles
+        -> Associative array of permissions that this module handles in the form: permission => Title; Max title length is 100 characters
+
+
+Modules:
+1. All Modules Should be in the site/modules folder within a folder that is the name of the module
+2. Module Constants: start with M_
+3. Module functions, classes, etc: modulename_func
+4. Register module constants in the modules.inc.php file
+5. Each module contains all of the css, scripts, templates, etc that are specific to that module
+
+
+Themes:
+1. There is only one theme on the website
+2. All theme manipulation is done using theme class methods
+3. You use the template class to load and modify templates
+4. Each theme class must have a html.tpl.php and main.tpl.php files within its base templates path
+5. The base html code is included in the html.tpl.php file
+6. The main site structure is defined within the main.tpl.php file
