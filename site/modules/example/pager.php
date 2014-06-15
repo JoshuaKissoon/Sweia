@@ -2,6 +2,7 @@
 
     /*
      * Testing the pager class
+     * @author mayur 20140614
      */
 
     $content = "Pager Class Example Usage <hr /> <br />";
