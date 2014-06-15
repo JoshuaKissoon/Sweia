@@ -1,9 +1,12 @@
 <?php
 
-    /*
+    /**
+     * Mail class that can be used to send emails throught the website. Includes email templates features, etc
+     * 
      * @author Joshua Kissoon
-     * @date 20130808
-     * @description Mail class that can be used to send emails throught the website. Includes email templates features, etc
+     * @author Sandeep
+     * @since 20130808
+     * @updated 20140615 
      */
 
     class EMail
@@ -13,7 +16,7 @@
         public $sender, $subject, $message;
 
         /**
-         * @desc 
+         * Constructor of the email class doing nothing. 
          */
         function __construct()
         {            
@@ -21,7 +24,8 @@
         }
 
         /**
-         * @desc Adds a recipient to the email
+         * Adds a recipient to the email
+         * 
          * @param $recipient The email address of the recipient
          */
         public function addRecipient($recipient)
@@ -31,7 +35,8 @@
         }
 
         /**
-         * @desc Sets the sender of the email
+         * Sets the sender of the email
+         * 
          * @param $sender The email address of the sender
          */
         public function setSender($sender)
@@ -41,7 +46,8 @@
         }
 
         /**
-         * @desc Sets the message to be sent
+         * Sets the message to be sent
+         * 
          * @param $message
          */
         public function setMessage($message)
@@ -51,7 +57,8 @@
         }
 
         /**
-         * @desc Sets the subject of the email
+         * Sets the subject of the email
+         * 
          * @param $subject
          */
         public function setSubject($subject)
@@ -61,7 +68,7 @@
         }
 
         /**
-         * @desc Composes the email, adds the necessary headers and sends the email
+         * Composes the email, adds the necessary headers and sends the email
          */
         public function sendMail()
         {
@@ -73,7 +80,8 @@
         }
 
         /**
-         * @desc A quick single-method call that composes and sends an email at once
+         * A quick single-method call that composes and sends an email at once
+         * 
          * @param $recipient A Recipient to send the email to
          * @param $subject
          * @param $message
