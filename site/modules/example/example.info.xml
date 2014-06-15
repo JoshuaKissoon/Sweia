@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    
+    <information>
+        <title>Example Module</title>
+        <description>An example module demonstrating how to create a simple module</description>
+    </information>
+    
+    <permissions>
+        <permission>
+            <perm>use_example</perm>
+            <title>Use the Example Module</title>
+        </permission>
+        <permission>
+            <perm>view_example_pager</perm>
+            <title>View Example Module's Pager</title>
+        </permission>
+    </permissions>
+    
+    <urls>
+        <url>
+            <link>example</link>
+            <permission>use_example</permission>
+        </url>
+        <url>
+            <link>example/pager</link>
+            <permission>view_example_pager</permission>
+        </url>
+    </urls>
+</config>

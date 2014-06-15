@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    
+    <information>
+        <title>Site Configuration</title>
+        <description>Module that handles all the Site configurations</description>
+    </information>
+    
+    <permissions>
+        <permission>
+            <perm>access_config_panel</perm>
+            <title>Access Admin Panel</title>
+        </permission>
+        <permission>
+            <perm>view_modules</perm>
+            <title>View Modules</title>
+        </permission>
+    </permissions>
+    
+    <urls>
+        <url>
+            <link>config</link>
+            <permission>access_config_panel</permission>
+        </url>
+        <url>
+            <link>config/modules</link>
+            <permission>view_modules</permission>
+        </url>
+    </urls>
+</config>

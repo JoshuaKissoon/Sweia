@@ -1,0 +1,52 @@
+20120106: Newer URL handling
+We now have the requirement to load more than 1 modules at a specific URL, so we handle URLs with up to 10 parts
+Setup a new url_handler table:
+    -> urlhid
+    -> url
+    -> module
+    -> permission
+    -> num_parts: How many parts this URL has
+    -> p0: part 1 of the url
+    -> p1
+    -> p2
+        .
+        .
+    -> p9
+
+URL handler Storing:
+    -> If a URL that ends with a %, set num_parts to 0 since this URL handler handles all URLs starting with that stream specified
+    -> The URLs will be broken into parts, each part can be a % or a string and are stored in p1, p2, ...
+
+Handler Loading:
+    -> We compute the number of parts np of the URL currently loaded
+        -> Load all URL's where num_parts=np and num_parts = 0
+    -> For each part of the URL:
+        -> Check if the selected URLs have that part at that place or if they have a % at that place
+
+Example:
+    => URL: config/modules
+        -> SQL: SELECT ... WHERE (num_parts=2 or num_parts=0) AND (p0='config' OR p0='%') AND (p1='module' or p1='%')
+
+
+20121106: URL handling
+File explaining how we grab the menu handler from the database
+
+When a menu handlers are set by a module, we give it a fit value(How specific is this URL)
+Fit value is composed of:
+    URL length: j/w/er/% - 4
+    # Wildcards: j/w/er/% - 1
+    fit = (URL length * 2) - #wildcards
+Fit calculation considerations
+    -> Longer the URL that fits, the better it is, thats why we multiply URL by 2
+    -> The longest URL with least wildcards is the best fit, so we minus #wildcards
+
+Based on the menu, we get the possible handlers:
+eg: admin/content/12 can have handlers:
+        admin/content/12
+        admin/content/%
+        admin/%/12
+        admin/%/%
+        admin/content
+        admin/%
+        admin
+

@@ -1,0 +1,10 @@
+Add email template
+Add handling for email template and stylesheet within the email class
+Allow Adding attachments to email
+
+Add user Management module with features
+Add admin module permissions management page
+Add template with JSmart::permissionDeniedError page
+Add admin module configuration page to configure site name, favicon, etc
+
+Remove the styles from JSmart.css that are not needed there and add them to style.css
