@@ -3,7 +3,7 @@
     /**
      * @author Joshua Kissoon
      * @date 20121212
-     * @description Class that handles Images
+     *  Class that handles Images
      */
     class Image
     {
