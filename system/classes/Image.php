@@ -1,9 +1,10 @@
 <?php
 
     /**
+     * Class that handles Images
+     * 
      * @author Joshua Kissoon
      * @date 20121212
-     * @description Class that handles Images
      */
     class Image
     {
@@ -11,7 +12,8 @@
         private $image, $width, $height, $resized_image;
 
         /**
-         * @desc If image filename is passed, Load the image file then get the width and height of the image
+         * If image filename is passed, Load the image file then get the width and height of the image
+         * 
          * @param $filename The image to be loaded
          */
         function __construct($filename = null)
@@ -28,7 +30,8 @@
         }
 
         /**
-         * @desc Checks what type of image file it is and load the image file
+         * Checks what type of image file it is and load the image file
+         * 
          * @param $file The image file to be loaded
          */
         public function loadImage($file)
@@ -55,7 +58,8 @@
         }
 
         /**
-         * @desc This is where we call the necessary resize Image function to resize the image
+         * This is where we call the necessary resize Image function to resize the image
+         * 
          * @param $option This parameter contains which resize option we want, options include:
          *          - exact - If we want the exact image the exact size specified
          *          - portrait - Scale the image to suit the vertical size specified
@@ -100,7 +104,8 @@
         }
 
         /**
-         * @desc Auto resizes an image without skewing the image
+         * Auto resizes an image without skewing the image
+         * 
          * @param $new_img_data Contain the height and width of the new image
          */
         public function autoResizeImage($new_img_data = array())
@@ -126,7 +131,8 @@
         }
 
         /**
-         * @desc Computes the new width of an image given a fixed height
+         * Computes the new width of an image given a fixed height
+         * 
          * @param $new_height The required new height of the image
          * @return The width the image will be given a height
          */
@@ -138,7 +144,8 @@
         }
 
         /**
-         * @desc Computes the new height of an image given a fixed width
+         * Computes the new height of an image given a fixed width
+         * 
          * @param $new_width The required new width of the image
          * @return The height the image will be given a width
          */
@@ -150,7 +157,8 @@
         }
 
         /**
-         * @desc Computes the optimal size to crop an image to
+         * Computes the optimal size to crop an image to
+         * 
          * @param $new_width The preferred width
          * @param $new_height The preferred height
          */
@@ -179,7 +187,8 @@
         }
 
         /**
-         * @desc Crops the image
+         * Crops the image
+         * 
          * @param $optimal_width
          * @param $optimal_height
          * @param $new_width
@@ -201,7 +210,8 @@
         }
 
         /**
-         * @desc Saves the image to a file
+         * Saves the image to a file
+         * 
          * @param $save_path The path and file name where to save the image to
          * @param $image_quality The quality of the image
          */
