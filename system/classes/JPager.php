@@ -1,9 +1,12 @@
 <?php
 
-    /**
+    /** 
+     * Class that handles pagination throughout the website
+     * 
      * @author Joshua Kissoon
      * @date 20121211
-     * @desc Class that handles pagination throughout the website
+     * @updated by Mayur Masade
+     * @updated date 20140615
      */
     require_once CLASSES_PATH . 'URL.php';
 
@@ -31,7 +34,8 @@
         }
 
         /**
-         * @desc Setup the pager query and links
+         *  Setup the pager query and links
+         * 
          * @param $params all parameters are in the $params array containing
          *      -> total_records - the total records to be displayed
          *      -> rows_per_page - the total records to be displayed per page
@@ -70,7 +74,8 @@
         }
 
         /**
-         * @desc Calculates the number of pages of records we will have 
+         *  Calculates the number of pages of records we will have 
+         * 
          */
         private function calculatePages()
         {
@@ -78,7 +83,8 @@
         }
 
         /**
-         * @desc calculate offset based on rows per page and then update the query
+         *  calculate offset based on rows per page and then update the query
+         * 
          */
         public function getRowOffset()
         {
@@ -95,7 +101,8 @@
         }
 
         /**
-         * @desc Returns the number of rows per page
+         *  Returns the number of rows per page
+         * 
          */
         public function getRowsPerPage()
         {
@@ -103,7 +110,8 @@
         }
 
         /**
-         * @desc Returns the url key for the page number
+         * Returns the url key for the page number
+         * 
          */
         public function getPageNoUrlKey()
         {
@@ -112,6 +120,7 @@
 
         /**
          * @desc This method will build pagination links
+         * 
          */
         public function buildLinks()
         {
@@ -140,7 +149,8 @@
         }
 
         /**
-         * @desc Method that generates the html links
+         *  Method that generates the html links
+         * 
          */
         public function getLinks()
         {
@@ -148,7 +158,8 @@
         }
 
         /**
-         * @desc Generates the HTML code for the pagination links
+         *Generates the HTML code for the pagination links
+         * 
          * @return HTML code for the pagination links
          */
         public function getLinksHtmlCode()
