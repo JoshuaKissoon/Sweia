@@ -1,15 +1,28 @@
 <?php
 
     /**
+     * Provides major core functionality for the entire system.
+     * 
+     * Over time Sweia will be made the Registry class for all system objects.
+     * 
      * @author Joshua Kissoon
-     * @date 20121214
-     * @description A class with methods specific to JSmart sites
+     * @since 20121214
+     * @updated 20140616
      */
     class Sweia
     {
 
         /**
-         * @desc Logs a message to the database
+         * Main class constructor
+         */
+        public function Sweia()
+        {
+            
+        }
+
+        /**
+         * Logs a message to the database
+         * 
          * @param $type The type of message to log
          * @param $message
          */
@@ -21,7 +34,8 @@
         }
 
         /**
-         * @desc Set a variable in the site table that can be used later 
+         * Set a variable in the site table that can be used later 
+         * 
          * @param $vid The id by which to store the variable
          * @param $value The actual value to store
          */
@@ -36,7 +50,8 @@
         }
 
         /**
-         * @desc Retrieves a variable that was set earlier in the site variable table
+         * Retrieves a variable that was set earlier in the site variable table
+         * 
          * @param $vid The id by of the variable to retrieve
          */
         public static function variableGet($vid)
