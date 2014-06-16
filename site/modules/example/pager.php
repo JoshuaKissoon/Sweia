@@ -2,13 +2,15 @@
 
     /*
      * Testing the pager class
-     * @author mayur 20140614
      */
 
+    $db = Sweia::getInstance()->getDB();
+    
     $content = "Pager Class Example Usage <hr /> <br />";
     $sql = "SELECT * FROM country";
-    $count = $DB->query("SELECT count(code) as count FROM country");
-    $count = $DB->fetchObject($count)->count;
+    $count = $db->query("SELECT count(code) as count FROM country");
+    $count = $db->fetchObject($count)->count;
+    
     $params = array(
         "total_records" => $count,
         "rows_per_page" => 15,
@@ -18,11 +20,12 @@
         "url" => M_EXAMPLE_URL . "&page=pager",
         "urlVar" => "pagenum",
     );
+    
     $pager = new JPager($params);
     $limit_sql = $pager->limit_query;
-    $resultset = $DB->query("SELECT * FROM country $limit_sql");
+    $resultset = $db->query("SELECT * FROM country $limit_sql");
     $count = 0;
-    while($country = $DB->fetchObject($resultset))
+    while($country = $db->fetchObject($resultset))
     {
         $count ++;
         $content .= "$count. $country->name <br />";

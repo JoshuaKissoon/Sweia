@@ -101,14 +101,13 @@
             }
             $sql .= " ORDER BY num_parts DESC";
 
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
-            $rs = $DB->query($sql, $args);
+            $rs = $db->query($sql, $args);
             $handlers = array();
 
             /* Store the handlers */
-            while ($handler = $DB->fetchObject($rs))
+            while ($handler = $db->fetchObject($rs))
             {
                 $handlers[$handler->module] = array("module" => $handler->module, "permission" => $handler->permission);
             }

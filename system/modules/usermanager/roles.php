@@ -37,6 +37,7 @@
 
     $url = Sweia::getInstance()->getURL();
     $themeRegistry = Sweia::getInstance()->getThemeRegistry();
+    $db = Sweia::getInstance()->getDB();
 
     switch (@$url[3])
     {
@@ -47,9 +48,9 @@
             break;
         default:
             /* Show role listing */
-            $rs = $DB->query("SELECT rid FROM role");
+            $rs = $db->query("SELECT rid FROM role");
             $roles = array();
-            while ($role = $DB->fetchObject($rs))
+            while ($role = $db->fetchObject($rs))
             {
                 $roles[] = $role->rid;
             }

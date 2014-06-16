@@ -56,6 +56,7 @@
     }
 
     $url = Sweia::getInstance()->getURL();
+    $db = Sweia::getInstance()->getDB();
 
     if (isset($url[3]))
     {
@@ -64,9 +65,9 @@
             case "add":
                 /* Load the Add User form */
                 $tpl = new Template($usermod_path . "templates/forms/add-user");
-                $rs = $DB->query("SELECT rid, role FROM role");
+                $rs = $db->query("SELECT rid, role FROM role");
                 $roles = array();
-                while ($r = $DB->fetchObject($rs))
+                while ($r = $db->fetchObject($rs))
                 {
                     $roles[$r->rid] = $r->role;
                 }
@@ -75,9 +76,9 @@
                 break;
             default:
                 /* Show user listing */
-                $rs = $DB->query("SELECT uid FROM user");
+                $rs = $db->query("SELECT uid FROM user");
                 $users = array();
-                while ($user = $DB->fetchObject($rs))
+                while ($user = $db->fetchObject($rs))
                 {
                     $users[] = $user->uid;
                 }

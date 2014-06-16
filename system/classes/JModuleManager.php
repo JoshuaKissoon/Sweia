@@ -23,10 +23,9 @@
          */
         public static function getModulePath($modname)
         {
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
-            $temp = $DB->fetchObject($DB->query("SELECT type FROM module WHERE name = '::mod'", array("::mod" => $modname)));
+            $temp = $db->fetchObject($db->query("SELECT type FROM module WHERE name = '::mod'", array("::mod" => $modname)));
             if (isset($temp->type) && $temp->type == "system")
             {
                 return SYSTEM_MODULES_PATH . "$modname/";
@@ -43,10 +42,9 @@
          */
         public static function getModuleURL($modname)
         {
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
-            $temp = $DB->fetchObject($DB->query("SELECT type FROM module WHERE name = '::mod'", array("::mod" => $modname)));
+            $temp = $db->fetchObject($db->query("SELECT type FROM module WHERE name = '::mod'", array("::mod" => $modname)));
             if (isset($temp->type) && $temp->type == "system")
             {
                 $path = SYSTEM_MODULES_URL . "$modname/";
@@ -63,12 +61,11 @@
          */
         public static function getModules()
         {
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
             $ret = array();
-            $res = $DB->query("SELECT * FROM module");
-            while ($mod = $DB->fetchObject($res))
+            $res = $db->query("SELECT * FROM module");
+            while ($mod = $db->fetchObject($res))
             {
                 $ret[$mod->name] = $mod;
             }
@@ -218,14 +215,13 @@
          */
         public static function deleteNullModules($currentmods = array())
         {
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
             $currentmods = "'" . implode("', '", $currentmods) . "'";
             $sql = "SELECT name FROM " . self::$modtbl . " WHERE name NOT IN ($currentmods)";
-            $rs = $DB->query($sql);
+            $rs = $db->query($sql);
 
-            while ($modname = $DB->fetchObject($rs))
+            while ($modname = $db->fetchObject($rs))
             {
                 /* Delete all modules that are not in the set of current modules */
                 $mod = new JModule($modname->name);

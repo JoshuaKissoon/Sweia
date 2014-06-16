@@ -53,13 +53,12 @@
                 return false;
             }
 
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
             $args = array("::uid" => $uid);
             $sql = "SELECT uid FROM " . self::$user_tbl . " WHERE uid='::uid'";
-            $res = $DB->query($sql, $args);
-            $user = $DB->fetchObject($res);
+            $res = $db->query($sql, $args);
+            $user = $db->fetchObject($res);
             return (isset($user->uid) && valid($user->uid)) ? true : false;
         }
 
@@ -98,13 +97,12 @@
             {
                 return false;
             }
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
             $args = array(":uid" => $this->uid);
             $sql = "SELECT * FROM " . self::$user_tbl . " u WHERE uid=':uid' LIMIT 1";
-            $rs = $DB->query($sql, $args);
-            $cuser = $DB->fetchObject($rs);
+            $rs = $db->query($sql, $args);
+            $cuser = $db->fetchObject($rs);
             if (isset($cuser->uid) && valid($cuser->uid))
             {
                 foreach ($cuser as $key => $value)
@@ -145,10 +143,9 @@
          */
         private function savePassword()
         {
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
-            return $DB->updateFields(self::$user_tbl, array("password" => $this->password), "uid='$this->uid'");
+            return $db->updateFields(self::$user_tbl, array("password" => $this->password), "uid='$this->uid'");
         }
 
         /**
@@ -191,8 +188,7 @@
                 return JSmartUser::$ERROR_INCOMPLETE_DATA;
             }
 
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
             $args = array(
                 ":email" => $this->email,
@@ -205,9 +201,9 @@
 
             $sql = "INSERT INTO " . self::$user_tbl . " (password, email, first_name, last_name, other_name, dob)
                 VALUES(':password', ':email', ':first_name', ':last_name', ':other_name', ':dob')";
-            if ($DB->query($sql, $args))
+            if ($db->query($sql, $args))
             {
-                $this->uid = $DB->lastInsertId();
+                $this->uid = $db->lastInsertId();
                 $this->saveRoles();
                 return true;
             }
@@ -231,12 +227,11 @@
          */
         public function authenticate()
         {
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
             $args = array(":email" => $this->email, "::password" => $this->password);
             $sql = "SELECT uid FROM " . self::$user_tbl . " WHERE email=':email' and password='::password' LIMIT 1";
-            $cuser = $DB->fetchObject($DB->query($sql, $args));
+            $cuser = $db->fetchObject($db->query($sql, $args));
             if (isset($cuser->uid) && valid($cuser->uid))
             {
                 $this->uid = $cuser->uid;
@@ -256,11 +251,10 @@
                 return false;
             }
 
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
-            $res = $DB->query("SELECT email FROM " . self::$user_tbl . " WHERE email='::email'", array("::email" => $email));
-            $temp = $DB->fetchObject($res);
+            $res = $db->query("SELECT email FROM " . self::$user_tbl . " WHERE email='::email'", array("::email" => $email));
+            $temp = $db->fetchObject($res);
             return (isset($temp->email) && valid($temp->email)) ? true : false;
         }
 
@@ -276,10 +270,8 @@
                 return false;
             }
 
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
-
-            return $DB->query("DELETE FROM " . self::$user_tbl . " WHERE uid='::uid'", array("::uid" => $uid));
+            $db = Sweia::getInstance()->getDB();
+            return $db->query("DELETE FROM " . self::$user_tbl . " WHERE uid='::uid'", array("::uid" => $uid));
         }
 
         /**
@@ -308,10 +300,8 @@
             if (!valid($this->status))
             {
                 /* If the status is not set in the user object, load it */
-                $sweia = Sweia::getInstance();
-                $DB = $sweia->getDB();
-
-                $this->status = $DB->getFieldValue(self::$user_tbl, "status", "uid = $this->uid");
+                $db = Sweia::getInstance()->getDB();
+                $this->status = $db->getFieldValue(self::$user_tbl, "status", "uid = $this->uid");
             }
             return $this->status;
         }
@@ -328,12 +318,11 @@
                 return false;
             }
 
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
             /* Check if its a valid user's status */
             $args = array("::status" => $sid);
-            $res = $DB->fetchObject($DB->query("SELECT sid FROM " . self::$user_status_tbl . " WHERE sid='::status'", $args));
+            $res = $db->fetchObject($db->query("SELECT sid FROM " . self::$user_status_tbl . " WHERE sid='::status'", $args));
             if (!isset($res->sid) || !valid($res->sid))
             {
                 return false;
@@ -341,7 +330,7 @@
 
             /* Its a valid user status, update this user's status */
             $args['::uid'] = $this->uid;
-            return $DB->query("UPDATE user SET status='::status' WHERE uid = '::uid'", $args);
+            return $db->query("UPDATE user SET status='::status' WHERE uid = '::uid'", $args);
         }
 
         /**
@@ -376,11 +365,10 @@
          */
         public function addRole($rid)
         {
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
-            $res = $DB->query("SELECT role FROM " . Role::$role_tbl . " WHERE rid='::rid'", array('::rid' => $rid));
-            $role = $DB->fetchObject($res);
+            $res = $db->query("SELECT role FROM " . Role::$role_tbl . " WHERE rid='::rid'", array('::rid' => $rid));
+            $role = $db->fetchObject($res);
             if (isset($role->role) && valid($role->role))
             {
                 $this->roles[$rid] = $role->role;
@@ -399,15 +387,14 @@
                 return false;
             }
 
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
             /* Remove all the roles this user had */
-            $DB->query("DELETE FROM " . self::$user_role_tbl . " WHERE uid='$this->uid'");
+            $db->query("DELETE FROM " . self::$user_role_tbl . " WHERE uid='$this->uid'");
 
             foreach ((array) $this->roles as $rid => $role)
             {
-                $DB->query("INSERT INTO " . self::$user_role_tbl . " (uid, rid) VALUES ('::uid', '::rid')", array('::rid' => $rid, '::uid' => $this->uid));
+                $db->query("INSERT INTO " . self::$user_role_tbl . " (uid, rid) VALUES ('::uid', '::rid')", array('::rid' => $rid, '::uid' => $this->uid));
             }
 
             return true;
@@ -418,11 +405,10 @@
          */
         private function loadRoles()
         {
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
-            $roles = $DB->query("SELECT ur.rid, r.role FROM " . self::$user_role_tbl . " ur LEFT JOIN role r ON (r.rid = ur.rid) WHERE uid='$this->uid'");
-            while ($role = $DB->fetchObject($roles))
+            $roles = $db->query("SELECT ur.rid, r.role FROM " . self::$user_role_tbl . " ur LEFT JOIN role r ON (r.rid = ur.rid) WHERE uid='$this->uid'");
+            while ($role = $db->fetchObject($roles))
             {
                 $this->roles[$role->rid] = $role->role;
             }
@@ -463,12 +449,11 @@
                 return false;
             }
 
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
             $rids = implode(", ", array_keys($this->roles));
-            $rs = $DB->query("SELECT permission FROM " . Role::$role_permission_tbl . " WHERE rid IN ($rids)");
-            while ($perm = $DB->fetchObject($rs))
+            $rs = $db->query("SELECT permission FROM " . Role::$role_permission_tbl . " WHERE rid IN ($rids)");
+            while ($perm = $db->fetchObject($rs))
             {
                 $this->permissions[$perm->permission] = $perm->permission;
             }

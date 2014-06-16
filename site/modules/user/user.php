@@ -89,10 +89,10 @@
         {
             /* Send email verification email */
             $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = $sweia->getDB();
             $url_code = random_alphanumeric_string(45);
             $args = array("::uid" => $user->uid, "::url_code" => $url_code);
-            $DB->query("INSERT INTO user_email_verification (uid, url_code) VALUES ('::uid', '::url_code')", $args);
+            $db->query("INSERT INTO user_email_verification (uid, url_code) VALUES ('::uid', '::url_code')", $args);
 
             $emailtpl = new Template(USER_MODULE_PATH . "templates/email/verification-email");
             $emailtpl->link = JPath::absoluteUrl("user/email-verification/&code=$url_code&email=$user->email&uid=$user->uid");
@@ -161,10 +161,10 @@
 
         /* Check if the code in the URL is that of a valid user */
         $sweia = Sweia::getInstance();
-        $DB = $sweia->getDB();
+        $db = $sweia->getDB();
         $sql = "SELECT uevid, uid, status FROM user_email_verification WHERE url_code = '::url_code' LIMIT 1";
         $args = array("::url_code" => $_GET['code']);
-        $ver_data = $DB->fetchObject($DB->query($sql, $args));
+        $ver_data = $db->fetchObject($db->query($sql, $args));
         if (!isset($ver_data->uid) || !valid($ver_data->uid) || $ver_data->uid != intval($values['uid']))
         {
             /* Invalid verification code, show error message */
@@ -173,7 +173,7 @@
         }
 
         /* Check that the user's status is awaiting email verification */
-        $usrstatus = $DB->fetchObject($DB->query("SELECT status FROM user WHERE uid='$ver_data->uid'"));
+        $usrstatus = $db->fetchObject($db->query("SELECT status FROM user WHERE uid='$ver_data->uid'"));
         if ($usrstatus->status != 5 && $ver_data->status != 2)
         {
             ScreenMessage::setMessage("Email verification was completed earlier.", "warning");
@@ -185,7 +185,7 @@
         $user->setStatus(1);
 
         $args2 = array("::uevid" => $ver_data->uevid, "::date_verified" => date("Y-m-d H:i:s"));
-        $DB->query("UPDATE user_email_verification SET status='1', date_verified = '::date_verified' WHERE uevid='::uevid'", $args2);
+        $db->query("UPDATE user_email_verification SET status='1', date_verified = '::date_verified' WHERE uevid='::uevid'", $args2);
 
         /* Tell the user they have successfully verified their email address and redirect them to the home page to login */
         ScreenMessage::setMessage("Your email address was successfully verifed, please login to continue. ", "success");

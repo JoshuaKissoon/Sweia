@@ -31,9 +31,9 @@
         public function moduleExists($modname = null)
         {
             $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = $sweia->getDB();
             $modname = ($modname) ? $modname : $this->name;
-            $res = $DB->fetchObject($DB->query("SELECT name FROM module WHERE name='::modname'", array("::modname" => $modname)));
+            $res = $db->fetchObject($db->query("SELECT name FROM module WHERE name='::modname'", array("::modname" => $modname)));
 
             if (isset($res->name))
             {
@@ -53,8 +53,8 @@
             if ($this->moduleExists($modname))
             {
                 $sweia = Sweia::getInstance();
-                $DB = $sweia->getDB();
-                $mod = $DB->fetchObject($DB->query("SELECT * FROM module WHERE name='::modname'", array("::modname" => $modname)));
+                $db = $sweia->getDB();
+                $mod = $db->fetchObject($db->query("SELECT * FROM module WHERE name='::modname'", array("::modname" => $modname)));
                 foreach ($mod as $key => $value)
                 {
                     $this->$key = $value;
@@ -75,10 +75,10 @@
         private function loadPermissions()
         {
             $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = $sweia->getDB();
             $this->permissions = array();
-            $perms = $DB->query("SELECT * FROM permission WHERE module='::modname'", array("::modname" => $this->name));
-            while ($perm = $DB->fetchObject($perms))
+            $perms = $db->query("SELECT * FROM permission WHERE module='::modname'", array("::modname" => $this->name));
+            while ($perm = $db->fetchObject($perms))
             {
                 $this->permissions[$perm->permission] = $perm->title;
             }
@@ -90,10 +90,10 @@
         private function loadUrls()
         {
             $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = $sweia->getDB();
             $this->urls = array();
-            $urls = $DB->query("SELECT * FROM url_handler WHERE module='::modname'", array("::modname" => $this->name));
-            while ($url = $DB->fetchObject($urls))
+            $urls = $db->query("SELECT * FROM url_handler WHERE module='::modname'", array("::modname" => $this->name));
+            while ($url = $db->fetchObject($urls))
             {
                 $this->urls[$url->url] = $url;
             }
@@ -125,7 +125,7 @@
         private function add()
         {
             $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = $sweia->getDB();
             $values = array(
                 "::name" => $this->name,
                 "::desc" => $this->description,
@@ -134,7 +134,7 @@
                 "::title" => $this->title,
             );
             $sql = "INSERT INTO $this->tbl (name, title, description, type, status) VALUES ('::name', '::title', '::desc', '::type', '::status')";
-            $DB->query($sql, $values);
+            $db->query($sql, $values);
 
             $this->savePermissions();
             $this->saveUrls();
@@ -169,7 +169,7 @@
         private function savePermission($perm, $title)
         {
             $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = $sweia->getDB();
 
             $values = array(
                 '::perm' => $perm,
@@ -178,7 +178,7 @@
             );
             $sql = "INSERT INTO permission (permission, title, module) VALUES ('::perm', '::title', '::modname')
                 ON DUPLICATE KEY UPDATE title = '::title', module = '::modname'";
-            $DB->query($sql, $values);
+            $db->query($sql, $values);
         }
 
         /**
@@ -234,7 +234,7 @@
             }
 
             $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = $sweia->getDB();
             $values = array(
                 '::url' => $url, '::mod' => $this->name,
                 '::perm' => isset($data['permission']) ? $data['permission'] : "",
@@ -252,7 +252,7 @@
             );
             $sql = "INSERT INTO url_handler (url, module, permission, num_parts, p0, p1, p2, p3, p4, p5, p6, p7, p8, p9)
                 VALUES ('::url', '::mod', '::perm', '::num_parts', '::p0', '::p1', '::p2', '::p3', '::p4', '::p5', '::p6', '::p7', '::p8', '::p9')";
-            $DB->query($sql, $values);
+            $db->query($sql, $values);
         }
 
         /**
@@ -262,13 +262,13 @@
         private function urlExists($url)
         {
             $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = $sweia->getDB();
 
             $args = array(
                 '::url' => $url,
                 '::mod' => $this->name,
             );
-            $res = $DB->fetchObject($DB->query("SELECT url FROM url_handler WHERE url='::url' AND module='::mod'", $args));
+            $res = $db->fetchObject($db->query("SELECT url FROM url_handler WHERE url='::url' AND module='::mod'", $args));
             if (isset($res->url))
             {
                 return ($url == $res->url) ? true : false;
@@ -284,8 +284,7 @@
          */
         private function update()
         {
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
             $values = array(
                 "::name" => $this->name,
@@ -295,7 +294,7 @@
                 "::title" => $this->title,
             );
             $sql = "UPDATE $this->tbl SET description = '::desc', status = '::status', type = '::type', title = '::title' WHERE name = '::name'";
-            $DB->query($sql, $values);
+            $db->query($sql, $values);
 
             $this->updatePermissions();
             $this->updateUrls();
@@ -339,8 +338,7 @@
          */
         private function updatePermission($perm, $title)
         {
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
             $values = array(
                 '::perm' => $perm,
@@ -348,7 +346,7 @@
                 '::modname' => $this->name
             );
             $sql = "UPDATE permission SET title = '::title', module = '::modname' WHERE permission = '::perm'";
-            $DB->query($sql, $values);
+            $db->query($sql, $values);
         }
 
         /**
@@ -393,14 +391,12 @@
         }
 
         /**
-         * @desc Delete the specified url from url_handler database table
+         * Delete the specified url from url_handler database table
          */
         private function deleteUrl($url)
         {
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
-            
-            return $DB->query("DELETE FROM url_handler WHERE url='::url'", array("::url" => $url));
+            $db = Sweia::getInstance()->getDB();
+            return $db->query("DELETE FROM url_handler WHERE url='::url'", array("::url" => $url));
         }
 
         /**
@@ -408,11 +404,10 @@
          */
         private function deletePermission($perm)
         {
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
-            $DB->query("DELETE FROM role_permission WHERE permission='::perm'", array("::perm" => $perm));
-            $DB->query("DELETE FROM permission WHERE permission='::perm'", array("::perm" => $perm));
+            $db->query("DELETE FROM role_permission WHERE permission='::perm'", array("::perm" => $perm));
+            $db->query("DELETE FROM permission WHERE permission='::perm'", array("::perm" => $perm));
         }
 
         /**
@@ -425,23 +420,22 @@
                 return false;
             }
 
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
             /* Delete the URLs and Permissions associated with this module */
-            $rs = $DB->query("SELECT url FROM url_handler WHERE module='::mod'", array("::mod" => $this->name));
-            while ($url = $DB->fetchObject($rs))
+            $rs = $db->query("SELECT url FROM url_handler WHERE module='::mod'", array("::mod" => $this->name));
+            while ($url = $db->fetchObject($rs))
             {
                 $this->deleteUrl($url->url);
             }
-            $rs2 = $DB->query("SELECT * FROM permission WHERE module='::mod'", array("::mod" => $this->name));
-            while ($perm = $DB->fetchObject($rs2))
+            $rs2 = $db->query("SELECT * FROM permission WHERE module='::mod'", array("::mod" => $this->name));
+            while ($perm = $db->fetchObject($rs2))
             {
                 $this->deletePermission($perm->permission);
             }
 
             /* Delete the module data */
-            return $DB->query("DELETE FROM module WHERE name='::mod'", array("::mod" => $this->name));
+            return $db->query("DELETE FROM module WHERE name='::mod'", array("::mod" => $this->name));
         }
 
     }

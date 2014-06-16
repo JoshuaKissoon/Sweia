@@ -16,11 +16,10 @@
          * @param $message
          */
         public static function log($type, $message)
-        {
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+        {  
+            $db = Sweia::getInstance()->getDB();
 
-            $res = $DB->query("INSERT INTO system_log (type, message) VALUES (':type', ':message')", array(":type" => $type, ":message" => $message));
+            $res = $db->query("INSERT INTO system_log (type, message) VALUES (':type', ':message')", array(":type" => $type, ":message" => $message));
             return ($res) ? true : false;
         }
 
@@ -32,13 +31,12 @@
          */
         public static function variableSet($vid, $value)
         {
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
             $args = array("::vid" => $vid, "::value" => $value);
             $sql = "INSERT INTO variable (vid, value) VALUES ('::vid', '::value')
                 ON DUPLICATE KEY UPDATE value='::value'";
-            $res = $DB->query($sql, $args);
+            $res = $db->query($sql, $args);
             return $res;
         }
 
@@ -49,12 +47,11 @@
          */
         public static function variableGet($vid)
         {
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
-            $vid = $DB->escapeString($vid);
-            $res = $DB->query("SELECT value FROM variable WHERE vid='::vid'", array("::vid" => $vid));
-            $variable = $DB->fetchObject($res);
+            $vid = $db->escapeString($vid);
+            $res = $db->query("SELECT value FROM variable WHERE vid='::vid'", array("::vid" => $vid));
+            $variable = $db->fetchObject($res);
             if (isset($variable->value))
             {
                 return $variable->value;

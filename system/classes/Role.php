@@ -39,11 +39,10 @@
          */
         public static function isRole($rid)
         {
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
-            $res = $DB->query("SELECT rid FROM role WHERE rid = '::rid'", array("::rid" => $rid));
-            $role = $DB->fetchObject($res);
+            $res = $db->query("SELECT rid FROM role WHERE rid = '::rid'", array("::rid" => $rid));
+            $role = $db->fetchObject($res);
             return (isset($role->rid) && valid($role->rid)) ? true : false;
         }
 
@@ -53,10 +52,9 @@
          */
         public function load()
         {
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
-            $res = $DB->fetchObject($DB->query("SELECT * FROM role WHERE rid='::rid'", array("::rid" => $this->rid)));
+            $res = $db->fetchObject($db->query("SELECT * FROM role WHERE rid='::rid'", array("::rid" => $this->rid)));
             if (isset($res->rid) && $res->rid == $this->rid)
             {
                 foreach ($res as $key => $value)
@@ -78,11 +76,10 @@
          */
         public function addAndSavePermission($perm)
         {
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
             /* Check if this is a valid permission */
-            $res = $DB->fetchObject($DB->query("SELECT permission FROM permission WHERE permission='::perm'", array("::perm" => $perm)));
+            $res = $db->fetchObject($db->query("SELECT permission FROM permission WHERE permission='::perm'", array("::perm" => $perm)));
             if (!valid($res->permission))
             {
                 return false;
@@ -107,11 +104,10 @@
          */
         private function loadPermissions()
         {
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
-            $res = $DB->query("SELECT permission FROM role_permission WHERE rid = '::rid'", array("::rid" => $this->rid));
-            while ($perm = $DB->fetchObject($res))
+            $res = $db->query("SELECT permission FROM role_permission WHERE rid = '::rid'", array("::rid" => $this->rid));
+            while ($perm = $db->fetchObject($res))
             {
                 $this->permissions[$perm->permission] = $perm->permission;
             }
@@ -125,10 +121,9 @@
         public function savePermissions()
         {
             /* First we delete all the permissions that are there in the database */
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
-            $res = $DB->query("DELETE FROM role_permission WHERE rid='::rid'", array("::rid" => $this->rid));
+            $res = $db->query("DELETE FROM role_permission WHERE rid='::rid'", array("::rid" => $this->rid));
 
             if (!$res)
             {
@@ -142,7 +137,7 @@
                     '::rid' => $this->rid,
                     '::permission' => $perm,
                 );
-                return $DB->query("INSERT INTO role_permission (rid, permission) VALUES ('::rid', '::permission')", $args);
+                return $db->query("INSERT INTO role_permission (rid, permission) VALUES ('::rid', '::permission')", $args);
             }
         }
 
@@ -182,17 +177,16 @@
                 return self::$ERROR_INCOMPLETE_DATA;
             }
 
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
             $args = array(
                 '::role' => $this->role,
                 '::description' => $this->description,
             );
             $sql = "INSERT INTO role (role, description) VALUES ('::role', '::description')";
-            if ($DB->query($sql, $args))
+            if ($db->query($sql, $args))
             {
-                $this->rid = $DB->lastInsertId();
+                $this->rid = $db->lastInsertId();
                 $this->savePermissions();
                 return true;
             }
@@ -225,14 +219,13 @@
             }
 
             /* Remove this role from all user's and permissions and then delete all of it's data */
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
             $args = array("::rid" => $rid);
-            if ($DB->query("DELETE FROM user_role WHERE rid = '::rid'", $args))
+            if ($db->query("DELETE FROM user_role WHERE rid = '::rid'", $args))
             {
-                $DB->query("DELETE FROM role_permission WHERE rid = '::rid'", $args);
-                if ($DB->query("DELETE FROM role WHERE rid = '::rid'", $args))
+                $db->query("DELETE FROM role_permission WHERE rid = '::rid'", $args);
+                if ($db->query("DELETE FROM role WHERE rid = '::rid'", $args))
                 {
                     return true;
                 }

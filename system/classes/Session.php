@@ -63,10 +63,8 @@
             );
 
             /* Save the session data to the database */
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
-
-            $DB->query("INSERT INTO user_session (uid, sid, ipaddress, status, data) VALUES('::uid', '::sid', '::ipaddress', '::status', '::data')", $args);
+            $db = Sweia::getInstance()->getDB();
+            $db->query("INSERT INTO user_session (uid, sid, ipaddress, status, data) VALUES('::uid', '::sid', '::ipaddress', '::status', '::data')", $args);
         }
 
         /**
@@ -81,11 +79,10 @@
             }
 
             /* If there is a cookie, check if there exists a valid database session and load it */
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
-            $res = $DB->query("SELECT * FROM user_session WHERE sid='::sid' AND status='1' LIMIT 1", array("::sid" => $_COOKIE['jsmartsid']));
-            if ($DB->resultNumRows() < 1)
+            $res = $db->query("SELECT * FROM user_session WHERE sid='::sid' AND status='1' LIMIT 1", array("::sid" => $_COOKIE['jsmartsid']));
+            if ($db->resultNumRows() < 1)
             {
                 /* The session is invalid, delete it */
                 setcookie("jsmartsid", "", time() - 3600);
@@ -93,7 +90,7 @@
             }
 
             /* The session is valid, Load all of the data into session, generate a new sid and update it in the database */
-            $row = $DB->fetchObject($res);
+            $row = $db->fetchObject($res);
             $data = json_decode($row->data, true);
             foreach ($data as $key => $value)
             {
@@ -106,7 +103,7 @@
 
             /* update the session id to the database */
             $args = array("::usid" => $row->usid, "::sid" => session_id());
-            return $DB->query("UPDATE user_session SET sid = '::sid' WHERE usid='::usid'", $args);
+            return $db->query("UPDATE user_session SET sid = '::sid' WHERE usid='::usid'", $args);
         }
 
         /**
@@ -114,11 +111,10 @@
          */
         public static function logoutUser()
         {
-            $sweia = Sweia::getInstance();
-            $DB = $sweia->getDB();
+            $db = Sweia::getInstance()->getDB();
 
             /* Set the session's status to 0 in the database */
-            $DB->query("UPDATE user_session SET status = '0' WHERE sid='::sid'", array("::sid" => session_id()));
+            $db->query("UPDATE user_session SET status = '0' WHERE sid='::sid'", array("::sid" => session_id()));
 
             unset($_SESSION['uid']);
             unset($_SESSION['logged_in']);
