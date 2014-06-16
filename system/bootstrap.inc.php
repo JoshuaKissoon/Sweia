@@ -38,8 +38,6 @@
 
     /* Load System Files & Classes */
     require_once INCLUDES_PATH . 'functions.inc.php';
-    require_once CLASSES_PATH . 'SQLiDatabase.php';
-    require_once CLASSES_PATH . 'Registry.php';
     require_once THEME_PATH . 'Theme.php';
 
     /* Load the site specific includes now */
@@ -65,11 +63,11 @@
      */
     if (Session::isLoggedIn())
     {
-        $USER = new JSmartUser($_SESSION['uid']);
+        $sweia->setUser(new JSmartUser($_SESSION['uid']));
     }
     else
     {
-        $USER = new JSmartUser();
+        $sweia->setUser(new JSmartUser());
     }
 
     /**
@@ -92,7 +90,7 @@
             /* There is no permission for this module at the current URL, just load it */
             include_once JModuleManager::getModule($handler['module']);
         }
-        else if ($USER->usesPermissionSystem() && $USER->hasPermission($handler['permission']))
+        else if ($sweia->getUser()->usesPermissionSystem() && $sweia->getUser()->hasPermission($handler['permission']))
         {
             /* If the user has the permission to access this module for this URL, load the module */
             include_once JModuleManager::getModule($handler['module']);

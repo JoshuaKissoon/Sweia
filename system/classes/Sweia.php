@@ -18,6 +18,7 @@
         private $DB;
         private $URL;
         private $themeRegistry;
+        private $user;
 
         /**
          * Main class constructor private
@@ -63,6 +64,19 @@
         public function getThemeRegistry()
         {
             return $this->themeRegistry;
+        }
+
+        /**
+         * Method used to set the global user object
+         */
+        public function setUser($user)
+        {
+            $this->user = $user;
+        }
+
+        public function getUser()
+        {
+            return $this->user;
         }
 
     }

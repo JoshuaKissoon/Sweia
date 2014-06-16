@@ -125,8 +125,9 @@
         public static function parseMenu($menu, $uid = null)
         {
             /* If no user was specified, parse the menu for the current user */
-            global $USER;
-            $uid = $USER->uid; //hprint($menu);hprint($USER);
+            $user = Sweia::getInstance()->getUser();
+            
+            $uid = $user->uid;
             foreach ($menu as $url => $menuItem)
             {
                 /* Remove the site base URL from the front of the menu if it exists there */
@@ -146,7 +147,7 @@
                         $menu[$url] = $menuItem;
                         break;
                     }
-                    else if ($USER->usesPermissionSystem() && $USER->hasPermission($handler['permission']))
+                    else if ($user->usesPermissionSystem() && $user->hasPermission($handler['permission']))
                     {
                         /* The user has the permission, add the URL to the menu */
                         $url = self::absoluteUrl($url);

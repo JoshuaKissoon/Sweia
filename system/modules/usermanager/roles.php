@@ -24,8 +24,9 @@
         switch ($_GET['op'])
         {
             case "delete-role":
+                $user = Sweia::getInstance()->getUser();
                 /* Here we handle deleting a role */
-                if ($USER->hasPermission("delete_role"))
+                if ($user->hasPermission("delete_role"))
                 {
                     Role::delete(@$_GET['rid']);
                 }

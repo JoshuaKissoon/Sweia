@@ -45,7 +45,8 @@
                 }
 
                 /* Here we handle deleting a user */
-                if ($USER->hasPermission("delete_user") && JSmartUser::isUser($_GET['uid']))
+                $user = Sweia::getInstance()->getUser();
+                if ($user->hasPermission("delete_user") && JSmartUser::isUser($_GET['uid']))
                 {
                     JSmartUser::delete($_GET['uid']);
                 }
