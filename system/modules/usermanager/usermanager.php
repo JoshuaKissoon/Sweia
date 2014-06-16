@@ -9,9 +9,9 @@
     $themeRegistry->addContent("left_sidebar", users_get_menu());
     $themeRegistry->addCss($usermod_url . "usermanager.css");
     
-    $URL = Sweia::getInstance()->getURL();
+    $url = Sweia::getInstance()->getURL();
     
-    switch(@$URL[2])
+    switch(@$url[2])
     {
        case "users":
           require "users.php";

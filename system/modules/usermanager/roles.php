@@ -34,10 +34,10 @@
         }
     }
 
-    $URL = Sweia::getInstance()->getURL();
+    $url = Sweia::getInstance()->getURL();
     $themeRegistry = Sweia::getInstance()->getThemeRegistry();
 
-    switch (@$URL[3])
+    switch (@$url[3])
     {
         case "add":
             /* Load the Add Role form */

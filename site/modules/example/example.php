@@ -2,11 +2,11 @@
 
     $content = "Example Module Called";
     
-    $URL = Sweia::getInstance()->getURL();
+    $url = Sweia::getInstance()->getURL();
 
-    $URL[1] = (isset($URL[1]) && valid($URL[1])) ? $URL[1] : "pager";
+    $url[1] = (isset($url[1]) && valid($url[1])) ? $url[1] : "pager";
 
-    switch ($URL[1])
+    switch ($url[1])
     {
         case "pager":
             require "./pager.php";

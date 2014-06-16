@@ -35,9 +35,9 @@
         }
     }
 
-    $URL = Sweia::getInstance()->getURL();
+    $url = Sweia::getInstance()->getURL();
 
-    switch (@$URL[3])
+    switch (@$url[3])
     {
         case "add":
             /* Load the Add User form */

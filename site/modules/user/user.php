@@ -19,12 +19,12 @@
         }
     }
     
-    $URL = Sweia::getInstance()->getURL();
+    $url = Sweia::getInstance()->getURL();
     $themeRegistry = Sweia::getInstance()->getThemeRegistry();
 
-    if (isset($URL[1]))
+    if (isset($url[1]))
     {
-        switch ($URL[1])
+        switch ($url[1])
         {
             case "signup":
                 $themeRegistry->addContent("content", user_signup_page());
