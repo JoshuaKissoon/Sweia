@@ -41,4 +41,5 @@
     $tpl = new Template($usermod_path . "templates/forms/role-permissions");
     $tpl->permissions = $permissions;
     $tpl->roles = $roles;
-    $REGISTRY->addContent("content", $tpl->parse());
+    
+    Sweia::getInstance()->getThemeRegistry()->addContent("content", $tpl->parse());

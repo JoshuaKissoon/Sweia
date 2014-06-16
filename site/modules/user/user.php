@@ -20,19 +20,20 @@
     }
     
     $URL = Sweia::getInstance()->getURL();
+    $themeRegistry = Sweia::getInstance()->getThemeRegistry();
 
     if (isset($URL[1]))
     {
         switch ($URL[1])
         {
             case "signup":
-                $REGISTRY->addContent("content", user_signup_page());
+                $themeRegistry->addContent("content", user_signup_page());
                 break;
             case "email-verification":
                 user_email_verify($_GET);
                 break;
             case "login":
-                $REGISTRY->addContent("content", user_login_page());
+                $themeRegistry->addContent("content", user_login_page());
                 break;
             case "logout":
                 if (isset($_GET['redirect_to']))

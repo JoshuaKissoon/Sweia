@@ -4,10 +4,12 @@
      * File that handles Module operations
      */
 
+    $themeRegistry = Sweia::getInstance()->getThemeRegistry();
+
     /* Set the modules sidebar menu */
     $menu = new Template(CONFIG_PATH . "templates/menus/sidebar-menu");
     $menu->items = config_modules_menu();
-    $REGISTRY->addContent("main_left", $menu->parse());
+    $themeRegistry->addContent("main_left", $menu->parse());
 
     switch (@$url[2])
     {
@@ -25,12 +27,12 @@
         /*
          * Here we list the modules
          */
-        global $REGISTRY;
+        $themeRegistry = Sweia::getInstance()->getThemeRegistry();
         $tpl = new Template(CONFIG_PATH . "templates/inner/module-list");
         $tpl->modules = JModuleManager::getModules();
 
         /* Add this content to the Content area within the theme */
-        $REGISTRY->addContent("content", $tpl->parse());
+        $themeRegistry->addContent("content", $tpl->parse());
     }
 
     function config_modules_menu()
@@ -45,3 +47,4 @@
 
         return $menu;
     }
+    

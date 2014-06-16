@@ -17,14 +17,16 @@
         /* Database Object */
         private $DB;
         private $URL;
+        private $themeRegistry;
 
         /**
          * Main class constructor private
          */
-        private function Sweia()
+        private function __construct()
         {
             $this->DB = new SQLiDatabase();
             $this->URL = JPath::urlArgs();
+            $this->themeRegistry = new ThemeRegistry();
         }
 
         /**
@@ -56,6 +58,11 @@
         public function getURL()
         {
             return $this->URL;
+        }
+
+        public function getThemeRegistry()
+        {
+            return $this->themeRegistry;
         }
 
     }

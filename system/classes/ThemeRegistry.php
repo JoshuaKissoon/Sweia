@@ -234,7 +234,3 @@
         }
 
     }
-
-    /* Initialize the theme */
-    $REGISTRY = new ThemeRegistry();
-    

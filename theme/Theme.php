@@ -13,23 +13,23 @@
          */
         public static function init()
         {
-            global $REGISTRY;
+            $themeRegistry = Sweia::getInstance()->getThemeRegistry();
 
             /* Adding foundation */
-            $REGISTRY->addCss(THEME_LIBRARIES_URL . "foundation/css/foundation.min.css");
-            $REGISTRY->addScript(THEME_LIBRARIES_URL . "foundation/js/modernizr.js", 1);
-            $REGISTRY->addScript(THEME_LIBRARIES_URL . "foundation/js/foundation.min.js");
+            $themeRegistry->addCss(THEME_LIBRARIES_URL . "foundation/css/foundation.min.css");
+            $themeRegistry->addScript(THEME_LIBRARIES_URL . "foundation/js/modernizr.js", 1);
+            $themeRegistry->addScript(THEME_LIBRARIES_URL . "foundation/js/foundation.min.js");
 
             /* Adding JQuery */
-            $REGISTRY->addScript(THEME_LIBRARIES_URL . "jquery/jquery-2.0.3.min.js", 2);
+            $themeRegistry->addScript(THEME_LIBRARIES_URL . "jquery/jquery-2.0.3.min.js", 2);
 
-            $REGISTRY->addCss(CSS_URL . "style.css");
-            $REGISTRY->addCss(array("file" => CSS_URL . "print.css", "media" => "print")); 
-            $REGISTRY->addCss(array('file' => CSS_URL . 'tablet.css', 'media' => 'all and (min-width: 400px) and (max-width: 900px)'));
-            $REGISTRY->addCss(array('file' => CSS_URL . 'mobile.css', 'media' => 'all and (min-width: 0px) and (max-width: 400px)'));
-            
-            
-            $REGISTRY->addScript(THEME_SCRIPTS_URL . "main.min.js", 20);
+            $themeRegistry->addCss(CSS_URL . "style.css");
+            $themeRegistry->addCss(array("file" => CSS_URL . "print.css", "media" => "print"));
+            $themeRegistry->addCss(array('file' => CSS_URL . 'tablet.css', 'media' => 'all and (min-width: 400px) and (max-width: 900px)'));
+            $themeRegistry->addCss(array('file' => CSS_URL . 'mobile.css', 'media' => 'all and (min-width: 0px) and (max-width: 400px)'));
+
+
+            $themeRegistry->addScript(THEME_SCRIPTS_URL . "main.min.js", 20);
         }
 
         /**
@@ -54,3 +54,4 @@
         }
 
     }
+    

@@ -35,13 +35,14 @@
     }
 
     $URL = Sweia::getInstance()->getURL();
+    $themeRegistry = Sweia::getInstance()->getThemeRegistry();
 
     switch (@$URL[3])
     {
         case "add":
             /* Load the Add Role form */
             $tpl = new Template($usermod_path . "templates/forms/add-role");
-            $REGISTRY->addContent("content", $tpl->parse());
+            $themeRegistry->addContent("content", $tpl->parse());
             break;
         default:
             /* Show role listing */
@@ -53,6 +54,6 @@
             }
             $tpl = new Template($usermod_path . "templates/inner/roles-list");
             $tpl->roles = $roles;
-            $REGISTRY->addContent("content", $tpl->parse());
+            $themeRegistry->addContent("content", $tpl->parse());
             break;
     }

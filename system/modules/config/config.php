@@ -12,13 +12,15 @@
             break;
     }
 
+    $themeRegistry = Sweia::getInstance()->getThemeRegistry();
+    
     /* Set the site title */
-    $REGISTRY->setSiteTitle(Utility::getSiteName() . " Configuration");
+    $themeRegistry->setSiteTitle(Utility::getSiteName() . " Configuration");
 
     /* Load the admin site navbar and sidebar */
     $navbar = new Template(CONFIG_PATH . "templates/menus/navbar");
     $navbar->items = config_navbar();
-    $REGISTRY->addContent("header_left", $navbar->parse());
+    $themeRegistry->addContent("header_left", $navbar->parse());
 
 
 
