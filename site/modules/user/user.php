@@ -94,11 +94,11 @@
             $emailtpl->link = JPath::absoluteUrl("user/email-verification/&code=$url_code&email=$user->email&uid=$user->uid");
 
             $mail = new EMail();
-            $mail->setSubject("Email Verification")->setMessage($emailtpl->parse())->addRecipient($user->email)->setSender(JSmart::variableGet("site_sender_email"));
+            $mail->setSubject("Email Verification")->setMessage($emailtpl->parse())->addRecipient($user->email)->setSender(Sweia::variableGet("site_sender_email"));
             $mail->sendMail();
 
             /* redirect this user to the main landing page showing a message to verify email */
-            $message = "Congratulations!! You have successfully signed up for " . JSmart::getSiteName() . ". Please verify your email address and enjoy using the site :).";
+            $message = "Congratulations!! You have successfully signed up for " . Sweia::getSiteName() . ". Please verify your email address and enjoy using the site :).";
             ScreenMessage::setMessage($message, ScreenMessage::$MESSAGE_TYPE_SUCCESS);
             redirect_to(BASE_URL);
         }

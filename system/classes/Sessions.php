@@ -14,7 +14,7 @@
         public static function updateSessions()
         {
             global $DB;
-            $session_lifetime = JSmart::variableGet("session_lifetime");
+            $session_lifetime = Sweia::variableGet("session_lifetime");
             $old_session_ts = time() - $session_lifetime;
             $old_session_dt = date("Y-m-d H:i:s", $old_session_ts);
             $sql = "UPDATE user_session SET status='0' WHERE create_ts < '$old_session_dt'";

@@ -13,7 +13,7 @@
     }
 
     /* Set the site title */
-    $REGISTRY->setSiteTitle(JSmart::getSiteName() . " Configuration");
+    $REGISTRY->setSiteTitle(Sweia::getSiteName() . " Configuration");
 
     /* Load the admin site navbar and sidebar */
     $navbar = new Template(CONFIG_PATH . "templates/menus/navbar");

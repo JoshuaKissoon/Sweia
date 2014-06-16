@@ -5,7 +5,7 @@
      * @date 20121214
      * @description A class with methods specific to JSmart sites
      */
-    class JSmart
+    class Sweia
     {
 
         /**
