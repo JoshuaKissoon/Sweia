@@ -4,10 +4,12 @@
      * Here we handle managing users
      */
 
-    if (@$_POST['submit'] == 'add-user')
+    if (isset($_POST['submit']) && $_POST['submit'] == 'add-user')
     {
         /* Handling adding a user to the database */
-        if (!valid(@$_POST['username']) || !valid(@$_POST['password']) || !valid(@$_POST['fname']))
+        if (!isset($_POST['username']) || !valid($_POST['username']) ||
+                !isset($_POST['password']) || !valid($_POST['password']) ||
+                !isset($_POST['fname']) || !valid($_POST['fname']))
         {
             ScreenMessage::setMessage("Please fill up all the fields", "warning");
         }
@@ -15,21 +17,38 @@
         $user->username = $_POST['username'];
         $user->setPassword($_POST['password']);
         $user->first_name = $_POST['fname'];
-        $user->last_name = @$_POST['lname'];
-        foreach ((array) @$_POST['roles'] as $rid)
-            $user->addRole($rid);
+        $user->last_name = isset($_POST['lname']) ? $_POST['lname'] : "";
+
+        if (isset($_POST['roles']) && is_array($_POST['roles']))
+        {
+            foreach ($_POST['roles'] as $rid)
+            {
+                $user->addRole($rid);
+            }
+        }
+
         if ($user->addUser())
+        {
             ScreenMessage::setMessage("Successfully Added new user", "success");
+        }
     }
-    if (@$_GET['type'] == "ajax")
+
+    if (isset($_GET['type']) && $_GET['type'] == "ajax")
     {
         switch ($_GET['op'])
         {
             case "delete-user":
-                hprint($_GET);
+                /* Check if there is a integer value */
+                if (!isset($_GET['uid']) || !is_numeric($_GET['uid']))
+                {
+                    exit;
+                }
+
                 /* Here we handle deleting a user */
-                if ($USER->hasPermission("delete_user") && JSmartUser::isUser(@$_GET['uid']))
-                    JSmartUser::delete(@$_GET['uid']);
+                if ($USER->hasPermission("delete_user") && JSmartUser::isUser($_GET['uid']))
+                {
+                    JSmartUser::delete($_GET['uid']);
+                }
                 exit;
                 break;
         }
@@ -37,30 +56,33 @@
 
     $url = Sweia::getInstance()->getURL();
 
-    switch (@$url[3])
+    if (isset($url[3]))
     {
-        case "add":
-            /* Load the Add User form */
-            $tpl = new Template($usermod_path . "templates/forms/add-user");
-            $rs = $DB->query("SELECT rid, role FROM role");
-            $roles = array();
-            while ($r = $DB->fetchObject($rs))
-            {
-                $roles[$r->rid] = $r->role;
-            }
-            $tpl->roles = $roles;
-            $themeRegistry->addContent("content", $tpl->parse());
-            break;
-        default:
-            /* Show user listing */
-            $rs = $DB->query("SELECT uid FROM user");
-            $users = array();
-            while ($user = $DB->fetchObject($rs))
-            {
-                $users[] = $user->uid;
-            }
-            $tpl = new Template($usermod_path . "templates/inner/users-list");
-            $tpl->users = $users;
-            $themeRegistry->addContent("content", $tpl->parse());
-            break;
+        switch ($url[3])
+        {
+            case "add":
+                /* Load the Add User form */
+                $tpl = new Template($usermod_path . "templates/forms/add-user");
+                $rs = $DB->query("SELECT rid, role FROM role");
+                $roles = array();
+                while ($r = $DB->fetchObject($rs))
+                {
+                    $roles[$r->rid] = $r->role;
+                }
+                $tpl->roles = $roles;
+                $themeRegistry->addContent("content", $tpl->parse());
+                break;
+            default:
+                /* Show user listing */
+                $rs = $DB->query("SELECT uid FROM user");
+                $users = array();
+                while ($user = $DB->fetchObject($rs))
+                {
+                    $users[] = $user->uid;
+                }
+                $tpl = new Template($usermod_path . "templates/inner/users-list");
+                $tpl->users = $users;
+                $themeRegistry->addContent("content", $tpl->parse());
+                break;
+        }
     }
