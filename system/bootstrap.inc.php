@@ -1,8 +1,7 @@
 <?php
 
     /**
-     * @file Bootstrap handler for JSmart
-     * @desc Does the initial bootstrap operations for the site
+     * Does the initial bootstrap operations for the site
      */
     /* Require the settings file */
     require_once 'site/default/settings.php';
