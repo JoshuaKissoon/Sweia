@@ -14,15 +14,22 @@
     /* Load the main constant files */
     require_once INCLUDES_PATH . 'constants.inc.php';
 
-    /* Load Interfaces */
-    require_once INTERFACES_PATH . 'User.php';
-    require_once INTERFACES_PATH . 'Database.php';
-
-    /* Autoloader for system classes */
+    /* Autoloader for classes and interfaces */
     spl_autoload_register("jsmart_load_system_classes");
+    spl_autoload_register("jsmart_load_system_interfaces");
+
     function jsmart_load_system_classes($class)
     {
         $file = CLASSES_PATH . $class . '.php';
+        if (file_exists($file))
+        {
+            require_once $file;
+        }
+    }
+    
+    function jsmart_load_system_interfaces($interface)
+    {
+        $file = INTERFACES_PATH . $interface . '.php';
         if (file_exists($file))
         {
             require_once $file;
