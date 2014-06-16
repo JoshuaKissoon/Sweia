@@ -1,19 +1,28 @@
 <?php
 
     /**
+     * Manages sessions throughout the site
+     * 
      * @author Joshua Kissoon
-     * @date 20121212
-     * @description Manages sessions throughout the site
+     * @since 20121212
+     * @updated 20140616
      */
     class Session
     {
 
         /**
-         * @desc Start the session
+         * Initialize the session
          */
-        public static function start()
+        public static function init()
         {
             session_start();
+
+            /* Load user data from cookies if the user is not logged in */
+            if (!Session::isLoggedIn())
+            {
+                /* If the user is not logged in, try loading the session and login data from cookies */
+                Session::loadDataFromCookies();
+            }
         }
 
         /**
