@@ -13,6 +13,7 @@
         {
             ScreenMessage::setMessage("Please fill up all the fields", "warning");
         }
+        
         $user = new JSmartUser();
         $user->username = $_POST['username'];
         $user->setPassword($_POST['password']);
@@ -29,7 +30,7 @@
 
         if ($user->addUser())
         {
-            ScreenMessage::setMessage("Successfully Added new user", "success");
+            ScreenMessage::setMessage("Successfully added a new user.", "success");
         }
     }
 

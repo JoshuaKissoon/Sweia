@@ -30,3 +30,4 @@
     
     /* Site paths */
     define("SITE_DEFAULT_FOLDER_PATH", BASE_PATH . 'site/default/');
+    define("SITE_INCLUDES_PATH", BASE_PATH . 'site/includes/');

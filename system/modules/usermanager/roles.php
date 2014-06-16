@@ -13,7 +13,7 @@
         }
         $role = new Role();
         $role->role = $_POST['role'];
-        $role->description = @$_POST['description'];
+        $role->description = isset($_POST['description']) ? $_POST['description'] : "";
         if ($role->save())
         {
             ScreenMessage::setMessage("Successfully Added new role", "success");

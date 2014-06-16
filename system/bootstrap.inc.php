@@ -12,7 +12,7 @@
 
 
     /* Load the main constant files */
-    require_once INCLUDES_PATH . 'constants.inc.php';
+    require_once SYSTEM_INCLUDES_PATH . 'constants.inc.php';
 
     /* Autoloader for classes and interfaces */
     spl_autoload_register("jsmart_load_system_classes");
@@ -37,7 +37,7 @@
     }
 
     /* Load System Files & Classes */
-    require_once INCLUDES_PATH . 'functions.inc.php';
+    require_once SYSTEM_INCLUDES_PATH . 'functions.inc.php';
     require_once THEME_PATH . 'Theme.php';
 
     /* Load the site specific includes now */
@@ -64,6 +64,10 @@
     {
         $sweia->setUser(new JSmartUser());
     }
+
+    /* Load the core site and system files */
+    require_once SYSTEM_INCLUDES_PATH . 'system.inc.php';
+    require_once SITE_INCLUDES_PATH . 'site.inc.php';
 
     /**
      * @section Load the modules for this url 
@@ -94,6 +98,6 @@
 
         define("BASE_URL", rtrim($protocol . $host . '/' . SITE_FOLDER, '/') . '/');
         define("BASE_PATH", rtrim($_SERVER['DOCUMENT_ROOT'] . '/' . SITE_FOLDER, '/') . '/');
-        define("INCLUDES_PATH", BASE_PATH . 'system/includes/');
+        define("SYSTEM_INCLUDES_PATH", BASE_PATH . 'system/includes/');
     }
     
