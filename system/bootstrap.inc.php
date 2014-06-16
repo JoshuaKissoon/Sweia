@@ -59,13 +59,7 @@
     {
         die("Database connectivity error, please check the database access details");
     }
-
-    /**
-     * @section Loading Global Variables
-     * @note This has to be done first since some modules and classes use these Global Variables
-     */
-    $URL = JPath::urlArgs();
-
+    
     /**
      * @section Loading User Data
      */

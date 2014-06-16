@@ -55,8 +55,8 @@
 
             /* Save the session data to the database */
             $sweia = Sweia::getInstance();
-    $DB = $sweia->getDB();
-    
+            $DB = $sweia->getDB();
+
             $DB->query("INSERT INTO user_session (uid, sid, ipaddress, status, data) VALUES('::uid', '::sid', '::ipaddress', '::status', '::data')", $args);
         }
 
@@ -73,8 +73,8 @@
 
             /* If there is a cookie, check if there exists a valid database session and load it */
             $sweia = Sweia::getInstance();
-    $DB = $sweia->getDB();
-    
+            $DB = $sweia->getDB();
+
             $res = $DB->query("SELECT * FROM user_session WHERE sid='::sid' AND status='1' LIMIT 1", array("::sid" => $_COOKIE['jsmartsid']));
             if ($DB->resultNumRows() < 1)
             {
@@ -106,7 +106,7 @@
         public static function logoutUser()
         {
             $sweia = Sweia::getInstance();
-    $DB = $sweia->getDB();
+            $DB = $sweia->getDB();
 
             /* Set the session's status to 0 in the database */
             $DB->query("UPDATE user_session SET status = '0' WHERE sid='::sid'", array("::sid" => session_id()));

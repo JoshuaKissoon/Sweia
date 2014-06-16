@@ -1,6 +1,8 @@
 <?php
 
     $content = "Example Module Called";
+    
+    $URL = Sweia::getInstance()->getURL();
 
     $URL[1] = (isset($URL[1]) && valid($URL[1])) ? $URL[1] : "pager";
 

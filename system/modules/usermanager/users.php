@@ -34,6 +34,8 @@
              break;
        }
     }
+    
+    $URL = Sweia::getInstance()->getURL();
 
     switch (@$URL[3])
     {

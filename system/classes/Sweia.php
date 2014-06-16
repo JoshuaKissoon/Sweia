@@ -16,6 +16,7 @@
 
         /* Database Object */
         private $DB;
+        private $URL;
 
         /**
          * Main class constructor private
@@ -23,6 +24,7 @@
         private function Sweia()
         {
             $this->DB = new SQLiDatabase();
+            $this->URL = JPath::urlArgs();
         }
 
         /**
@@ -46,6 +48,14 @@
         public function getDB()
         {
             return $this->DB;
+        }
+
+        /**
+         * We get the URL object[] with the different arguments of the URL
+         */
+        public function getURL()
+        {
+            return $this->URL;
         }
 
     }

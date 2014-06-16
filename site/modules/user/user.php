@@ -18,6 +18,8 @@
                 break;
         }
     }
+    
+    $URL = Sweia::getInstance()->getURL();
 
     if (isset($URL[1]))
     {

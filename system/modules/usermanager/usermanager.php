@@ -7,6 +7,8 @@
     $REGISTRY->addContent("left_sidebar", users_get_menu());
     $REGISTRY->addCss($usermod_url . "usermanager.css");
     
+    $URL = Sweia::getInstance()->getURL();
+    
     switch(@$URL[2])
     {
        case "users":
