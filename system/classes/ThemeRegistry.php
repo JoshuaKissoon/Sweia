@@ -1,11 +1,12 @@
 <?php
 
     /**
+     * This is the main site Registry class that manages everything within the site, all page components are placed here then it is rendered
+     * 
      * @author Joshua Kissoon
      * @date 20121220
-     * @description This is the main site Registry class that manages everything within the site, all page components are placed here then it is rendered
      */
-    class Registry
+    class ThemeRegistry
     {
 
         private $templates = array();
@@ -235,5 +236,5 @@
     }
 
     /* Initialize the theme */
-    $REGISTRY = new Registry();
+    $REGISTRY = new ThemeRegistry();
     

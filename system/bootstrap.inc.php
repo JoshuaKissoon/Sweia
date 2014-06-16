@@ -26,7 +26,7 @@
             require_once $file;
         }
     }
-    
+
     function jsmart_load_system_interfaces($interface)
     {
         $file = INTERFACES_PATH . $interface . '.php';
@@ -59,7 +59,7 @@
     {
         die("Database connectivity error, please check the database access details");
     }
-    
+
     /**
      * @section Loading User Data
      */
@@ -99,10 +99,11 @@
         }
     }
 
+    /**
+     * Initialize constants that are commonly used and will be used a lot throughout the site
+     */
     function _jsmart_constants_initialize()
     {
-        /* Add our constants that are commonly used and will be used a lot throughout the site */
-
         /* Generating our Base Path and Base URL */
         $protocol = strtolower(substr($_SERVER["SERVER_PROTOCOL"], 0, 5)) == 'https' ? 'https://' : 'http://';
         $host = $_SERVER['HTTP_HOST'];
