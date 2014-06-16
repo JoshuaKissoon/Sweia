@@ -44,6 +44,15 @@
         }
 
         /**
+         * Run necessary bootstrap operations in the entire system
+         */
+        public function bootstrap()
+        {
+            Theme::init();          // Initialize the theme
+            Session::init();        // Initialize the session
+        }
+
+        /**
          * Get the instance of the Database and return it
          * 
          * @return Instance of the Database
@@ -61,6 +70,9 @@
             return $this->URL;
         }
 
+        /**
+         * @return The Theme Registry
+         */
         public function getThemeRegistry()
         {
             return $this->themeRegistry;
@@ -74,6 +86,9 @@
             $this->user = $user;
         }
 
+        /**
+         * @return The user object of the logged in system user
+         */
         public function getUser()
         {
             return $this->user;

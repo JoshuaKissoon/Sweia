@@ -43,24 +43,19 @@
     /* Load the site specific includes now */
     require_once SITE_DEFAULT_FOLDER_PATH . 'constants.inc.php';
 
-    /**
-     * @section System Initialization
-     */
-    Theme::init();  // Initialize the theme
-    session_start();    // Start the session
+    /* Get an instance of the Sweia object */
+    $sweia = Sweia::getInstance();
+    $sweia->bootstrap();
 
     /**
      * @section Testing the database connectivity
      */
-    $sweia = Sweia::getInstance();
     if (!$sweia->getDB()->tryConnect())
     {
         die("Database connectivity error, please check the database access details");
     }
 
-    /**
-     * @section Loading User Data
-     */
+    /* Loading User */
     if (Session::isLoggedIn())
     {
         $sweia->setUser(new JSmartUser($_SESSION['uid']));
@@ -68,15 +63,6 @@
     else
     {
         $sweia->setUser(new JSmartUser());
-    }
-
-    /**
-     * @section Loading Data from cookies
-     */
-    if (!Session::isLoggedIn())
-    {
-        /* If the user is not logged in, try loading the session and login data from cookies */
-        Session::loadDataFromCookies();
     }
 
     /**
