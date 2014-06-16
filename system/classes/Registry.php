@@ -207,7 +207,7 @@
          */
         public function renderPage()
         {
-            $this->variables['sitename'] = Sweia::getSiteName();
+            $this->variables['sitename'] = Utility::getSiteName();
 
             /* Load main file */
             $main = new Template($this->getMainTemplate());
@@ -225,7 +225,7 @@
             $html->header_scripts = $this->renderHeaderScriptFiles();
             $html->footer_scripts = $this->renderScriptFiles();
             $html->content = $main->parse();
-            $html->title = isset($this->pagetitle) && valid($this->pagetitle) ? $this->getPageTitle() : Sweia::getSiteName();
+            $html->title = isset($this->pagetitle) && valid($this->pagetitle) ? $this->getPageTitle() : Utility::getSiteName();
             $html->head = implode("", $this->head);
 
             /* Publish this template */

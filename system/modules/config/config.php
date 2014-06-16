@@ -13,7 +13,7 @@
     }
 
     /* Set the site title */
-    $REGISTRY->setSiteTitle(Sweia::getSiteName() . " Configuration");
+    $REGISTRY->setSiteTitle(Utility::getSiteName() . " Configuration");
 
     /* Load the admin site navbar and sidebar */
     $navbar = new Template(CONFIG_PATH . "templates/menus/navbar");
