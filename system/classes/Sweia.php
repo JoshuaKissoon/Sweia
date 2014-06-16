@@ -12,12 +12,40 @@
     class Sweia
     {
 
+        private static $sweia = null;
+
+        /* Database Object */
+        private $DB;
+
         /**
-         * Main class constructor
+         * Main class constructor private
          */
-        public function Sweia()
+        private function Sweia()
         {
-            
+            $this->DB = new SQLiDatabase();
+        }
+
+        /**
+         * Return an instance of Sweia
+         */
+        public static function getInstance()
+        {
+            if (self::$sweia == null)
+            {
+                self::$sweia = new Sweia();
+            }
+
+            return self::$sweia;
+        }
+
+        /**
+         * Get the instance of the Database and return it
+         * 
+         * @return Instance of the Database
+         */
+        public function getDB()
+        {
+            return $this->DB;
         }
 
         /**
@@ -28,7 +56,9 @@
          */
         public static function log($type, $message)
         {
-            global $DB;
+            $sweia = Sweia::getInstance();
+            $DB = $sweia->getDB();
+
             $res = $DB->query("INSERT INTO system_log (type, message) VALUES (':type', ':message')", array(":type" => $type, ":message" => $message));
             return ($res) ? true : false;
         }
@@ -41,7 +71,9 @@
          */
         public static function variableSet($vid, $value)
         {
-            global $DB;
+            $sweia = Sweia::getInstance();
+            $DB = $sweia->getDB();
+
             $args = array("::vid" => $vid, "::value" => $value);
             $sql = "INSERT INTO variable (vid, value) VALUES ('::vid', '::value')
                 ON DUPLICATE KEY UPDATE value='::value'";
@@ -56,7 +88,9 @@
          */
         public static function variableGet($vid)
         {
-            global $DB;
+            $sweia = Sweia::getInstance();
+            $DB = $sweia->getDB();
+
             $vid = $DB->escapeString($vid);
             $res = $DB->query("SELECT value FROM variable WHERE vid='::vid'", array("::vid" => $vid));
             $variable = $DB->fetchObject($res);

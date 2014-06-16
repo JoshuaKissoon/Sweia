@@ -13,7 +13,9 @@
          */
         public static function updateSessions()
         {
-            global $DB;
+            $sweia = Sweia::getInstance();
+            $DB = $sweia->getDB();
+
             $session_lifetime = Sweia::variableGet("session_lifetime");
             $old_session_ts = time() - $session_lifetime;
             $old_session_dt = date("Y-m-d H:i:s", $old_session_ts);

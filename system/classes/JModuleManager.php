@@ -23,7 +23,9 @@
          */
         public static function getModulePath($modname)
         {
-            global $DB;
+            $sweia = Sweia::getInstance();
+            $DB = $sweia->getDB();
+
             $temp = $DB->fetchObject($DB->query("SELECT type FROM module WHERE name = '::mod'", array("::mod" => $modname)));
             if (isset($temp->type) && $temp->type == "system")
             {
@@ -41,7 +43,9 @@
          */
         public static function getModuleURL($modname)
         {
-            global $DB;
+            $sweia = Sweia::getInstance();
+            $DB = $sweia->getDB();
+
             $temp = $DB->fetchObject($DB->query("SELECT type FROM module WHERE name = '::mod'", array("::mod" => $modname)));
             if (isset($temp->type) && $temp->type == "system")
             {
@@ -59,7 +63,9 @@
          */
         public static function getModules()
         {
-            global $DB;
+            $sweia = Sweia::getInstance();
+            $DB = $sweia->getDB();
+
             $ret = array();
             $res = $DB->query("SELECT * FROM module");
             while ($mod = $DB->fetchObject($res))
@@ -166,13 +172,13 @@
                 /* Adding the permissions */
                 if (isset($modinfo['permissions']['permission']) && is_array($modinfo['permissions']['permission']))
                 {
-                    if(!isset($modinfo['permissions']['permission'][0]))
+                    if (!isset($modinfo['permissions']['permission'][0]))
                     {
                         $temp = $modinfo['permissions']['permission'];
                         unset($modinfo['permissions']['permission']);
                         $modinfo['permissions']['permission'] = array($temp);
                     }
-                    
+
                     foreach ($modinfo['permissions']['permission'] as $perm)
                     {
                         $module->addPermission($perm['perm'], $perm['title']);
@@ -188,9 +194,9 @@
                         {
                             $data['permission'] = $url['permission'];
                         }
-                        
-                        if(isset($url['link']))
-                        {                            
+
+                        if (isset($url['link']))
+                        {
                             $link = $url['link'];
                         }
                         else
@@ -212,7 +218,9 @@
          */
         public static function deleteNullModules($currentmods = array())
         {
-            global $DB;
+            $sweia = Sweia::getInstance();
+            $DB = $sweia->getDB();
+
             $currentmods = "'" . implode("', '", $currentmods) . "'";
             $sql = "SELECT name FROM " . self::$modtbl . " WHERE name NOT IN ($currentmods)";
             $rs = $DB->query($sql);

@@ -85,7 +85,8 @@
         if ($user->save())
         {
             /* Send email verification email */
-            global $DB;
+            $sweia = Sweia::getInstance();
+            $DB = $sweia->getDB();
             $url_code = random_alphanumeric_string(45);
             $args = array("::uid" => $user->uid, "::url_code" => $url_code);
             $DB->query("INSERT INTO user_email_verification (uid, url_code) VALUES ('::uid', '::url_code')", $args);
@@ -156,7 +157,8 @@
         }
 
         /* Check if the code in the URL is that of a valid user */
-        global $DB;
+        $sweia = Sweia::getInstance();
+        $DB = $sweia->getDB();
         $sql = "SELECT uevid, uid, status FROM user_email_verification WHERE url_code = '::url_code' LIMIT 1";
         $args = array("::url_code" => $_GET['code']);
         $ver_data = $DB->fetchObject($DB->query($sql, $args));

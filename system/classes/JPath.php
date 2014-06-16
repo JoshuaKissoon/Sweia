@@ -100,7 +100,10 @@
                 $c++;
             }
             $sql .= " ORDER BY num_parts DESC";
-            global $DB;
+
+            $sweia = Sweia::getInstance();
+            $DB = $sweia->getDB();
+
             $rs = $DB->query($sql, $args);
             $handlers = array();
 

@@ -30,7 +30,8 @@
          */
         public function moduleExists($modname = null)
         {
-            global $DB;
+            $sweia = Sweia::getInstance();
+            $DB = $sweia->getDB();
             $modname = ($modname) ? $modname : $this->name;
             $res = $DB->fetchObject($DB->query("SELECT name FROM module WHERE name='::modname'", array("::modname" => $modname)));
 
@@ -51,7 +52,8 @@
         {
             if ($this->moduleExists($modname))
             {
-                global $DB;
+                $sweia = Sweia::getInstance();
+                $DB = $sweia->getDB();
                 $mod = $DB->fetchObject($DB->query("SELECT * FROM module WHERE name='::modname'", array("::modname" => $modname)));
                 foreach ($mod as $key => $value)
                 {
@@ -72,7 +74,8 @@
          */
         private function loadPermissions()
         {
-            global $DB;
+            $sweia = Sweia::getInstance();
+            $DB = $sweia->getDB();
             $this->permissions = array();
             $perms = $DB->query("SELECT * FROM permission WHERE module='::modname'", array("::modname" => $this->name));
             while ($perm = $DB->fetchObject($perms))
@@ -86,7 +89,8 @@
          */
         private function loadUrls()
         {
-            global $DB;
+            $sweia = Sweia::getInstance();
+            $DB = $sweia->getDB();
             $this->urls = array();
             $urls = $DB->query("SELECT * FROM url_handler WHERE module='::modname'", array("::modname" => $this->name));
             while ($url = $DB->fetchObject($urls))
@@ -120,7 +124,8 @@
          */
         private function add()
         {
-            global $DB;
+            $sweia = Sweia::getInstance();
+            $DB = $sweia->getDB();
             $values = array(
                 "::name" => $this->name,
                 "::desc" => $this->description,
@@ -137,9 +142,10 @@
         }
 
         /**
-         * @desc Adds a permission to this module's premission array, this is not yet saved to the DB
-         * @param $permission
-         * @param $descripton
+         * Adds a permission to this module's premission array, this is not yet saved to the DB
+         * 
+         * @param $perm
+         * @param $title
          */
         public function addPermission($perm, $title)
         {
@@ -147,7 +153,7 @@
         }
 
         /**
-         * @desc Add Module permissions to the database 
+         * Add Module permissions to the database 
          */
         private function savePermissions()
         {
@@ -162,7 +168,9 @@
          */
         private function savePermission($perm, $title)
         {
-            global $DB;
+            $sweia = Sweia::getInstance();
+            $DB = $sweia->getDB();
+
             $values = array(
                 '::perm' => $perm,
                 '::title' => $title,
@@ -182,7 +190,7 @@
         {
             $this->urls[$url] = $data;
         }
-        
+
         /**
          * @desc Add Module urls to the database 
          */
@@ -211,9 +219,9 @@
             $url = rtrim(ltrim($url, '/'), '/');
             $parts = explode("/", $url);
             $num_parts = ($parts[count($parts) - 1] == "%") ? 0 : count($parts);
-            
+
             $pos = array_search("*", $parts);
-            if($pos !== FALSE)
+            if ($pos !== FALSE)
             {
                 /* This handler handles all URLS after some initial part */
                 $parts[$pos] = "%";
@@ -225,7 +233,8 @@
                 $placeholder = "";
             }
 
-            global $DB;
+            $sweia = Sweia::getInstance();
+            $DB = $sweia->getDB();
             $values = array(
                 '::url' => $url, '::mod' => $this->name,
                 '::perm' => isset($data['permission']) ? $data['permission'] : "",
@@ -252,7 +261,9 @@
          */
         private function urlExists($url)
         {
-            global $DB;
+            $sweia = Sweia::getInstance();
+            $DB = $sweia->getDB();
+
             $args = array(
                 '::url' => $url,
                 '::mod' => $this->name,
@@ -273,7 +284,9 @@
          */
         private function update()
         {
-            global $DB;
+            $sweia = Sweia::getInstance();
+            $DB = $sweia->getDB();
+
             $values = array(
                 "::name" => $this->name,
                 "::desc" => $this->description,
@@ -326,7 +339,9 @@
          */
         private function updatePermission($perm, $title)
         {
-            global $DB;
+            $sweia = Sweia::getInstance();
+            $DB = $sweia->getDB();
+
             $values = array(
                 '::perm' => $perm,
                 '::title' => $title,
@@ -382,7 +397,9 @@
          */
         private function deleteUrl($url)
         {
-            global $DB;
+            $sweia = Sweia::getInstance();
+            $DB = $sweia->getDB();
+            
             return $DB->query("DELETE FROM url_handler WHERE url='::url'", array("::url" => $url));
         }
 
@@ -391,7 +408,9 @@
          */
         private function deletePermission($perm)
         {
-            global $DB;
+            $sweia = Sweia::getInstance();
+            $DB = $sweia->getDB();
+
             $DB->query("DELETE FROM role_permission WHERE permission='::perm'", array("::perm" => $perm));
             $DB->query("DELETE FROM permission WHERE permission='::perm'", array("::perm" => $perm));
         }
@@ -406,7 +425,8 @@
                 return false;
             }
 
-            global $DB;
+            $sweia = Sweia::getInstance();
+            $DB = $sweia->getDB();
 
             /* Delete the URLs and Permissions associated with this module */
             $rs = $DB->query("SELECT url FROM url_handler WHERE module='::mod'", array("::mod" => $this->name));

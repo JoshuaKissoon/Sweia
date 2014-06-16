@@ -54,8 +54,8 @@
     /**
      * @section Testing the database connectivity
      */
-    $DB = new SQLiDatabase();
-    if (!$DB->tryConnect())
+    $sweia = Sweia::getInstance();
+    if (!$sweia->getDB()->tryConnect())
     {
         die("Database connectivity error, please check the database access details");
     }

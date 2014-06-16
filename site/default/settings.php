@@ -9,7 +9,7 @@
      */
 
     /* Is the site in a specific folder within your web directory */
-    define("SITE_FOLDER", "jsmart");
+    define("SITE_FOLDER", "sweia");
 
     /* Home URL */
     define("HOME_URL", "home");
