@@ -16,12 +16,12 @@
             $themeRegistry = Sweia::getInstance()->getThemeRegistry();
 
             /* Adding foundation */
-            $themeRegistry->addCss(THEME_LIBRARIES_URL . "foundation/css/foundation.min.css");
-            $themeRegistry->addScript(THEME_LIBRARIES_URL . "foundation/js/modernizr.js", 1);
-            $themeRegistry->addScript(THEME_LIBRARIES_URL . "foundation/js/foundation.min.js");
+            $themeRegistry->addCss(THEME_LIBRARIES_URL . "foundation/foundation-5.2.3/css/foundation.min.css");
+            $themeRegistry->addScript(THEME_LIBRARIES_URL . "foundation/foundation-5.2.3/js/vendor/modernizr.js", 1);
+            $themeRegistry->addScript(THEME_LIBRARIES_URL . "foundation/foundation-5.2.3/js/foundation.min.js");
 
             /* Adding JQuery */
-            $themeRegistry->addScript(THEME_LIBRARIES_URL . "jquery/jquery-2.0.3.min.js", 2);
+            $themeRegistry->addScript(THEME_LIBRARIES_URL . "jquery/jquery-2.1.1.min.js", 2);
 
             $themeRegistry->addCss(CSS_URL . "style.css");
             $themeRegistry->addCss(array("file" => CSS_URL . "print.css", "media" => "print"));
