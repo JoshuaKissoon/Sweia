@@ -6,7 +6,7 @@
      * @author Joshua Kissoon
      * @since 20140621
      */
-    class SystemConfig implements SystemConfiguration
+    class SystemConfig
     {
 
         public static function protocol()

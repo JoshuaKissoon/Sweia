@@ -8,9 +8,6 @@
     require_once 'includes/SystemConfig.php';
     require_once 'site/includes/SiteConfig.php';
 
-    /* Load the main constant files */
-    require_once SystemConfig::includesPath() . 'constants.inc.php';
-
     /* Autoloader for classes and interfaces */
     spl_autoload_register("jsmart_load_system_classes");
     spl_autoload_register("jsmart_load_system_interfaces");
@@ -36,9 +33,6 @@
     /* Load System Files & Classes */
     require_once SystemConfig::includesPath() . 'functions.inc.php';
     require_once SiteConfig::themePath() . 'Theme.php';
-
-    /* Load the site specific includes now */
-    require_once SiteConfig::includesPath() . 'constants.inc.php';
 
     /* Get an instance of the Sweia object */
     $sweia = Sweia::getInstance();

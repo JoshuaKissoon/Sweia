@@ -5,12 +5,12 @@
      *
      * @author Joshua Kissoon
      */
-    class SiteConfig implements SiteConfiguration
+    class SiteConfig
     {
 
         public static function includesPath()
         {
-            return SystemConfig::basePath() . "site/includes";
+            return SystemConfig::basePath() . "site/includes/";
         }
 
         public static function modulesPath()
