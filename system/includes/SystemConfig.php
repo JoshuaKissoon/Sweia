@@ -9,39 +9,59 @@
     class SystemConfig implements SystemConfiguration
     {
 
+        public static function protocol()
+        {
+            return strtolower(substr($_SERVER["SERVER_PROTOCOL"], 0, 5)) == 'https' ? 'https://' : 'http://';
+        }
+
+        public static function host()
+        {
+            return $_SERVER['HTTP_HOST'];
+        }
+
+        public static function baseUrl()
+        {
+            return rtrim(SystemConfig::protocol() . SystemConfig::host() . '/' . SITE_FOLDER, '/') . '/';
+        }
+
+        public static function basePath()
+        {
+            return rtrim($_SERVER['DOCUMENT_ROOT'] . '/' . SITE_FOLDER, '/') . '/';
+        }
+
         public static function includesPath()
         {
-            return SiteConfig::basePath() . 'system/includes/';
+            return SystemConfig::basePath() . 'system/includes/';
         }
 
         public static function classesPath()
         {
-            return SiteConfig::basePath() . "system/classes/";
+            return SystemConfig::basePath() . "system/classes/";
         }
 
         public static function interfacesPath()
         {
-            return SiteConfig::basePath() . "system/interfaces/";
+            return SystemConfig::basePath() . "system/interfaces/";
         }
 
         public static function modulesPath()
         {
-            return SiteConfig::basePath() . "system/modules/";
+            return SystemConfig::basePath() . "system/modules/";
         }
 
         public static function modulesUrl()
         {
-            return SiteConfig::baseUrl() . "system/modules/";
+            return SystemConfig::baseUrl() . "system/modules/";
         }
 
         public static function themesPath()
         {
-            return SiteConfig::basePath() . "themes/";
+            return SystemConfig::basePath() . "themes/";
         }
 
         public static function themesUrl()
         {
-            return SiteConfig::baseUrl() . "themes/";
+            return SystemConfig::baseUrl() . "themes/";
         }
 
     }

@@ -1,14 +1,28 @@
 <?php
 
     /**
-     * Handles all URL events within the site
-     * 
      * @author Joshua Kissoon
-     * @since 20121219
-     * @updated 20140621
+     * @date 20121219
+     * @description Handles all URL events within the site
      */
     class JPath
     {
+
+        /**
+         * @return The Site Base URL 
+         */
+        public static function baseURL()
+        {
+            return SystemConfig::baseUrl();
+        }
+
+        /**
+         * @return Returns the Site Base Path 
+         */
+        public static function basePath()
+        {
+            return SystemConfig::basePath();
+        }
 
         /**
          *  @return The relative URL from which the request came from
@@ -30,7 +44,7 @@
          */
         public static function fullRequestUrl()
         {
-            return SiteConfig::baseUrl() . self::requestUrl();
+            return SystemConfig::baseUrl() . self::requestUrl();
         }
 
         /**
@@ -111,12 +125,12 @@
         {
             /* If no user was specified, parse the menu for the current user */
             $user = Sweia::getInstance()->getUser();
-
+            
             $uid = $user->uid;
             foreach ($menu as $url => $menuItem)
             {
                 /* Remove the site base URL from the front of the menu if it exists there */
-                $url1 = str_replace(SiteConfig::baseUrl(), "", $url);
+                $url1 = str_replace(SystemConfig::baseUrl(), "", $url);
                 $url = ltrim(rtrim($url1));
 
                 /* Remove this URL from the menu */
@@ -160,12 +174,12 @@
         public static function absoluteUrl($url)
         {
             /* Replace the Base URL if it's already in the string */
-            $url = str_replace(SiteConfig::baseUrl(), "", $url);
+            $url = str_replace(self::baseURL(), "", $url);
 
             /* Remove excess slashes from the URL */
             $url_trimmed = rtrim(ltrim($url, "/"), "/");
 
-            return SiteConfig::baseUrl() . "?urlq=" . ltrim($url_trimmed, "/");
+            return self::baseURL() . "?urlq=" . ltrim($url_trimmed, "/");
         }
 
     }
