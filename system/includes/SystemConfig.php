@@ -21,12 +21,12 @@
 
         public static function baseUrl()
         {
-            return rtrim(SystemConfig::protocol() . SystemConfig::host() . '/' . SITE_FOLDER, '/') . '/';
+            return rtrim(SystemConfig::protocol() . SystemConfig::host() . '/' . BaseConfig::SITE_FOLDER, '/') . '/';
         }
 
         public static function basePath()
         {
-            return rtrim($_SERVER['DOCUMENT_ROOT'] . '/' . SITE_FOLDER, '/') . '/';
+            return rtrim($_SERVER['DOCUMENT_ROOT'] . '/' . BaseConfig::SITE_FOLDER, '/') . '/';
         }
 
         public static function includesPath()

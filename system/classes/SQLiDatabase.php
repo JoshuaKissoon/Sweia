@@ -29,10 +29,10 @@
          */
         public function tryConnect()
         {
-            $conn = mysqli_connect(DB_SERVER, DB_USER, DB_PASS);
+            $conn = mysqli_connect(BaseConfig::DB_SERVER, BaseConfig::DB_USER, BaseConfig::DB_PASS);
             if ($conn)
             {
-                $db_select = mysqli_select_db($conn, DB_NAME);
+                $db_select = mysqli_select_db($conn, BaseConfig::DB_NAME);
                 if ($db_select)
                 {
                     return true;
@@ -46,10 +46,10 @@
          */
         public function connect()
         {
-            $this->connection = mysqli_connect(DB_SERVER, DB_USER, DB_PASS);
+            $this->connection = mysqli_connect(BaseConfig::DB_SERVER, BaseConfig::DB_USER, BaseConfig::DB_PASS);
             if ($this->connection)
             {
-                $db_select = mysqli_select_db($this->connection, DB_NAME);
+                $db_select = mysqli_select_db($this->connection, BaseConfig::DB_NAME);
                 if ($db_select)
                 {
                     return true;
@@ -72,7 +72,7 @@
             else
             {
                 /* If no database specified, select the default database */
-                mysqli_select_db($this->connection, DB_NAME);
+                mysqli_select_db($this->connection, BaseConfig::DB_NAME);
             }
         }
 

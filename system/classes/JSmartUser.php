@@ -155,7 +155,7 @@
          */
         private function hashPassword($password)
         {
-            $salt = md5($this->email . JSMART_SITE_SALT);
+            $salt = md5($this->email . BaseConfig::PASSWORD_SALT);
             return sha1($salt . $password);
         }
 

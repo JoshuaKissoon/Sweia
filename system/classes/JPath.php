@@ -39,11 +39,11 @@
         {
             if (!isset($_GET['urlq']))
             {
-                return HOME_URL;
+                return BaseConfig::HOME_URL;
             }
             $url = $_GET['urlq'];
             $curl = rtrim(ltrim($url, "/"), "/");
-            return (isset($curl) && valid($curl)) ? $curl : HOME_URL;
+            return (isset($curl) && valid($curl)) ? $curl : BaseConfig::HOME_URL;
         }
 
         /**
@@ -69,7 +69,7 @@
             }
             if (!valid($url))
             {
-                $url = HOME_URL;
+                $url = BaseConfig::HOME_URL;
             }
             $url_parts = explode("/", $url);
             $num_parts = count($url_parts);
