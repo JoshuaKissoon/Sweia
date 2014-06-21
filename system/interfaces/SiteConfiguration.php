@@ -4,6 +4,7 @@
      * Allows each site to specify it's site-specific configuration
      *
      * @author Joshua Kissoon
+     * @since 20140621
      */
     interface SiteConfiguration
     {

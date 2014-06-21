@@ -3,7 +3,8 @@
     /**
      * Specifies the configuration of the System
      *
-     * @author Joshua
+     * @author Joshua Kissoon
+     * @since 20140621
      */
     class SystemConfig implements SystemConfiguration
     {
@@ -51,6 +52,16 @@
         public static function modulesUrl()
         {
             return SystemConfig::baseUrl() . "system/modules/";
+        }
+
+        public static function themesPath()
+        {
+            return SystemConfig::basePath() . "themes/";
+        }
+
+        public static function themesUrl()
+        {
+            return SystemConfig::baseUrl() . "themes/";
         }
 
     }

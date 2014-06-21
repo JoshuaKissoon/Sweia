@@ -3,7 +3,8 @@
     /**
      * Specifies the configuration of the System
      *
-     * @author Joshua
+     * @author Joshua Kissoon
+     * @since 20140621
      */
     interface SystemConfiguration
     {
@@ -25,5 +26,9 @@
         public static function modulesPath();
 
         public static function modulesUrl();
+        
+        public static function themesPath();
+        
+        public static function themesUrl();
     }
     
