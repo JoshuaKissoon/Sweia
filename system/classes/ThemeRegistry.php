@@ -39,7 +39,7 @@
          */
         private function getHtmlTemplate()
         {
-            return (isset($this->templates['html'])) ? $this->templates['html'] : TEMPLATES_PATH . "html";
+            return (isset($this->templates['html'])) ? $this->templates['html'] : SiteConfig::templatesPath() . "html";
         }
 
         /**
@@ -64,7 +64,7 @@
          */
         private function getMainTemplate()
         {
-            return (isset($this->templates['main'])) ? $this->templates['main'] : TEMPLATES_PATH . "main";
+            return (isset($this->templates['main'])) ? $this->templates['main'] : SiteConfig::templatesPath() . "main";
         }
 
         /**

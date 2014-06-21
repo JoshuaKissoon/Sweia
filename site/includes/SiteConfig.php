@@ -53,5 +53,35 @@
             return SystemConfig::themesUrl() . BaseConfig::THEME . "/";
         }
 
+        public static function templatesPath()
+        {
+            return SiteConfig::themePath() . "templates/";
+        }
+
+        public static function templatesUrl()
+        {
+            return SiteConfig::themeUrl() . "templates/";
+        }
+
+        public static function themeCssUrl()
+        {
+            return SiteConfig::themeUrl() . "css/";
+        }
+
+        public static function themeImagesUrl()
+        {
+            return SiteConfig::themeUrl() . "images/";
+        }
+
+        public static function themeScriptsUrl()
+        {
+            return SiteConfig::themeUrl() . "scripts/";
+        }
+
+        public static function themeLibrariessUrl()
+        {
+            return SiteConfig::themeUrl() . "libraries/";
+        }
+
     }
     

@@ -26,5 +26,17 @@
         public static function adminThemeUrl();
 
         public static function adminThemePath();
+
+        public static function themeCssUrl();
+
+        public static function themeScriptsUrl();
+
+        public static function themeLibrariessUrl();
+
+        public static function themeImagesUrl();
+
+        public static function templatesPath();
+
+        public static function templatesUrl();
     }
     

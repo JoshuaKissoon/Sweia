@@ -16,20 +16,20 @@
             $themeRegistry = Sweia::getInstance()->getThemeRegistry();
 
             /* Adding foundation */
-            $themeRegistry->addCss(THEME_LIBRARIES_URL . "foundation/foundation-5.2.3/css/foundation.min.css");
-            $themeRegistry->addScript(THEME_LIBRARIES_URL . "foundation/foundation-5.2.3/js/vendor/modernizr.js", 1);
-            $themeRegistry->addScript(THEME_LIBRARIES_URL . "foundation/foundation-5.2.3/js/foundation.min.js");
+            $themeRegistry->addCss(SiteConfig::themeLibrariessUrl() . "foundation/foundation-5.2.3/css/foundation.min.css");
+            $themeRegistry->addScript(SiteConfig::themeLibrariessUrl() . "foundation/foundation-5.2.3/js/vendor/modernizr.js", 1);
+            $themeRegistry->addScript(SiteConfig::themeLibrariessUrl() . "foundation/foundation-5.2.3/js/foundation.min.js");
 
             /* Adding JQuery */
-            $themeRegistry->addScript(THEME_LIBRARIES_URL . "jquery/jquery-2.1.1.min.js", 2);
+            $themeRegistry->addScript(SiteConfig::themeLibrariessUrl() . "jquery/jquery-2.1.1.min.js", 2);
 
-            $themeRegistry->addCss(CSS_URL . "style.css");
-            $themeRegistry->addCss(array("file" => CSS_URL . "print.css", "media" => "print"));
-            $themeRegistry->addCss(array('file' => CSS_URL . 'tablet.css', 'media' => 'all and (min-width: 400px) and (max-width: 900px)'));
-            $themeRegistry->addCss(array('file' => CSS_URL . 'mobile.css', 'media' => 'all and (min-width: 0px) and (max-width: 400px)'));
+            $themeRegistry->addCss(SiteConfig::themeCssUrl() . "style.css");
+            $themeRegistry->addCss(array("file" => SiteConfig::themeCssUrl() . "print.css", "media" => "print"));
+            $themeRegistry->addCss(array('file' => SiteConfig::themeCssUrl() . 'tablet.css', 'media' => 'all and (min-width: 400px) and (max-width: 900px)'));
+            $themeRegistry->addCss(array('file' => SiteConfig::themeCssUrl() . 'mobile.css', 'media' => 'all and (min-width: 0px) and (max-width: 400px)'));
 
 
-            $themeRegistry->addScript(THEME_SCRIPTS_URL . "main.min.js", 20);
+            $themeRegistry->addScript(SiteConfig::themeScriptsUrl() . "main.min.js", 20);
         }
 
         /**
@@ -47,7 +47,7 @@
             }
 
             /* If there are messages, generate the ul */
-            $template = new Template(TEMPLATES_PATH . "/inner/screen-messages");
+            $template = new Template(SiteConfig::templatesPath() . "/inner/screen-messages");
             $template->messages = $messages;
             $template->message_count = count($messages);
             return $template->parse();
