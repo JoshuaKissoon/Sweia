@@ -104,7 +104,7 @@
             /* redirect this user to the main landing page showing a message to verify email */
             $message = "Congratulations!! You have successfully signed up for " . Utility::getSiteName() . ". Please verify your email address and enjoy using the site :).";
             ScreenMessage::setMessage($message, ScreenMessage::$MESSAGE_TYPE_SUCCESS);
-            redirect_to(SystemConfig::baseUrl());
+            redirect_to(SiteConfig::baseUrl());
         }
         else
         {
@@ -156,7 +156,7 @@
         if (Session::isLoggedIn())
         {
             ScreenMessage::setMessage("You are already Logged In, no verification possible", "warning");
-            redirect_to(SystemConfig::baseUrl());
+            redirect_to(SiteConfig::baseUrl());
         }
 
         /* Check if the code in the URL is that of a valid user */
@@ -169,7 +169,7 @@
         {
             /* Invalid verification code, show error message */
             ScreenMessage::setMessage("Invalid Verification Data", "error");
-            redirect_to(SystemConfig::baseUrl());
+            redirect_to(SiteConfig::baseUrl());
         }
 
         /* Check that the user's status is awaiting email verification */
@@ -177,7 +177,7 @@
         if ($usrstatus->status != 5 && $ver_data->status != 2)
         {
             ScreenMessage::setMessage("Email verification was completed earlier.", "warning");
-            redirect_to(SystemConfig::baseUrl());
+            redirect_to(SiteConfig::baseUrl());
         }
 
         /* If all data was valid, now confirm this user's email address by setting the user to active and login the user */
@@ -189,7 +189,7 @@
 
         /* Tell the user they have successfully verified their email address and redirect them to the home page to login */
         ScreenMessage::setMessage("Your email address was successfully verifed, please login to continue. ", "success");
-        redirect_to(SystemConfig::baseUrl());
+        redirect_to(SiteConfig::baseUrl());
     }
 
     function user_login_page()
@@ -226,7 +226,7 @@
             /* The user is authenticated, lets log them in */
             Session::loginUser($user);
             ScreenMessage::setMessage("Logged in Successfully.", ScreenMessage::$MESSAGE_TYPE_SUCCESS);
-            redirect_to(SystemConfig::baseUrl());
+            redirect_to(SiteConfig::baseUrl());
         }
         else
         {
@@ -241,7 +241,7 @@
     {
         if (!$redirect_url)
         {
-            $redirect_url = SystemConfig::baseUrl();
+            $redirect_url = SiteConfig::baseUrl();
         }
 
         if (Session::isLoggedIn())

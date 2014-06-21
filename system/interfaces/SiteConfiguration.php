@@ -9,6 +9,14 @@
     interface SiteConfiguration
     {
 
+        public static function protocol();
+
+        public static function host();
+
+        public static function baseUrl();
+
+        public static function basePath();
+
         public static function includesPath();
 
         public static function modulesPath();

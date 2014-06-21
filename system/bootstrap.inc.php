@@ -4,8 +4,8 @@
      * Does the initial bootstrap operations for the site
      */
     /* Require the configuration files */
-    require_once 'site/includes/SiteConfig.php';
     require_once 'includes/SystemConfig.php';
+    require_once 'site/includes/SiteConfig.php';
 
     /* Load the main constant files */
     require_once SystemConfig::includesPath() . 'constants.inc.php';
