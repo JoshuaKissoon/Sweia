@@ -38,5 +38,9 @@
         public static function templatesPath();
 
         public static function templatesUrl();
+        
+        public static function filesDirectory();
+        
+        public static function filesTemporaryDirectory();
     }
     

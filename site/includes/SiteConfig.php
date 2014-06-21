@@ -83,5 +83,15 @@
             return SiteConfig::themeUrl() . "libraries/";
         }
 
+        public static function filesDirectory()
+        {
+            return SystemConfig::basePath() . "files/";
+        }
+
+        public static function filesTemporaryDirectory()
+        {
+            return SystemConfig::basePath() . "files/tmp/";
+        }
+
     }
     
