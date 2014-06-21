@@ -4,8 +4,9 @@
      * Does the initial bootstrap operations for the site
      */
     /* Require the configuration files */
-    require_once 'site/includes/SiteConfig.php';
+    require_once 'site/includes/BaseConfig.php';
     require_once 'includes/SystemConfig.php';
+    require_once 'site/includes/SiteConfig.php';
 
     /* Load the main constant files */
     require_once SystemConfig::includesPath() . 'constants.inc.php';
@@ -34,7 +35,7 @@
 
     /* Load System Files & Classes */
     require_once SystemConfig::includesPath() . 'functions.inc.php';
-    require_once THEME_PATH . 'Theme.php';
+    require_once SiteConfig::themePath() . 'Theme.php';
 
     /* Load the site specific includes now */
     require_once SiteConfig::includesPath() . 'constants.inc.php';

@@ -3,8 +3,6 @@
     /* Constants used throughout the site */
 
     /* Theme related URLs/Paths */
-    define("THEME_URL", SystemConfig::baseUrl() . "theme/");
-    define("THEME_PATH", SystemConfig::basePath() . "theme/");
     define("CSS_URL", SystemConfig::baseUrl() . "theme/css/");
     define("THEME_CSS_URL", SystemConfig::baseUrl() . "theme/css/");
     define("THEME_SCRIPTS_URL", SystemConfig::baseUrl() . "theme/scripts/");

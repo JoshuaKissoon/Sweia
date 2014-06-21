@@ -18,5 +18,13 @@
         public static function librariesPath();
 
         public static function librariesUrl();
+
+        public static function themeUrl();
+
+        public static function themePath();
+
+        public static function adminThemeUrl();
+
+        public static function adminThemePath();
     }
     
