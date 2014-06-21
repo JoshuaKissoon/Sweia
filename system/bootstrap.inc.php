@@ -3,15 +3,12 @@
     /**
      * Does the initial bootstrap operations for the site
      */
-    /* Require the settings file */
-    require_once 'site/default/settings.php';
-
-    /* Initialize site constants */
-    _jsmart_constants_initialize();
-
+    /* Require the configuration files */
+    require_once 'site/includes/SiteConfig.php';
+    require_once 'includes/SystemConfig.php';
 
     /* Load the main constant files */
-    require_once SYSTEM_INCLUDES_PATH . 'constants.inc.php';
+    require_once SystemConfig::includesPath() . 'constants.inc.php';
 
     /* Autoloader for classes and interfaces */
     spl_autoload_register("jsmart_load_system_classes");
@@ -19,7 +16,7 @@
 
     function jsmart_load_system_classes($class)
     {
-        $file = CLASSES_PATH . $class . '.php';
+        $file = SystemConfig::classesPath() . $class . '.php';
         if (file_exists($file))
         {
             require_once $file;
@@ -28,7 +25,7 @@
 
     function jsmart_load_system_interfaces($interface)
     {
-        $file = INTERFACES_PATH . $interface . '.php';
+        $file = SystemConfig::interfacesPath() . $interface . '.php';
         if (file_exists($file))
         {
             require_once $file;
@@ -36,11 +33,11 @@
     }
 
     /* Load System Files & Classes */
-    require_once SYSTEM_INCLUDES_PATH . 'functions.inc.php';
+    require_once SystemConfig::includesPath() . 'functions.inc.php';
     require_once THEME_PATH . 'Theme.php';
 
     /* Load the site specific includes now */
-    require_once SITE_DEFAULT_FOLDER_PATH . 'constants.inc.php';
+    require_once SiteConfig::includesPath() . 'constants.inc.php';
 
     /* Get an instance of the Sweia object */
     $sweia = Sweia::getInstance();
@@ -65,8 +62,8 @@
     }
 
     /* Load the core site and system files */
-    require_once SYSTEM_INCLUDES_PATH . 'system.inc.php';
-    require_once SITE_INCLUDES_PATH . 'site.inc.php';
+    require_once SystemConfig::includesPath() . 'system.inc.php';
+    require_once SiteConfig::includesPath() . 'site.inc.php';
 
     /**
      * @section Load the modules for this url 
@@ -85,18 +82,3 @@
             include_once JModuleManager::getModule($handler['module']);
         }
     }
-
-    /**
-     * Initialize constants that are commonly used and will be used a lot throughout the site
-     */
-    function _jsmart_constants_initialize()
-    {
-        /* Generating our Base Path and Base URL */
-        $protocol = strtolower(substr($_SERVER["SERVER_PROTOCOL"], 0, 5)) == 'https' ? 'https://' : 'http://';
-        $host = $_SERVER['HTTP_HOST'];
-
-        define("BASE_URL", rtrim($protocol . $host . '/' . SITE_FOLDER, '/') . '/');
-        define("BASE_PATH", rtrim($_SERVER['DOCUMENT_ROOT'] . '/' . SITE_FOLDER, '/') . '/');
-        define("SYSTEM_INCLUDES_PATH", BASE_PATH . 'system/includes/');
-    }
-    

@@ -28,11 +28,11 @@
             $temp = $db->fetchObject($db->query("SELECT type FROM module WHERE name = '::mod'", array("::mod" => $modname)));
             if (isset($temp->type) && $temp->type == "system")
             {
-                return SYSTEM_MODULES_PATH . "$modname/";
+                return SystemConfig::modulesPath() . "$modname/";
             }
             else
             {
-                return SITE_MODULES_PATH . "$modname/";
+                return SiteConfig::modulesPath() . "$modname/";
             }
         }
 
@@ -47,11 +47,11 @@
             $temp = $db->fetchObject($db->query("SELECT type FROM module WHERE name = '::mod'", array("::mod" => $modname)));
             if (isset($temp->type) && $temp->type == "system")
             {
-                $path = SYSTEM_MODULES_URL . "$modname/";
+                $path = SystemConfig::modulesUrl() . "$modname/";
             }
             else
             {
-                $path = SITE_MODULES_URL . "$modname/";
+                $path = SiteConfig::modulesUrl() . "$modname/";
             }
             return $path;
         }
@@ -81,7 +81,7 @@
 
             /* Setup system modules */
             $sys_modtype = "system";
-            $sys_modules = self::scanModulesDir(SYSTEM_MODULES_PATH);
+            $sys_modules = self::scanModulesDir(SystemConfig::modulesPath());
             foreach ($sys_modules as $modname => $modpath)
             {
                 if (self::setupModule($modname, $modpath, $sys_modtype))
@@ -92,7 +92,7 @@
 
             /* Setup site modules */
             $site_modtype = "site";
-            $site_modules = self::scanModulesDir(SITE_MODULES_PATH);
+            $site_modules = self::scanModulesDir(SiteConfig::modulesPath());
             foreach ($site_modules as $modname => $modpath)
             {
                 if (self::setupModule($modname, $modpath, $site_modtype))

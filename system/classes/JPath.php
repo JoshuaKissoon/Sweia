@@ -13,7 +13,7 @@
          */
         public static function baseURL()
         {
-            return BASE_URL;
+            return SystemConfig::baseUrl();
         }
 
         /**
@@ -21,7 +21,7 @@
          */
         public static function basePath()
         {
-            return BASE_PATH;
+            return SystemConfig::basePath();
         }
 
         /**
@@ -44,7 +44,7 @@
          */
         public static function fullRequestUrl()
         {
-            return BASE_URL . self::requestUrl();
+            return SystemConfig::baseUrl() . self::requestUrl();
         }
 
         /**
@@ -130,7 +130,7 @@
             foreach ($menu as $url => $menuItem)
             {
                 /* Remove the site base URL from the front of the menu if it exists there */
-                $url1 = str_replace(BASE_URL, "", $url);
+                $url1 = str_replace(SystemConfig::baseUrl(), "", $url);
                 $url = ltrim(rtrim($url1));
 
                 /* Remove this URL from the menu */

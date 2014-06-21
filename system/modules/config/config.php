@@ -1,7 +1,7 @@
 <?php
 
     /* Define config module constants */
-    define("CONFIG_URL", BASE_URL . "config/");
+    define("CONFIG_URL", SystemConfig::baseUrl() . "config/");
     define("CONFIG_PATH", JModuleManager::getModulePath("config"));
 
     $url = JPath::urlArgs();

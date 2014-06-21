@@ -8,7 +8,6 @@
      * @updated by Mayur Masade
      * @updated date 20140615
      */
-    require_once CLASSES_PATH . 'URL.php';
 
     class JPager
     {
