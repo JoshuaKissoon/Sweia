@@ -9,31 +9,15 @@
     {
 
         /**
-         * @return The Site Base URL 
-         */
-        public static function baseURL()
-        {
-            return SystemConfig::baseUrl();
-        }
-
-        /**
-         * @return Returns the Site Base Path 
-         */
-        public static function basePath()
-        {
-            return SystemConfig::basePath();
-        }
-
-        /**
          *  @return The relative URL from which the request came from
          */
         public static function requestUrl()
         {
             $url = $_SERVER["REQUEST_URI"];
-            if (valid(SITE_FOLDER))
+            if (valid(BaseConfig::SITE_FOLDER))
             {
                 /* If the Site is within a subfolder, remove it from the URL arguments */
-                $folder = rtrim(SITE_FOLDER, '/') . '/';
+                $folder = rtrim(BaseConfig::SITE_FOLDER, '/') . '/';
                 $url = str_replace($folder, "", $url);
             }
             return rtrim(ltrim($url, '/'), "/");
@@ -125,7 +109,7 @@
         {
             /* If no user was specified, parse the menu for the current user */
             $user = Sweia::getInstance()->getUser();
-            
+
             $uid = $user->uid;
             foreach ($menu as $url => $menuItem)
             {
@@ -174,12 +158,12 @@
         public static function absoluteUrl($url)
         {
             /* Replace the Base URL if it's already in the string */
-            $url = str_replace(self::baseURL(), "", $url);
+            $url = str_replace(SystemConfig::baseUrl(), "", $url);
 
             /* Remove excess slashes from the URL */
             $url_trimmed = rtrim(ltrim($url, "/"), "/");
 
-            return self::baseURL() . "?urlq=" . ltrim($url_trimmed, "/");
+            return SystemConfig::baseUrl() . "?urlq=" . ltrim($url_trimmed, "/");
         }
 
     }
