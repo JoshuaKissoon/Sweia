@@ -1,7 +1,7 @@
 <?php
 
     /**
-     * Class that can be used to manipulate URLs
+     * Class that is used to handle the current site URL
      * 
      * @author Joshua Kissoon
      * @since 20121219

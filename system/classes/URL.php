@@ -1,9 +1,11 @@
 <?php
 
     /**
+     * A class that is used to manipulate a URL
+     * 
      * @author Joshua Kissoon
-     * @date 20130323
-     * @descriptin A class that is used to manipulate any URL
+     * @since 20130323
+     * @updated 20140623
      */
     class URL
     {
@@ -12,7 +14,8 @@
         public $args = array();
 
         /**
-         * @desc Get the URL sections 
+         * Get the URL sections 
+         * 
          * @param $url The URL to process
          */
         public function __construct($url)
@@ -35,7 +38,8 @@
         }
 
         /**
-         * @desc Add a new argument to the URL
+         * Add a new argument to the URL
+         * 
          * @param $key The title of the argument to add
          * @param $value The value of the argument to add
          */
@@ -45,7 +49,8 @@
         }
 
         /**
-         * @desc Remove an argument from the URL
+         * Remove an argument from the URL
+         * 
          * @param $key The key of the argument to remove
          */
         public function removeArg($key)
@@ -57,7 +62,7 @@
         }
 
         /**
-         * @desc Method that builds and returns the URL
+         * Method that builds and returns the URL
          */
         public function getURL()
         {

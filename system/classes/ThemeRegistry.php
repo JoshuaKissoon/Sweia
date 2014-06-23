@@ -4,7 +4,8 @@
      * This is the main site Registry class that manages everything within the site, all page components are placed here then it is rendered
      * 
      * @author Joshua Kissoon
-     * @date 20121220
+     * @since 20121220
+     * @updated 20140623
      */
     class ThemeRegistry
     {
@@ -18,24 +19,18 @@
         public $pagetitle = "";
 
         /**
-         * @desc Specifies the HTML Template
+         * Specifies the HTML Template
+         * 
          * @param $file The template file location
          */
         public function setHtmlTemplate($file)
         {
             $name = rtrim($file, ".tpl.php");
-            if (is_file($name . ".tpl.php"))
-            {
-                $this->templates['html'] = $name;
-            }
-            else
-            {
-                /* @todo Throw some error */
-            }
+            $this->templates['html'] = $name;
         }
 
         /**
-         * @desc Returns the HTML template file name
+         * @return String - The HTML template file name
          */
         private function getHtmlTemplate()
         {
@@ -43,24 +38,18 @@
         }
 
         /**
-         * @desc Specifies the MAIN Template
+         * Specifies the main Template
+         * 
          * @param $file The template file location
          */
         public function setMainTemplate($file)
         {
             $name = rtrim($file, ".tpl.php");
-            if (is_file($name . ".tpl.php"))
-            {
-                $this->templates['main'] = $name;
-            }
-            else
-            {
-                /* @todo Throw some error */
-            }
+            $this->templates['main'] = $name;
         }
 
         /**
-         * @desc Returns the MAIN template file name
+         * @return String - The main template file name
          */
         private function getMainTemplate()
         {
@@ -68,7 +57,8 @@
         }
 
         /**
-         * @desc Takes in an array of parameters of a stylesheet and stores the stylesheet
+         * Takes in an array of parameters of a stylesheet and stores the stylesheet
+         * 
          * @param $params The parameters of the stylesheet
          * @param $weight Where on the page amoung stylesheets should it be placed
          */
@@ -82,8 +72,9 @@
         }
 
         /**
-         * @desc Parses all the stored stylesheets to get the HTML code for all the site required stylesheets 
-         * @return The HTML for the link tag for the stylesheets
+         * Parses all the stored stylesheets to get the HTML code for all the site required stylesheets 
+         * 
+         * @return String - The HTML code for the link tag for the stylesheets
          */
         private function renderCssFiles()
         {
@@ -92,7 +83,8 @@
         }
 
         /**
-         * @desc Takes in an array of parameters of a script file and stores the script
+         * Takes in an array of parameters of a script file and stores the script
+         * 
          * @param $params The parameters of the script file
          * @param $weight Where on the page amoung script files should it be placed
          * @param $header_script Whether to put the script in the site header
@@ -124,8 +116,9 @@
         }
 
         /**
-         * @desc Parses all the stored scripts to get the HTML code for them
-         * @return The HTML for the <script> link tags for the scripts to be placed in the header
+         * Parses all the stored scripts to get the HTML code for them
+         * 
+         * @return String - The HTML code for the <script> link tags for the scripts to be placed in the header
          */
         public function renderHeaderScriptFiles()
         {
@@ -139,8 +132,9 @@
         }
 
         /**
-         * @desc Parses all the stored scripts to get the HTML code for them
-         * @return The HTML for the <script> link tags for the scripts to be placed in the site default location (footer)
+         * Parses all the stored scripts to get the HTML code for them
+         * 
+         * @return String - The HTML code for the <script> link tags for the scripts to be placed in the site default location (footer)
          */
         public function renderScriptFiles()
         {
@@ -149,7 +143,8 @@
         }
 
         /**
-         * @desc Method that adds content to the system theme
+         * Method that adds content to the system theme
+         * 
          * @param $region Which region to add this content to
          * @param $content The content to add
          */
@@ -159,7 +154,8 @@
         }
 
         /**
-         * @desc Method that adds content to the system theme
+         * Method that adds content to the system theme
+         * 
          * @param $region Which region to add this content to
          * @param $content The content to add
          */
@@ -178,7 +174,8 @@
         }
 
         /**
-         * @desc Clears all the content currently in some region
+         * Clears all the content currently in some region
+         * 
          * @param $region Which region to clear the content from
          */
         public function clearRegion($region)
@@ -187,7 +184,8 @@
         }
 
         /**
-         * @desc Set the browser page title
+         * Set the browser page title
+         * 
          * @param $title The title to set it to
          */
         public function setPageTitle($title)
@@ -196,7 +194,7 @@
         }
 
         /**
-         * @desc Return the name of the site
+         * @return String - The name of the site
          */
         public function getPageTitle()
         {
@@ -204,7 +202,7 @@
         }
 
         /**
-         * @desc Render the theme to the browser
+         * Render the theme to the browser
          */
         public function renderPage()
         {
@@ -234,3 +232,4 @@
         }
 
     }
+    
