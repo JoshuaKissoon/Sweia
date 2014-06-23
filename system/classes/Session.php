@@ -85,16 +85,25 @@
             /* If there is a cookie, check if there exists a valid database session and load it */
             $db = Sweia::getInstance()->getDB();
 
-            $res = $db->query("SELECT * FROM " . self::$USER_SESSION_TBL . " WHERE sid='::sid' AND status='1' LIMIT 1", array("::sid" => $_COOKIE['jsmartsid']));
+            $res = $db->query("SELECT * FROM " . self::$USER_SESSION_TBL . " WHERE sid='::sid' LIMIT 1", array("::sid" => $_COOKIE['jsmartsid']));
             if ($db->resultNumRows() < 1)
             {
-                /* The session is invalid, delete it */
-                setcookie("jsmartsid", "", time() - 3600);
+                /* The session is non-existent, delete it */
+                self::invalidateSessionCookie();
+                return false;
+            }
+
+            /* Session is existent, lets get it's data */
+            $row = $db->fetchObject($res);
+            if ($row->status != 1)
+            {
+                /* Session has exipred, invalidate it */
+                self::invalidateSessionCookie();
+                self::invalidateSessionDB(session_id());
                 return false;
             }
 
             /* The session is valid, Load all of the data into session, generate a new sid and update it in the database */
-            $row = $db->fetchObject($res);
             $data = json_decode($row->data, true);
             foreach ($data as $key => $value)
             {
@@ -115,18 +124,39 @@
          */
         public static function logoutUser()
         {
-            $db = Sweia::getInstance()->getDB();
+            /* Invalidate the database session */
+            self::invalidateSessionDB(session_id());
 
-            /* Set the session's status to 0 in the database */
-            $db->query("UPDATE " . self::$USER_SESSION_TBL . " SET status = '0' WHERE sid='::sid'", array("::sid" => session_id()));
-
+            /* Destroy the session variables */
             unset($_SESSION['uid']);
             unset($_SESSION['logged_in']);
             unset($_SESSION['user_type']);
             unset($_SESSION['logged_in_email']);
             unset($_SESSION['ipaddress']);
             unset($_SESSION['status']);
+
+            /* Destroy the PHP Session */
             self::destroy();
+        }
+
+        /**
+         * Invalidate a session from the database
+         * 
+         * @param $session_id The id of the session to invalidate
+         */
+        public static function invalidateSessionDB($session_id)
+        {
+            $db = Sweia::getInstance()->getDB();
+            /* Set the session's status to 0 in the database */
+            $db->query("UPDATE " . self::$USER_SESSION_TBL . " SET status = '0' WHERE sid='::sid'", array("::sid" => $session_id));
+        }
+
+        /**
+         * Invalidate the current session cookie
+         */
+        public static function invalidateSessionCookie()
+        {
+            setcookie("jsmartsid", "", time() - 3600);
         }
 
         /**
