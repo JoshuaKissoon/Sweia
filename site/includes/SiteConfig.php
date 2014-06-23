@@ -4,6 +4,7 @@
      * Allows each site to specify it's site-specific configuration
      *
      * @author Joshua Kissoon
+     * @since 20140621
      */
     class SiteConfig
     {
@@ -106,7 +107,7 @@
 
         public static function themeLibrariessUrl()
         {
-            return SiteConfig::themeUrl() . "libraries/";
+            return SystemConfig::themesUrl() . "libraries/";
         }
 
         public static function filesDirectory()
