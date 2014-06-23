@@ -1,15 +1,17 @@
 <?php
 
     /**
+     * Class that can be used to manipulate URLs
+     * 
      * @author Joshua Kissoon
-     * @date 20121219
-     * @description Handles all URL events within the site
+     * @since 20121219
+     * @updated 20140623
      */
     class JPath
     {
 
         /**
-         *  @return The relative URL from which the request came from
+         * @return The relative URL from which the request came from
          */
         public static function requestUrl()
         {
@@ -32,8 +34,9 @@
         }
 
         /**
-         * @desc Gets the URL query
-         * @return The URL Query
+         * Gets the URL query
+         * 
+         * @return String - The URL Query
          */
         public static function getUrlQ()
         {
@@ -57,8 +60,10 @@
         }
 
         /**
-         * @desc Finds the modules that handles a URL
+         * Finds the modules that handles a URL
+         * 
          * @param $url The URL for which to check
+         * 
          * @return The modules that handles this URL
          */
         public static function getUrlHandlers($url = null)
@@ -99,11 +104,14 @@
         }
 
         /**
-         * @description Parses a set of menus and:
+         * Parses a set of menus and:
          *      -> removes those items the specified user don't have premission to access
          *      -> Append the Site Base URL to each of the menu items if they don't already contain the base url
+         * 
          * @param $menu An array in the form $url => $title
          * @param $uid The user from whose POV to parse the menu, the currently logged in user is default
+         * 
+         * @return String - The parsed menu
          */
         public static function parseMenu($menu, $uid = null)
         {
@@ -143,7 +151,7 @@
         }
 
         /**
-         * @desc An old function to call absoluteUrl
+         * A support function to call absoluteUrl
          */
         public static function fullUrl($url)
         {
@@ -151,8 +159,10 @@
         }
 
         /**
-         * @desc Creates an absolute site URL given a relative URL
+         * Creates an absolute site URL given a relative URL
+         * 
          * @param $url the relative URL
+         * 
          * @return The full site URL for a given URL string 
          */
         public static function absoluteUrl($url)

@@ -1,10 +1,11 @@
 <?php
 
     /**
-     * @desc The database abstraction layer is here
+     * A Database class implementation for SQLi
+     * 
      * @author Joshua Kissoon
-     * @date very long ago
-     * @note Magic quotes is not utilized here, we use escape_string since magic_quotes will be deprecated from php 5.4
+     * @since 20140101
+     * @updated 20140623
      */
     class SQLiDatabase implements Database
     {
@@ -13,7 +14,7 @@
         public $resultset, $last_query, $current_row, $field_value;
 
         /**
-         * @desc Automatically connect to the database in the constructor
+         * Automatically connect to the database in the constructor
          */
         function __construct($connect = true)
         {
@@ -24,8 +25,9 @@
         }
 
         /**
-         * @desc Connect to the database
-         * @return Boolean Whether the connection was successful
+         * Connect to the database
+         * 
+         * @return Boolean - Whether the connection was successful
          */
         public function tryConnect()
         {
@@ -42,7 +44,7 @@
         }
 
         /**
-         * @desc Connect to the database
+         * Connect to the database
          */
         public function connect()
         {
@@ -59,7 +61,8 @@
         }
 
         /**
-         * @desc Select a database to use
+         * Select a database to use
+         * 
          * @param $database The name of the database
          */
         public function selectDatabase($database)
@@ -77,16 +80,18 @@
         }
 
         /**
-         * @desc Queries the database to produce a result
+         * Queries the database to produce a result
+         * 
          * @param $query The SQL statement to be executed
          * @param $variables An array of variables to replace in the query, these are passed in an array so that they can be escaped
+         * 
          * @example query("SELECT * FROM user WHERE name LIKE ':name'", array(":name" => "John Smith"))
          */
         public function query($query, $variables = array(), $log_query = false)
         {
             foreach ((array) $variables as $key => $value)
             {
-                $value = mysqli_real_escape_string($this->connection, @$value);
+                $value = mysqli_real_escape_string($this->connection, $value);
                 $query = str_replace($key, $value, $query);
             }
             $this->last_query = $query;
@@ -107,7 +112,8 @@
         }
 
         /**
-         * @desc Quickly update a field or fields in a table
+         * Quickly update a field or fields in a table
+         * 
          * @param $table The table to update
          * @param $fields_values An associative array with the key being the fieldname and the value is the value
          * @param $where The where clause to limit the update
@@ -135,10 +141,13 @@
         }
 
         /**
-         * @desc Quickly grab the data from a field from a specified table
+         * Quickly grab the data from a field from a specified table
+         * 
          * @param $table The name of the table to update
-         * @param $field The field which to return
+         * @param $field_name The field which to return
          * @param $where The where clause to limit the resultset
+         * 
+         * @return The field value for the requested field
          */
         public function getFieldValue($table, $field_name, $where = "1=1")
         {
@@ -152,7 +161,8 @@
         }
 
         /**
-         * @desc Method to fetch a row from the resultset in the form of an array
+         * Method to fetch a row from the resultset in the form of an array
+         * 
          * @param $resultset The result set from which to fetch the row
          */
         public function fetchArray($resultset = null)
@@ -166,7 +176,8 @@
         }
 
         /**
-         * @desc Method to fetch a row from the resultset in the form of an object
+         * Method to fetch a row from the resultset in the form of an object
+         * 
          * @param $resultset The result set from which to fetch the row
          */
         public function fetchObject($resultset = null)
@@ -179,10 +190,6 @@
             return $this->current_row;
         }
 
-        /**
-         * @desc Returns the number of rows in a resultset
-         * @param $resultset The result set from which to check the number of rows
-         */
         public function resultNumRows($resultset = null)
         {
             if (!$resultset)
@@ -192,18 +199,11 @@
             return mysqli_num_rows($resultset);
         }
 
-        /**
-         * @desc Returns the ID value for the last row inserted into the database
-         */
         public function lastInsertId()
         {
             return mysqli_insert_id($this->connection);
         }
 
-        /**
-         * @desc Escapes a string so that it is safe to be used in a query
-         * @param $value The value to be escaped
-         */
         public function escapeString($value)
         {
             if (get_magic_quotes_gpc())

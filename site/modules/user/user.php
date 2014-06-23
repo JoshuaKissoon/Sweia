@@ -77,7 +77,7 @@
         $errors = user_signup_form_validate($values);
         if ($errors)
         {
-            ScreenMessage::setMessages($errors, ScreenMessage::$MESSAGE_TYPE_ERROR);
+            ScreenMessage::setMessages($errors, ScreenMessage::MESSAGE_TYPE_ERROR);
             return;
         }
 
@@ -103,12 +103,12 @@
 
             /* redirect this user to the main landing page showing a message to verify email */
             $message = "Congratulations!! You have successfully signed up for " . Utility::getSiteName() . ". Please verify your email address and enjoy using the site :).";
-            ScreenMessage::setMessage($message, ScreenMessage::$MESSAGE_TYPE_SUCCESS);
+            ScreenMessage::setMessage($message, ScreenMessage::MESSAGE_TYPE_SUCCESS);
             redirect_to(SystemConfig::baseUrl());
         }
         else
         {
-            ScreenMessage::setMessages("Sorry, we were unable to create your account.", ScreenMessage::$MESSAGE_TYPE_SUCCESS);
+            ScreenMessage::setMessages("Sorry, we were unable to create your account.", ScreenMessage::MESSAGE_TYPE_SUCCESS);
         }
     }
 
@@ -225,12 +225,12 @@
         {
             /* The user is authenticated, lets log them in */
             Session::loginUser($user);
-            ScreenMessage::setMessage("Logged in Successfully.", ScreenMessage::$MESSAGE_TYPE_SUCCESS);
+            ScreenMessage::setMessage("Logged in Successfully.", ScreenMessage::MESSAGE_TYPE_SUCCESS);
             redirect_to(SystemConfig::baseUrl());
         }
         else
         {
-            ScreenMessage::setMessages("Invalid email and/or password. Please try again.", ScreenMessage::$MESSAGE_TYPE_WARNING);
+            ScreenMessage::setMessages("Invalid email and/or password. Please try again.", ScreenMessage::MESSAGE_TYPE_WARNING);
         }
     }
 
@@ -248,7 +248,7 @@
         {
             Session::logoutUser();
         }
-        ScreenMessage::setMessage("Logged out Successfully.", ScreenMessage::$MESSAGE_TYPE_SUCCESS);
+        ScreenMessage::setMessage("Logged out Successfully.", ScreenMessage::MESSAGE_TYPE_SUCCESS);
         redirect_to(JPath::absoluteUrl($redirect_url));
     }
     

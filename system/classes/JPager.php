@@ -1,14 +1,12 @@
 <?php
 
-    /** 
+    /**
      * Class that handles pagination throughout the website
      * 
      * @author Joshua Kissoon
-     * @date 20121211
-     * @updated by Mayur Masade
-     * @updated date 20140615
+     * @since 20121211
+     * @updated 20140615
      */
-
     class JPager
     {
         /* Pageination variables */
@@ -21,11 +19,6 @@
         /* URL Variables */
         private $url = "";   // The URL to add to the pager links
         private $pageno_url_key = "pager_page";   // The Pager class url variable to use
-
-        /**
-         * @desc 
-         * @return
-         */
 
         public function __construct()
         {
@@ -49,9 +42,9 @@
 
             $this->total_records = isset($params['total_records']) ? $params['total_records'] : $this->total_records;
             $this->rows_per_page = isset($params['rows_per_page']) ? $params['rows_per_page'] : $this->rows_per_page;
-            $this->current_page = (@$params['current_page'] > 0) ? $params['current_page'] : $this->current_page;
-            $this->delta = (@$params['delta'] > 0) ? $params['delta'] : $this->delta;
-            $this->html_options = is_array(@$params['html_options']) ? $params['html_options'] : array();
+            $this->current_page = (isset($params['current_page']) && ($params['current_page'] > 0)) ? $params['current_page'] : $this->current_page;
+            $this->delta = (isset($params['delta']) && ($params['delta'] > 0)) ? $params['delta'] : $this->delta;
+            $this->html_options = (isset($params['html_options']) && is_array($params['html_options'])) ? $params['html_options'] : array();
             $this->total_records = $params['total_records'];
             $this->pageno_url_key = isset($params['url_var']) ? $params['url_var'] : $this->pageno_url_key;
 
@@ -73,8 +66,7 @@
         }
 
         /**
-         *  Calculates the number of pages of records we will have 
-         * 
+         * Calculates the number of pages of records we will have 
          */
         private function calculatePages()
         {
@@ -82,8 +74,7 @@
         }
 
         /**
-         *  calculate offset based on rows per page and then update the query
-         * 
+         * Calculate offset based on rows per page and then update the query
          */
         public function getRowOffset()
         {
@@ -100,8 +91,7 @@
         }
 
         /**
-         *  Returns the number of rows per page
-         * 
+         * @return Integer - the number of rows per page
          */
         public function getRowsPerPage()
         {
@@ -109,8 +99,7 @@
         }
 
         /**
-         * Returns the url key for the page number
-         * 
+         * @return String - the url key for the page number
          */
         public function getPageNoUrlKey()
         {
@@ -118,8 +107,7 @@
         }
 
         /**
-         * @desc This method will build pagination links
-         * 
+         * Build pagination links
          */
         public function buildLinks()
         {
@@ -141,15 +129,14 @@
                 }
                 $this->links[$i] = "<a href='$this->url&$this->pageno_url_key=$i'>$i</a>";
             }
-            if (valid(@$next))
+            if (isset($next) && valid($next))
             {
                 $this->links["next"] = $next;
             }
         }
 
         /**
-         *  Method that generates the html links
-         * 
+         * Method that generates the html links
          */
         public function getLinks()
         {
@@ -157,7 +144,7 @@
         }
 
         /**
-         *Generates the HTML code for the pagination links
+         * Generates the HTML code for the pagination links
          * 
          * @return HTML code for the pagination links
          */

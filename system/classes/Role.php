@@ -4,7 +4,8 @@
      * A class that handles user roles
      * 
      * @author Joshua Kissoon
-     * @date 20130316
+     * @since 20130316
+     * @updated 20140623
      */
     class Role
     {

@@ -1,9 +1,11 @@
 <?php
 
     /**
+     * Class that contains core user functionality
+     * 
      * @author Joshua Kissoon
-     * @date 20121227
-     * @description Class that contains user functionality for core JSmart users
+     * @since 20121227
+     * @updated 20140623
      */
     class JSmartUser implements User
     {
@@ -15,21 +17,27 @@
         /* Class Metadata */
         public static $user_type = "jsmartuser";
 
-        /* Database Tables */
-        private static $user_tbl = "user";
-        private static $user_status_tbl = "user_status";
-        private static $user_role_tbl = "user_role";
+        /**
+         * Database Tables 
+         */
+        const DB_TBL_USER = "user";
+        const DB_TBL_USER_STATUS = "user_status";
+        const DB_TBL_USER_ROLE = "user_role";
 
-        /* Define error handlers */
+        /**
+         * Error handlers 
+         */
         public static $ERROR_INCOMPLETE_DATA = 00001;
 
         /* Some constants of what data is loaded */
         private $is_permissions_loaded = false;
 
         /**
-         * @desc Constructor method for the user class, loads the user
+         * Constructor method for the user class, loads the user
+         * 
          * @param $uid The id of the user to load
-         * @return Whether the load was successful or not
+         * 
+         * @return Boolean - Whether the load was successful or not
          */
         public function __construct($uid = null)
         {
@@ -42,8 +50,10 @@
         }
 
         /**
-         * @desc Checks if this is a user of the system
+         * Checks if this is a user of the system
+         * 
          * @param $uid The user of the user to check for
+         * 
          * @return Boolean Whether this is a system user or not
          */
         public static function isUser($uid)
@@ -56,16 +66,18 @@
             $db = Sweia::getInstance()->getDB();
 
             $args = array("::uid" => $uid);
-            $sql = "SELECT uid FROM " . self::$user_tbl . " WHERE uid='::uid'";
+            $sql = "SELECT uid FROM " . JSmartUser::DB_TBL_USER . " WHERE uid='::uid'";
             $res = $db->query($sql, $args);
             $user = $db->fetchObject($res);
             return (isset($user->uid) && valid($user->uid)) ? true : false;
         }
 
         /**
-         * @desc Method that loads the user data from the database
+         * Method that loads the user data from the database
+         * 
          * @param $uid The id of the user to load
-         * @return Whether the load was successful or not
+         * 
+         * @return Boolean - Whether the load was successful or not
          */
         public function load($uid = null)
         {
@@ -88,8 +100,9 @@
         }
 
         /**
-         * @desc Method that loads the basic user information from the database
-         * @return Whether the load was successful or not
+         * Method that loads the basic user information from the database
+         * 
+         * @return Boolean - Whether the load was successful or not
          */
         public function loadUserInfo()
         {
@@ -100,7 +113,7 @@
             $db = Sweia::getInstance()->getDB();
 
             $args = array(":uid" => $this->uid);
-            $sql = "SELECT * FROM " . self::$user_tbl . " u WHERE uid=':uid' LIMIT 1";
+            $sql = "SELECT * FROM " . JSmartUser::DB_TBL_USER . " u WHERE uid=':uid' LIMIT 1";
             $rs = $db->query($sql, $args);
             $cuser = $db->fetchObject($rs);
             if (isset($cuser->uid) && valid($cuser->uid))
@@ -118,19 +131,16 @@
         }
 
         /**
-         * @desc Hash the password and set the user's object password. The password is not permanently saved to the database
+         * Hash the password and set the user's object password. 
+         * This method does not save the password to the database.
          */
         public function setPassword($password)
         {
-            if (!isset($this->email) || !valid($this->email))
-            {
-                return false;
-            }
             $this->password = $this->hashPassword($password);
         }
 
         /**
-         * @desc Here we check if this password given here is that of the user
+         * Check if this password given here is that of the user
          */
         public function isUserPassword($password)
         {
@@ -138,29 +148,29 @@
         }
 
         /**
-         * @desc Saves the user's password to the database
-         * @return Boolean whether the save was successful
+         * Saves the user's password to the database
+         * 
+         * @return Boolean - whether the save was successful
          */
         private function savePassword()
         {
             $db = Sweia::getInstance()->getDB();
-
-            return $db->updateFields(self::$user_tbl, array("password" => $this->password), "uid='$this->uid'");
+            return $db->updateFields(JSmartUser::DB_TBL_USER, array("password" => $this->password), "uid='$this->uid'");
         }
 
         /**
-         * @desc Hashes the user's password using a salt
-         * @return The hashed password
-         * @todo Move the salt to the main settings.php file so that the website owner can update their hash
+         * Hashes the user's password using a salt
+         * 
+         * @return String - The hashed password
          */
-        private function hashPassword($password)
+        private function hashPassword()
         {
-            $salt = md5($this->email . BaseConfig::PASSWORD_SALT);
-            return sha1($salt . $password);
+            $salted = md5($this->password . BaseConfig::PASSWORD_SALT);
+            return sha1($salted);
         }
 
         /**
-         * @desc Save the data of this user to the database, if it's a new user, then create this new user
+         * Save the data of this user to the database, if it's a new user, then create this new user
          */
         public function save()
         {
@@ -175,7 +185,7 @@
         }
 
         /**
-         * @desc Adds a new user to the database
+         * Adds a new user to the system
          */
         private function addUser()
         {
@@ -199,7 +209,7 @@
                 ":password" => $this->password,
             );
 
-            $sql = "INSERT INTO " . self::$user_tbl . " (password, email, first_name, last_name, other_name, dob)
+            $sql = "INSERT INTO " . JSmartUser::DB_TBL_USER . " (password, email, first_name, last_name, other_name, dob)
                 VALUES(':password', ':email', ':first_name', ':last_name', ':other_name', ':dob')";
             if ($db->query($sql, $args))
             {
@@ -214,7 +224,8 @@
         }
 
         /**
-         * @desc Updates the user data to the database
+         * Updates the user data to the database
+         * @todo
          */
         private function updateUser()
         {
@@ -222,15 +233,16 @@
         }
 
         /**
-         * @desc Check if the email and password is valid
-         * @return Boolean whether the data is valid or not
+         * Check if the email and password is valid
+         * 
+         * @return Boolean - whether the user credentials is valid
          */
         public function authenticate()
         {
             $db = Sweia::getInstance()->getDB();
 
             $args = array(":email" => $this->email, "::password" => $this->password);
-            $sql = "SELECT uid FROM " . self::$user_tbl . " WHERE email=':email' and password='::password' LIMIT 1";
+            $sql = "SELECT uid FROM " . JSmartUser::DB_TBL_USER . " WHERE email=':email' and password='::password' LIMIT 1";
             $cuser = $db->fetchObject($db->query($sql, $args));
             if (isset($cuser->uid) && valid($cuser->uid))
             {
@@ -242,7 +254,7 @@
         }
 
         /**
-         * @desc Checks if an email address is in use 
+         * Checks if an email address is in use 
          */
         public static function isEmailInUse($email)
         {
@@ -253,15 +265,17 @@
 
             $db = Sweia::getInstance()->getDB();
 
-            $res = $db->query("SELECT email FROM " . self::$user_tbl . " WHERE email='::email'", array("::email" => $email));
+            $res = $db->query("SELECT email FROM " . JSmartUser::DB_TBL_USER . " WHERE email='::email'", array("::email" => $email));
             $temp = $db->fetchObject($res);
             return (isset($temp->email) && valid($temp->email)) ? true : false;
         }
 
         /**
-         * @desc Deletes a user from the system
+         * Deletes a user from the system
+         * 
          * @param $uid The user ID of the user to delete
-         * @return Boolean Whether the user was deleted or not
+         * 
+         * @return Boolean - Whether the user was deleted or not
          */
         public static function delete($uid)
         {
@@ -271,12 +285,13 @@
             }
 
             $db = Sweia::getInstance()->getDB();
-            return $db->query("DELETE FROM " . self::$user_tbl . " WHERE uid='::uid'", array("::uid" => $uid));
+            return $db->query("DELETE FROM " . JSmartUser::DB_TBL_USER . " WHERE uid='::uid'", array("::uid" => $uid));
         }
 
         /**
-         * @desc Set the user's email
-         * @return Boolean Whether the email was successfully set
+         * Set the user's email
+         * 
+         * @return Boolean - Whether the email was successfully set
          */
         public function setEmail($email)
         {
@@ -292,8 +307,9 @@
         }
 
         /**
-         * @desc Grabs the user's status from the database
-         * @return The user's current status
+         * Grabs the user's status from the database
+         * 
+         * @return String - The user's current status
          */
         public function getStatus()
         {
@@ -301,15 +317,17 @@
             {
                 /* If the status is not set in the user object, load it */
                 $db = Sweia::getInstance()->getDB();
-                $this->status = $db->getFieldValue(self::$user_tbl, "status", "uid = $this->uid");
+                $this->status = $db->getFieldValue(JSmartUser::DB_TBL_USER, "status", "uid = $this->uid");
             }
             return $this->status;
         }
 
         /**
-         * @desc Update this user's status
+         * Update this user's status
+         * 
          * @param $sid The status id of the user's new status
-         * @return Whether the user's status is valid or not
+         * 
+         * @return Boolean - Whether the operation was successful
          */
         public function setStatus($sid)
         {
@@ -322,7 +340,7 @@
 
             /* Check if its a valid user's status */
             $args = array("::status" => $sid);
-            $res = $db->fetchObject($db->query("SELECT sid FROM " . self::$user_status_tbl . " WHERE sid='::status'", $args));
+            $res = $db->fetchObject($db->query("SELECT sid FROM " . JSmartUser::DB_TBL_USER_STATUS . " WHERE sid='::status'", $args));
             if (!isset($res->sid) || !valid($res->sid))
             {
                 return false;
@@ -334,7 +352,7 @@
         }
 
         /**
-         * @desc Method that returns the user's ID number, most likely as used in the database
+         * @return Integer - The userId
          */
         public function getUserID()
         {
@@ -342,7 +360,7 @@
         }
 
         /**
-         * @desc Method that returns the user's ID number, most likely as used in the database
+         * @return String - the user's email
          */
         public function getEmail()
         {
@@ -350,24 +368,27 @@
         }
 
         /**
-         * @desc Each user will have a system type
-         * @return String What type of user it is
+         * Each user will have a system type
+         * 
+         * @return String - What type of user it is
          */
         public function getUserType()
         {
             return self::$user_type;
         }
 
-        /* USER ROLE MANAGEMENT */
-
         /**
-         * @desc Adds a new role to a user
+         * Adds a new role to a user
+         * 
+         * @param $rid the id of the role to add
+         * 
+         * @return Boolean - Whether the operation was successful
          */
         public function addRole($rid)
         {
             $db = Sweia::getInstance()->getDB();
 
-            $res = $db->query("SELECT role FROM " . Role::$role_tbl . " WHERE rid='::rid'", array('::rid' => $rid));
+            $res = $db->query("SELECT role FROM " . Role::DB_TBL_ROLE . " WHERE rid='::rid'", array('::rid' => $rid));
             $role = $db->fetchObject($res);
             if (isset($role->role) && valid($role->role))
             {
@@ -378,7 +399,9 @@
         }
 
         /**
-         * @desc Saves this user's roles to the Database
+         * Saves this user's roles to the Database
+         * 
+         * @return Boolean - Whether the operation was successful
          */
         public function saveRoles()
         {
@@ -390,24 +413,26 @@
             $db = Sweia::getInstance()->getDB();
 
             /* Remove all the roles this user had */
-            $db->query("DELETE FROM " . self::$user_role_tbl . " WHERE uid='$this->uid'");
+            $db->query("DELETE FROM " . JSmartUser::DB_TBL_USER_ROLE . " WHERE uid='$this->uid'");
 
             foreach ((array) $this->roles as $rid => $role)
             {
-                $db->query("INSERT INTO " . self::$user_role_tbl . " (uid, rid) VALUES ('::uid', '::rid')", array('::rid' => $rid, '::uid' => $this->uid));
+                $db->query("INSERT INTO " . JSmartUser::DB_TBL_USER_ROLE . " (uid, rid) VALUES ('::uid', '::rid')", array('::rid' => $rid, '::uid' => $this->uid));
             }
 
             return true;
         }
 
         /**
-         * @desc Loads the roles that a user have
+         * Loads the roles that a user have
+         * 
+         * @return Array - The set of user roles
          */
         private function loadRoles()
         {
             $db = Sweia::getInstance()->getDB();
 
-            $roles = $db->query("SELECT ur.rid, r.role FROM " . self::$user_role_tbl . " ur LEFT JOIN role r ON (r.rid = ur.rid) WHERE uid='$this->uid'");
+            $roles = $db->query("SELECT ur.rid, r.role FROM " . JSmartUser::DB_TBL_USER_ROLE . " ur LEFT JOIN role r ON (r.rid = ur.rid) WHERE uid='$this->uid'");
             while ($role = $db->fetchObject($roles))
             {
                 $this->roles[$role->rid] = $role->role;
@@ -418,20 +443,21 @@
             {
                 $this->roles[2] = "authenticated";
             }
+            
+            return $this->roles;
         }
 
         /**
-         * @return The roles this user have
+         * @return Array - The roles this user have
          */
         public function getRoles()
         {
             return $this->roles;
         }
 
-        /* USER PERMISSION MANAGEMENT */
-
         /**
-         * @desc Checks whether this user works with the permission system
+         * Checks whether this user works with the permission system
+         * 
          * @return Boolean on whether the user uses the permission system or not
          */
         public function usesPermissionSystem()
@@ -440,7 +466,7 @@
         }
 
         /**
-         * @desc Load the permissions for this user from the database
+         * Load the permissions for this user from the database
          */
         private function loadPermissions()
         {
@@ -452,7 +478,7 @@
             $db = Sweia::getInstance()->getDB();
 
             $rids = implode(", ", array_keys($this->roles));
-            $rs = $db->query("SELECT permission FROM " . Role::$role_permission_tbl . " WHERE rid IN ($rids)");
+            $rs = $db->query("SELECT permission FROM " . Role::DB_TBL_ROLE_PERMISSION . " WHERE rid IN ($rids)");
             while ($perm = $db->fetchObject($rs))
             {
                 $this->permissions[$perm->permission] = $perm->permission;
@@ -460,9 +486,11 @@
         }
 
         /**
-         * @desc Check if the user has the specified permission
+         * Check if the user has the specified permission
+         * 
          * @param $permission The permission to check if the user have
-         * @return Boolean Whether the user has the permission
+         * 
+         * @return Boolean - Whether the user has the permission
          */
         public function hasPermission($permission)
         {
