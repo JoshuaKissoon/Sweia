@@ -4,6 +4,7 @@
      * An exception thrown when a template is not found
      *
      * @author Joshua Kissoon
+     * @since 20140623
      */
     class InvalidTemplateException extends Exception
     {

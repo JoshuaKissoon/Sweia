@@ -56,7 +56,7 @@
             }
 
             /* Remove the page number from the URL if it exists */
-            $url = new URL($this->url);
+            $url = new UrlManipulator($this->url);
             $url->removeArg($this->pageno_url_key);
             $this->url = $url->getURL();
 

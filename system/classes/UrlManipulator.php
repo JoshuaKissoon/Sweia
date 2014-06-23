@@ -7,7 +7,7 @@
      * @since 20130323
      * @updated 20140623
      */
-    class URL
+    class UrlManipulator
     {
 
         private $base_url;
