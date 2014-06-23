@@ -1,7 +1,7 @@
 <?php
 
     /**
-     * Manages sessions throughout the site
+     * Manages the current php session
      * 
      * @author Joshua Kissoon
      * @since 20121212
@@ -28,7 +28,7 @@
         }
 
         /**
-         * @desc Destroy the current session 
+         * Destroy the current session 
          */
         public static function destroy()
         {
@@ -36,7 +36,8 @@
         }
 
         /**
-         * @desc Creates a new session and logs in a user
+         * Creates a new session and logs in a user
+         * 
          * @param User The user to log in
          */
         public static function loginUser(User $user)
@@ -70,7 +71,8 @@
         }
 
         /**
-         * @desc Try to load the user's data from cookies 
+         * Try to load the user's data from cookies 
+         * 
          * @return Boolean whether the load was successful or not
          */
         public static function loadDataFromCookies()
@@ -109,7 +111,7 @@
         }
 
         /**
-         * @desc Here we logout the user and destroy the session 
+         * Logout the user and destroy the session 
          */
         public static function logoutUser()
         {
@@ -128,8 +130,9 @@
         }
 
         /**
-         * @desc Checks whether a user is logged in
-         * @return Boolean Whether the user is logged in or not
+         * Checks whether a user is logged in
+         * 
+         * @return Boolean - Whether the user is logged in or not
          */
         public static function isLoggedIn()
         {
