@@ -1,9 +1,10 @@
 <?php
 
     /**
+     * Class that handles all module operations
+     * 
      * @author Joshua Kissoon
-     * @description Class that handles all module operations
-     * @date 20121218
+     * @since 20121218
      */
     class JModule
     {
@@ -13,7 +14,7 @@
         public $name, $description, $type;
 
         /**
-         * @desc If the name is specified, load the module
+         * If the name is specified, load the module
          */
         public function __construct($modname = null)
         {
@@ -24,8 +25,10 @@
         }
 
         /**
-         * @desc Checks if a module already exists within the database with this name
+         * Checks if a module already exists within the database with this name
+         * 
          * @param $modname The name of the module
+         * 
          * @return Boolean Whether the module exists or not
          */
         public function moduleExists($modname = null)
@@ -44,8 +47,10 @@
         }
 
         /**
-         * @desc Load all of a module's information if the module exists
+         * Load all of a module's information if the module exists
+         * 
          * @param $modname The name of the module to load
+         * 
          * @return The module's data, and return this module object
          */
         public function load($modname)
@@ -70,7 +75,7 @@
         }
 
         /**
-         * @desc Loads an array with the permissions for this module
+         * Loads an array with the permissions for this module
          */
         private function loadPermissions()
         {
@@ -85,7 +90,7 @@
         }
 
         /**
-         * @desc Loads an array with the URLs for this module
+         * Loads an array with the URLs for this module
          */
         private function loadUrls()
         {
@@ -100,7 +105,7 @@
         }
 
         /**
-         * @desc Add/update a module to the database
+         * Add/update a module to the database
          */
         public function save()
         {
@@ -120,7 +125,7 @@
         }
 
         /**
-         * @desc Adds a new module to the database
+         * Adds a new module to the database
          */
         private function add()
         {
@@ -164,7 +169,7 @@
         }
 
         /**
-         * @desc Adds a single permission for a module to the database
+         * Adds a single permission for a module to the database
          */
         private function savePermission($perm, $title)
         {
@@ -182,7 +187,8 @@
         }
 
         /**
-         * @desc Adds a permurlission to this module's urls array, this is not yet saved to the DB
+         * Adds a permurlission to this module's urls array, this is not yet saved to the DB
+         * 
          * @param $url
          * @param $data
          */
@@ -192,7 +198,7 @@
         }
 
         /**
-         * @desc Add Module urls to the database 
+         * Add Module urls to the database 
          */
         private function saveUrls()
         {
@@ -203,7 +209,8 @@
         }
 
         /**
-         * @desc Adds a single url for a module to the database
+         * Adds a single url for a module to the database
+         * 
          * @param $url The URL to add to the database for this module
          * @param $data An array with data for this URL
          */
@@ -221,16 +228,12 @@
             $num_parts = ($parts[count($parts) - 1] == "%") ? 0 : count($parts);
 
             $pos = array_search("*", $parts);
+            $placeholder = "";
             if ($pos !== FALSE)
             {
-                /* This handler handles all URLS after some initial part */
                 $parts[$pos] = "%";
                 $num_parts = 0;
                 $placeholder = "%";
-            }
-            else
-            {
-                $placeholder = "";
             }
 
             $sweia = Sweia::getInstance();
@@ -256,7 +259,8 @@
         }
 
         /**
-         * @desc Checks if a url already exists in the database for this module
+         * Checks if a url already exists in the database for this module
+         * 
          * @param $url The URL to check it's existence
          */
         private function urlExists($url)
@@ -280,7 +284,7 @@
         }
 
         /**
-         * @desc Updates a current module data in the database 
+         * Updates a current module data in the database 
          */
         private function update()
         {
@@ -302,7 +306,7 @@
         }
 
         /**
-         * @desc Update permissions that already exist, and elete module permissions that are in the database but not in the new permission list
+         * Update permissions that already exist, and elete module permissions that are in the database but not in the new permission list
          */
         private function updatePermissions()
         {
@@ -334,7 +338,7 @@
         }
 
         /**
-         * @desc Updates a single permission for this module
+         * Updates a single permission for this module
          */
         private function updatePermission($perm, $title)
         {
@@ -350,7 +354,7 @@
         }
 
         /**
-         * @desc Update urls that already exist for this module. Delete module urls that are in the database but not in the new permission list
+         * Update urls that already exist for this module. Delete module urls that are in the database but not in the new permission list
          */
         private function updateUrls()
         {
@@ -382,7 +386,7 @@
         }
 
         /**
-         * @desc Updates a Single URL
+         * Updates a Single URL
          */
         private function updateUrl($url, $data)
         {
@@ -400,7 +404,7 @@
         }
 
         /**
-         * @desc Delete the specified permission from permission table and role_permission table
+         * Delete the specified permission from permission table and role_permission table
          */
         private function deletePermission($perm)
         {
@@ -411,7 +415,7 @@
         }
 
         /**
-         * @desc Completely delete this module and all of it's data from the database
+         * Completely delete this module and all of it's data from the database
          */
         public function delete()
         {

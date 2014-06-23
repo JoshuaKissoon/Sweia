@@ -1,17 +1,19 @@
 <?php
 
     /**
+     * Class that handles all management operations on module
+     * 
      * @author Joshua Kissoon
-     * @description Class that handles all management operations on module
-     * @date 20121219
+     * @since 20121219
      */
     class JModuleManager
     {
 
-        private static $modtbl = "module";
+        public static $modtbl = "module";
+        const MODULES_TABLE = "module";
 
         /**
-         * @desc Here we simply load the main module handler file for this module: modulename.php
+         * Load the main module handler file for this module: modulename.php
          */
         public static function getModule($modname)
         {
@@ -19,7 +21,7 @@
         }
 
         /**
-         * @desc Here we simply load the main module handler file for this module: modulename.php
+         * Get the folder path for the module
          */
         public static function getModulePath($modname)
         {
@@ -37,7 +39,8 @@
         }
 
         /**
-         * @desc Here we simply load the main module handler file for this module: modulename.php
+         * Here we simply load the main module handler file for this module: modulename.php
+         * 
          * @param $modname The module for which to get it's URL
          */
         public static function getModuleURL($modname)

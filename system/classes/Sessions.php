@@ -1,15 +1,17 @@
 <?php
 
     /**
-     * @description Class that acts as a manager for all user sessions
+     * Class that acts as a manager for all user sessions
+     * 
      * @author Joshua Kissoon
-     * @date 20131210
+     * @since 20131210
+     * @updated 20140623
      */
     class Sessions
     {
 
         /**
-         * @desc Invalidate all sessions for this user which have passed the session lifetime of the site 
+         * Invalidate all sessions for user sessions that have passed the session lifetime of the site 
          */
         public static function updateSessions()
         {

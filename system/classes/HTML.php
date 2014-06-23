@@ -1,18 +1,24 @@
 <?php
 
     /**
-     * @description Class that handles generating different html elements
+     * Class that handles generating different html elements
+     * 
      * @author Joshua Kissoon
-     * @date 20121020
+     * @since 20121020
      */
     class HTML
     {
 
         /**
-         * @description Takes in a stylesheet file and returns the stylesheet include html code
+         * Takes in a stylesheet file and returns the stylesheet include html code
+         * 
          * @param $stylesheet is a stylesheet in the form: array('file' => 'main.css', media => 'screen')
+         * 
          * @return The HTML code for a stylesheet link
+         * 
          * @example <link href="theme/css/main.css" rel="stylesheet" type="text/css" media="screen">
+         * 
+         * @updated 20140623
          */
         public static function stylesheet($stylesheet)
         {
@@ -24,16 +30,18 @@
              * Check if the stylesheet name is in href or in file variable.
              * And check if media variable is actually set
              */
-            $file = isset($stylesheet['file']) ? $stylesheet['file'] : @$stylesheet['href'];
+            $file = isset($stylesheet['file']) ? $stylesheet['file'] : (isset($stylesheet['href']) ? $stylesheet['href'] : "");
             $media = isset($stylesheet['media']) ? $stylesheet['media'] : "screen, projection";
             $tag = "<link href='$file' rel='stylesheet' type='text/css' media='$media'>";
             return $tag;
         }
 
         /**
-         * @desc Creates the HTML link code for several stylesheets by repeatedly calling the stylesheet method above
-         * @return The HTML code for the set of stylesheets
+         * Creates the HTML link code for several stylesheets by repeatedly calling the stylesheet method above
+         * 
          * @param $stylesheets An array of arrays of stylesheets' information
+         * 
+         * @return The HTML code for the set of stylesheets
          */
         public static function stylesheets($stylesheets)
         {
@@ -50,16 +58,19 @@
         }
 
         /**
-         * @description Takes in a meta info and returns the meta include html code
+         * Takes in a meta info and returns the meta include html code
+         * 
          * @param $meta is an array with the meta information: array('name'=>'description', content='smart Website', 'http-equiv'=>'content-type')
+         * 
          * @return The HTML code for a meta tag
+         * 
          * @example <meta http-equiv="content-type" name="author" content="Hege Refsnes" />
          */
         public static function metaTag($meta)
         {
             if (!is_array($meta))
             {
-                $meta = array("name" => $metas);
+                $meta = array("name" => $meta);
             }
 
             /* Go through the meta array to add everything */
@@ -73,9 +84,12 @@
         }
 
         /**
-         * @description Takes in script information and returns the script html code
-         * @params $script An array with the script information: array('file'=>'jsc.js')
+         * Takes in script information and returns the script html code
+         * 
+         * @param $script An array with the script information: array('file'=>'jsc.js')
+         * 
          * @return The HTML code for the script link
+         * 
          * @example <script src="..." type="text/javascrip" />
          */
         public static function script($script)
@@ -96,9 +110,11 @@
         }
 
         /**
-         * @desc Creates the HTML link code for several sripts by repeatedly calling the script method above
-         * @return The HTML code for the set of scripts
+         * Creates the HTML link code for several sripts by repeatedly calling the script method above
+         * 
          * @param $scripts An array of arrays of scripts' information
+         * 
+         * @return The HTML code for the set of scripts
          */
         public static function scripts($scripts)
         {
@@ -115,14 +131,19 @@
         }
 
         /**
-         * @description Creates an html grid
+         * Creates an html grid
+         * 
          * @param $data An array of data to put in the grid
          * @param $cols Ahe amount of columns this grid is going to have
          * @param $options Different options that can be applied to the grid
+         * 
+         * @return String - An HTML string for the grid
          */
         public static function grid($data, $cols, $options = array())
         {
-            $grid = "<div class='grid-wrapper'><table class='table grid'>";
+            $id = isset($options["id"]) ? $options["id"] : "";      // Get the grid ID
+
+            $grid = "<div class='grid-wrapper' id='$id'><table class='table grid'>";
             $rowcount = 1;
             $count = 0;
             foreach ($data as $item)
@@ -149,10 +170,12 @@
         }
 
         /**
-         * @desc Generates the HTML code for a table
-         * @return The html for a table with the data sent
+         * Generates the HTML code for a table
+         * 
          * @param $header Table headers
          * @param $data An array of arrays each containing a row of data
+         * 
+         * @return The html for a table with the data sent
          */
         public static function table($header, $data, $options = array())
         {
