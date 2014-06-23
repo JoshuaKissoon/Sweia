@@ -29,29 +29,44 @@
             return rtrim($_SERVER['DOCUMENT_ROOT'] . '/' . BaseConfig::SITE_FOLDER, '/') . '/';
         }
 
+        public static function systemsDirPath()
+        {
+            return SystemConfig::basePath() . "system/";
+        }
+
+        public static function systemsDirUrl()
+        {
+            return SystemConfig::baseUrl() . "system/";
+        }
+
         public static function includesPath()
         {
-            return SystemConfig::basePath() . 'system/includes/';
+            return SystemConfig::systemsDirPath() . 'includes/';
         }
 
         public static function classesPath()
         {
-            return SystemConfig::basePath() . "system/classes/";
+            return SystemConfig::systemsDirPath() . "classes/";
         }
 
         public static function interfacesPath()
         {
-            return SystemConfig::basePath() . "system/interfaces/";
+            return SystemConfig::systemsDirPath() . "interfaces/";
+        }
+
+        public static function exceptionsPath()
+        {
+            return SystemConfig::systemsDirPath() . "exceptions/";
         }
 
         public static function modulesPath()
         {
-            return SystemConfig::basePath() . "system/modules/";
+            return SystemConfig::systemsDirPath() . "modules/";
         }
 
         public static function modulesUrl()
         {
-            return SystemConfig::baseUrl() . "system/modules/";
+            return SystemConfig::systemsDirUrl() . "modules/";
         }
 
         public static function themesPath()
