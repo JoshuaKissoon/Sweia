@@ -1,9 +1,10 @@
 <?php
 
     /**
+     * A class that handles user roles
+     * 
      * @author Joshua Kissoon
      * @date 20130316
-     * @description A class that handles user roles
      */
     class Role
     {
@@ -11,17 +12,23 @@
         public $rid, $role, $description;
         private $permissions = array();
 
-        /* Database Tables */
-        public static $role_tbl = "role";
-        public static $role_permission_tbl = "role_permission";
+        /**
+         * Database Tables 
+         */
+        const DB_TBL_ROLE = "role";
+        const DB_TBL_ROLE_PERMISSION = "role_permission";
 
-        /* Define error handlers */
+        /**
+         * Error handlers 
+         */
         public static $ERROR_INCOMPLETE_DATA = 00001;
 
         /**
-         * @desc Role class constructor, if a role id is given, then we load the role
+         * Role class constructor, if a role id is given, then we load the role
+         * 
          * @param $rid The id of a role to load from the database
-         * @return Boolean Whether the role was successfully loaded
+         * 
+         * @return Boolean - Whether the role was successfully loaded
          */
         public function __construct($rid = null)
         {
@@ -33,28 +40,31 @@
         }
 
         /**
-         * @desc Check if a $rid is that of a valid role 
+         * Check if a $rid is that of a valid role 
+         * 
          * @param $rid The rid to check for
+         * 
          * @return Boolean Whether the given rid is that of a valid role or not
          */
         public static function isRole($rid)
         {
             $db = Sweia::getInstance()->getDB();
 
-            $res = $db->query("SELECT rid FROM role WHERE rid = '::rid'", array("::rid" => $rid));
+            $res = $db->query("SELECT rid FROM " . Role::DB_TBL_ROLE . " WHERE rid = '::rid'", array("::rid" => $rid));
             $role = $db->fetchObject($res);
             return (isset($role->rid) && valid($role->rid)) ? true : false;
         }
 
         /**
-         * @desc Loads all the data for a role
-         * @return Whether the data was successfully loaded or not
+         * Loads all the data for a role and store it locally in this role object
+         * 
+         * @return Boolean - Whether the data was successfully loaded or not
          */
         public function load()
         {
             $db = Sweia::getInstance()->getDB();
 
-            $res = $db->fetchObject($db->query("SELECT * FROM role WHERE rid='::rid'", array("::rid" => $this->rid)));
+            $res = $db->fetchObject($db->query("SELECT * FROM " . Role::DB_TBL_ROLE . " WHERE rid='::rid'", array("::rid" => $this->rid)));
             if (isset($res->rid) && $res->rid == $this->rid)
             {
                 foreach ($res as $key => $value)
@@ -71,8 +81,9 @@
         }
 
         /**
-         * @desc Adds a new permission to this role
-         * @return Boolean Whether the new permission was successfully added
+         * Adds a new permission to this role
+         * 
+         * @return Boolean - Whether the new permission was successfully added
          */
         public function addAndSavePermission($perm)
         {
@@ -91,7 +102,7 @@
         }
 
         /**
-         * @desc Removes all permissions from this role 
+         * Removes all permissions from this role 
          */
         public function clearPermissions()
         {
@@ -99,14 +110,15 @@
         }
 
         /**
-         * @desc Load all permissions for this role from the database
-         * @return Integer The number of permissions that are associated with this role
+         * Load all permissions for this role from the database
+         * 
+         * @return Integer - The number of permissions that are associated with this role
          */
         private function loadPermissions()
         {
             $db = Sweia::getInstance()->getDB();
 
-            $res = $db->query("SELECT permission FROM role_permission WHERE rid = '::rid'", array("::rid" => $this->rid));
+            $res = $db->query("SELECT permission FROM " . Role::DB_TBL_ROLE_PERMISSION . " WHERE rid = '::rid'", array("::rid" => $this->rid));
             while ($perm = $db->fetchObject($res))
             {
                 $this->permissions[$perm->permission] = $perm->permission;
@@ -115,15 +127,16 @@
         }
 
         /**
-         * @desc Updates the permissions for this role by adding, editing and deleting permissions as necessary
-         * @return Whether the operation was successful or not
+         * Updates the permissions for this role by adding, editing and deleting permissions as necessary
+         * 
+         * @return Boolean - Whether the operation was successful or not
          */
         public function savePermissions()
         {
             /* First we delete all the permissions that are there in the database */
             $db = Sweia::getInstance()->getDB();
 
-            $res = $db->query("DELETE FROM role_permission WHERE rid='::rid'", array("::rid" => $this->rid));
+            $res = $db->query("DELETE FROM " . Role::DB_TBL_ROLE_PERMISSION . " WHERE rid='::rid'", array("::rid" => $this->rid));
 
             if (!$res)
             {
@@ -137,13 +150,14 @@
                     '::rid' => $this->rid,
                     '::permission' => $perm,
                 );
-                return $db->query("INSERT INTO role_permission (rid, permission) VALUES ('::rid', '::permission')", $args);
+                return $db->query("INSERT INTO " . Role::DB_TBL_ROLE_PERMISSION . " (rid, permission) VALUES ('::rid', '::permission')", $args);
             }
         }
 
         /**
-         * @desc Either update a role if we're using a current role or create a new role
-         * @return Boolean Whether the operation was successful or not
+         * Either update a role if we're using a current role or create a new role
+         * 
+         * @return Boolean - Whether the operation was successful or not
          */
         public function save()
         {
@@ -158,8 +172,9 @@
         }
 
         /**
-         * @desc Here we update a role
-         * @return Boolean Whether the update was successful or not
+         * Here we update a role to the database from the current role object
+         * 
+         * @return Boolean - Whether the update was successful or not
          */
         private function update()
         {
@@ -167,7 +182,8 @@
         }
 
         /**
-         * @desc Add a new role to the database
+         * Add a new role to the database
+         * 
          * @return Whether the creation of the role was successful or not
          */
         private function create()
@@ -183,7 +199,7 @@
                 '::role' => $this->role,
                 '::description' => $this->description,
             );
-            $sql = "INSERT INTO role (role, description) VALUES ('::role', '::description')";
+            $sql = "INSERT INTO " . Role::DB_TBL_ROLE . " (role, description) VALUES ('::role', '::description')";
             if ($db->query($sql, $args))
             {
                 $this->rid = $db->lastInsertId();
@@ -197,9 +213,11 @@
         }
 
         /**
-         * @desc Checks if a role has a permission 
+         * Checks if a role has a permission 
+         * 
          * @param $perm The permission to check for
-         * @return Boolean whether the role has the permission or not
+         * 
+         * @return Boolean - Whether the role has the permission or not
          */
         public function hasPermission($perm)
         {
@@ -207,9 +225,11 @@
         }
 
         /**
-         * @desc Delete this role from the system 
+         * Delete this role from the system 
+         * 
          * @param $rid The role to delete
-         * @return Boolean Whether the deletion was successful or not
+         * 
+         * @return Boolean - Whether the deletion was successful or not
          */
         public static function delete($rid)
         {
@@ -222,10 +242,10 @@
             $db = Sweia::getInstance()->getDB();
 
             $args = array("::rid" => $rid);
-            if ($db->query("DELETE FROM user_role WHERE rid = '::rid'", $args))
+            if ($db->query("DELETE FROM " . JSmartUser::DB_TBL_USER_ROLE . " WHERE rid = '::rid'", $args))
             {
-                $db->query("DELETE FROM role_permission WHERE rid = '::rid'", $args);
-                if ($db->query("DELETE FROM role WHERE rid = '::rid'", $args))
+                $db->query("DELETE FROM " . Role::DB_TBL_ROLE_PERMISSION . " WHERE rid = '::rid'", $args);
+                if ($db->query("DELETE FROM " . Role::DB_TBL_ROLE . " WHERE rid = '::rid'", $args))
                 {
                     return true;
                 }
