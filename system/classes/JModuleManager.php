@@ -9,8 +9,7 @@
     class JModuleManager
     {
 
-        public static $modtbl = "module";
-        const MODULES_TABLE = "module";
+        const DB_TBL_MODULES = "module";
 
         /**
          * Load the main module handler file for this module: modulename.php
@@ -60,7 +59,7 @@
         }
 
         /**
-         * @desc Return a list of all modules within the system
+         * Return a list of all modules within the system
          */
         public static function getModules()
         {
@@ -76,11 +75,11 @@
         }
 
         /**
-         * @desc Scan the modules path for all modules, check for module changes and do updates on site and system modules
+         * Scan the modules path for all modules, check for module changes and do updates on site and system modules
          */
         public static function setupModules()
         {
-            $current_modules = array();                         // Stores all the modules that are currently in the site
+            $current_modules = array();   // Stores all the modules that are currently in the site
 
             /* Setup system modules */
             $sys_modtype = "system";
@@ -109,8 +108,11 @@
         }
 
         /**
-         * @desc Scan a specified modules directory for modules 
+         * Scan a specified modules directory for modules 
+         * 
          * @param The module directory to scan
+         * 
+         * @return Array - An array of all modules in the given directory
          */
         public static function scanModulesDir($dir)
         {
@@ -138,7 +140,8 @@
         }
 
         /**
-         * @desc Load the module data from the module file into the database
+         * Load the module data from the module file into the database
+         * 
          * @param $modname The name of the module to setup
          * @param $modpath Where is the module located
          * @param $modtype Whether it's a site or system module
@@ -213,7 +216,8 @@
         }
 
         /**
-         * @desc Removes from the database all modules not in the current modules list
+         * Removes from the database all modules not in the current modules list
+         * 
          * @param $currentmods A list of current modules
          */
         public static function deleteNullModules($currentmods = array())
@@ -221,7 +225,7 @@
             $db = Sweia::getInstance()->getDB();
 
             $currentmods = "'" . implode("', '", $currentmods) . "'";
-            $sql = "SELECT name FROM " . self::$modtbl . " WHERE name NOT IN ($currentmods)";
+            $sql = "SELECT name FROM " . JModuleManager::DB_TBL_MODULES . " WHERE name NOT IN ($currentmods)";
             $rs = $db->query($sql);
 
             while ($modname = $db->fetchObject($rs))
