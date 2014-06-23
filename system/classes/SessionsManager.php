@@ -7,7 +7,7 @@
      * @since 20131210
      * @updated 20140623
      */
-    class Sessions
+    class SessionsManager
     {
 
         /**
