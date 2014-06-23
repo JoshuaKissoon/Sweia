@@ -11,6 +11,7 @@
     /* Autoloader for classes and interfaces */
     spl_autoload_register("jsmart_load_system_classes");
     spl_autoload_register("jsmart_load_system_interfaces");
+    spl_autoload_register("jsmart_load_system_exceptions");
 
     function jsmart_load_system_classes($class)
     {
@@ -24,6 +25,15 @@
     function jsmart_load_system_interfaces($interface)
     {
         $file = SystemConfig::interfacesPath() . $interface . '.php';
+        if (file_exists($file))
+        {
+            require_once $file;
+        }
+    }
+
+    function jsmart_load_system_exceptions($name)
+    {
+        $file = SystemConfig::exceptionsPath() . $name . '.php';
         if (file_exists($file))
         {
             require_once $file;
