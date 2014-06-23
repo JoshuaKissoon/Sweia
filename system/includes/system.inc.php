@@ -7,5 +7,11 @@
      * @author Joshua Kissoon
      * @since 20140616
      */
+    $url = Sweia::getInstance()->getURL();
 
-    
+
+    /* If we're at admin section! load the admin template */
+    if (isset($url[0]) && $url[0] == SiteConfig::adminUrlDirectory())
+    {
+        SiteConfig::$useAdminTheme = true;
+    }

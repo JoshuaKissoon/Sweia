@@ -8,6 +8,8 @@
     class SiteConfig
     {
 
+        public static $useAdminTheme = false;   // Whether to use the admin theme or not
+
         public static function includesPath()
         {
             return SystemConfig::basePath() . "site/includes/";
@@ -43,14 +45,38 @@
             return SystemConfig::themesUrl() . BaseConfig::ADMIN_THEME . "/";
         }
 
-        public static function themePath()
+        public static function siteThemePath()
         {
             return SystemConfig::themesPath() . BaseConfig::THEME . "/";
         }
 
-        public static function themeUrl()
+        public static function siteThemeUrl()
         {
             return SystemConfig::themesUrl() . BaseConfig::THEME . "/";
+        }
+
+        public static function themePath()
+        {
+            if (SiteConfig::$useAdminTheme)
+            {
+                return SiteConfig::adminThemePath();
+            }
+            else
+            {
+                return SiteConfig::siteThemePath();
+            }
+        }
+
+        public static function themeUrl()
+        {
+            if (SiteConfig::$useAdminTheme)
+            {
+                return SiteConfig::adminThemeUrl();
+            }
+            else
+            {
+                return SiteConfig::siteThemeUrl();
+            }
         }
 
         public static function templatesPath()
@@ -91,6 +117,11 @@
         public static function filesTemporaryDirectory()
         {
             return SystemConfig::basePath() . "files/tmp/";
+        }
+
+        public static function adminUrlDirectory()
+        {
+            return "admin";
         }
 
     }

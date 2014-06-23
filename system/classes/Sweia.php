@@ -31,7 +31,7 @@
         }
 
         /**
-         * Return an instance of Sweia
+         * @return Sweia - an instance of Sweia
          */
         public static function getInstance()
         {
@@ -55,7 +55,7 @@
         /**
          * Get the instance of the Database and return it
          * 
-         * @return Instance of the Database
+         * @return Database Instance of the Database
          */
         public function getDB()
         {
@@ -63,7 +63,7 @@
         }
 
         /**
-         * We get the URL object[] with the different arguments of the URL
+         * @return The URL object[] with the different arguments of the URL
          */
         public function getURL()
         {
@@ -71,7 +71,7 @@
         }
 
         /**
-         * @return The Theme Registry
+         * @return ThemeRegistry - The Theme Registry
          */
         public function getThemeRegistry()
         {
@@ -87,7 +87,7 @@
         }
 
         /**
-         * @return The user object of the logged in system user
+         * @return User - The user object of the logged in system user
          */
         public function getUser()
         {
