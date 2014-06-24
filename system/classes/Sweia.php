@@ -1,9 +1,7 @@
 <?php
 
     /**
-     * Provides major core functionality for the entire system.
-     * 
-     * Over time Sweia will be made the Registry class for all system objects.
+     * Sweia  is the Registry class for all system objects.
      * 
      * @author Joshua Kissoon
      * @since 20121214

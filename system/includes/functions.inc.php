@@ -30,12 +30,6 @@
         return false;
     }
 
-    function redirect_to($location)
-    {
-        header("Location: $location");
-        exit();
-    }
-
     function hprint($data, $show_html = false)
     {
         /*

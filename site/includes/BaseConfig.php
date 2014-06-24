@@ -10,16 +10,16 @@
     {
         /* Is the site in a specific folder within your web directory */
 
-        const SITE_FOLDER = "sweia";
+        const SITE_FOLDER = "Sweia";
 
         /* Home URL */
         const HOME_URL = "home";
 
         /* Database Access Information */
         const DB_SERVER = "localhost";
-        const DB_USER = "jsmart";
-        const DB_PASS = "Pass1233";
-        const DB_NAME = "jsmart_test";
+        const DB_USER = "sweia";
+        const DB_PASS = "Pass1233~";
+        const DB_NAME = "sweia_wd";
 
         /* Themes Information */
         const THEME = "default";
