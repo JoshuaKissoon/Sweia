@@ -16,14 +16,7 @@
 
         /* Class Metadata */
         public static $user_type = "jsmartuser";
-
-        /**
-         * Database Tables 
-         */
-        const DB_TBL_USER = "user";
-        const DB_TBL_USER_STATUS = "user_status";
-        const DB_TBL_USER_ROLE = "user_role";
-
+        
         /**
          * Error handlers 
          */
@@ -66,7 +59,7 @@
             $db = Sweia::getInstance()->getDB();
 
             $args = array("::uid" => $uid);
-            $sql = "SELECT uid FROM " . JSmartUser::DB_TBL_USER . " WHERE uid='::uid'";
+            $sql = "SELECT uid FROM " . SystemTables::DB_TBL_USER . " WHERE uid='::uid'";
             $res = $db->query($sql, $args);
             $user = $db->fetchObject($res);
             return (isset($user->uid) && valid($user->uid)) ? true : false;
@@ -113,7 +106,7 @@
             $db = Sweia::getInstance()->getDB();
 
             $args = array(":uid" => $this->uid);
-            $sql = "SELECT * FROM " . JSmartUser::DB_TBL_USER . " u WHERE uid=':uid' LIMIT 1";
+            $sql = "SELECT * FROM " . SystemTables::DB_TBL_USER . " u WHERE uid=':uid' LIMIT 1";
             $rs = $db->query($sql, $args);
             $cuser = $db->fetchObject($rs);
             if (isset($cuser->uid) && valid($cuser->uid))
@@ -155,7 +148,7 @@
         private function savePassword()
         {
             $db = Sweia::getInstance()->getDB();
-            return $db->updateFields(JSmartUser::DB_TBL_USER, array("password" => $this->password), "uid='$this->uid'");
+            return $db->updateFields(SystemTables::DB_TBL_USER, array("password" => $this->password), "uid='$this->uid'");
         }
 
         /**
@@ -209,7 +202,7 @@
                 ":password" => $this->password,
             );
 
-            $sql = "INSERT INTO " . JSmartUser::DB_TBL_USER . " (password, email, first_name, last_name, other_name, dob)
+            $sql = "INSERT INTO " . SystemTables::DB_TBL_USER . " (password, email, first_name, last_name, other_name, dob)
                 VALUES(':password', ':email', ':first_name', ':last_name', ':other_name', ':dob')";
             if ($db->query($sql, $args))
             {
@@ -242,7 +235,7 @@
             $db = Sweia::getInstance()->getDB();
 
             $args = array(":email" => $this->email, "::password" => $this->password);
-            $sql = "SELECT uid FROM " . JSmartUser::DB_TBL_USER . " WHERE email=':email' and password='::password' LIMIT 1";
+            $sql = "SELECT uid FROM " . SystemTables::DB_TBL_USER . " WHERE email=':email' and password='::password' LIMIT 1";
             $cuser = $db->fetchObject($db->query($sql, $args));
             if (isset($cuser->uid) && valid($cuser->uid))
             {
@@ -265,7 +258,7 @@
 
             $db = Sweia::getInstance()->getDB();
 
-            $res = $db->query("SELECT email FROM " . JSmartUser::DB_TBL_USER . " WHERE email='::email'", array("::email" => $email));
+            $res = $db->query("SELECT email FROM " . SystemTables::DB_TBL_USER . " WHERE email='::email'", array("::email" => $email));
             $temp = $db->fetchObject($res);
             return (isset($temp->email) && valid($temp->email)) ? true : false;
         }
@@ -285,7 +278,7 @@
             }
 
             $db = Sweia::getInstance()->getDB();
-            return $db->query("DELETE FROM " . JSmartUser::DB_TBL_USER . " WHERE uid='::uid'", array("::uid" => $uid));
+            return $db->query("DELETE FROM " . SystemTables::DB_TBL_USER . " WHERE uid='::uid'", array("::uid" => $uid));
         }
 
         /**
@@ -317,7 +310,7 @@
             {
                 /* If the status is not set in the user object, load it */
                 $db = Sweia::getInstance()->getDB();
-                $this->status = $db->getFieldValue(JSmartUser::DB_TBL_USER, "status", "uid = $this->uid");
+                $this->status = $db->getFieldValue(SystemTables::DB_TBL_USER, "status", "uid = $this->uid");
             }
             return $this->status;
         }
@@ -340,7 +333,7 @@
 
             /* Check if its a valid user's status */
             $args = array("::status" => $sid);
-            $res = $db->fetchObject($db->query("SELECT sid FROM " . JSmartUser::DB_TBL_USER_STATUS . " WHERE sid='::status'", $args));
+            $res = $db->fetchObject($db->query("SELECT sid FROM " . SystemTables::DB_TBL_USER_STATUS . " WHERE sid='::status'", $args));
             if (!isset($res->sid) || !valid($res->sid))
             {
                 return false;
@@ -413,11 +406,11 @@
             $db = Sweia::getInstance()->getDB();
 
             /* Remove all the roles this user had */
-            $db->query("DELETE FROM " . JSmartUser::DB_TBL_USER_ROLE . " WHERE uid='$this->uid'");
+            $db->query("DELETE FROM " . SystemTables::DB_TBL_USER_ROLE . " WHERE uid='$this->uid'");
 
             foreach ((array) $this->roles as $rid => $role)
             {
-                $db->query("INSERT INTO " . JSmartUser::DB_TBL_USER_ROLE . " (uid, rid) VALUES ('::uid', '::rid')", array('::rid' => $rid, '::uid' => $this->uid));
+                $db->query("INSERT INTO " . SystemTables::DB_TBL_USER_ROLE . " (uid, rid) VALUES ('::uid', '::rid')", array('::rid' => $rid, '::uid' => $this->uid));
             }
 
             return true;
@@ -432,7 +425,7 @@
         {
             $db = Sweia::getInstance()->getDB();
 
-            $roles = $db->query("SELECT ur.rid, r.role FROM " . JSmartUser::DB_TBL_USER_ROLE . " ur LEFT JOIN role r ON (r.rid = ur.rid) WHERE uid='$this->uid'");
+            $roles = $db->query("SELECT ur.rid, r.role FROM " . SystemTables::DB_TBL_USER_ROLE . " ur LEFT JOIN role r ON (r.rid = ur.rid) WHERE uid='$this->uid'");
             while ($role = $db->fetchObject($roles))
             {
                 $this->roles[$role->rid] = $role->role;

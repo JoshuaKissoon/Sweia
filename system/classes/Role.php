@@ -243,7 +243,7 @@
             $db = Sweia::getInstance()->getDB();
 
             $args = array("::rid" => $rid);
-            if ($db->query("DELETE FROM " . JSmartUser::DB_TBL_USER_ROLE . " WHERE rid = '::rid'", $args))
+            if ($db->query("DELETE FROM " . SystemTables::DB_TBL_USER_ROLE . " WHERE rid = '::rid'", $args))
             {
                 $db->query("DELETE FROM " . Role::DB_TBL_ROLE_PERMISSION . " WHERE rid = '::rid'", $args);
                 if ($db->query("DELETE FROM " . Role::DB_TBL_ROLE . " WHERE rid = '::rid'", $args))

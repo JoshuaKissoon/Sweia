@@ -20,6 +20,12 @@
         {
             require_once $file;
         }
+        
+        $file = SystemConfig::includesPath() . $class . '.php';
+        if (file_exists($file))
+        {
+            require_once $file;
+        }
     }
 
     function jsmart_load_system_interfaces($interface)
