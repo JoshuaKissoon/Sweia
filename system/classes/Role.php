@@ -14,12 +14,6 @@
         private $permissions = array();
 
         /**
-         * Database Tables 
-         */
-        const DB_TBL_ROLE = "role";
-        const DB_TBL_ROLE_PERMISSION = "role_permission";
-
-        /**
          * Error handlers 
          */
         public static $ERROR_INCOMPLETE_DATA = 00001;
@@ -51,7 +45,7 @@
         {
             $db = Sweia::getInstance()->getDB();
 
-            $res = $db->query("SELECT rid FROM " . Role::DB_TBL_ROLE . " WHERE rid = '::rid'", array("::rid" => $rid));
+            $res = $db->query("SELECT rid FROM " . SystemTables::DB_TBL_ROLE . " WHERE rid = '::rid'", array("::rid" => $rid));
             $role = $db->fetchObject($res);
             return (isset($role->rid) && valid($role->rid)) ? true : false;
         }
@@ -65,7 +59,7 @@
         {
             $db = Sweia::getInstance()->getDB();
 
-            $res = $db->fetchObject($db->query("SELECT * FROM " . Role::DB_TBL_ROLE . " WHERE rid='::rid'", array("::rid" => $this->rid)));
+            $res = $db->fetchObject($db->query("SELECT * FROM " . SystemTables::DB_TBL_ROLE . " WHERE rid='::rid'", array("::rid" => $this->rid)));
             if (isset($res->rid) && $res->rid == $this->rid)
             {
                 foreach ($res as $key => $value)
@@ -119,7 +113,7 @@
         {
             $db = Sweia::getInstance()->getDB();
 
-            $res = $db->query("SELECT permission FROM " . Role::DB_TBL_ROLE_PERMISSION . " WHERE rid = '::rid'", array("::rid" => $this->rid));
+            $res = $db->query("SELECT permission FROM " . SystemTables::DB_TBL_ROLE_PERMISSION . " WHERE rid = '::rid'", array("::rid" => $this->rid));
             while ($perm = $db->fetchObject($res))
             {
                 $this->permissions[$perm->permission] = $perm->permission;
@@ -137,7 +131,7 @@
             /* First we delete all the permissions that are there in the database */
             $db = Sweia::getInstance()->getDB();
 
-            $res = $db->query("DELETE FROM " . Role::DB_TBL_ROLE_PERMISSION . " WHERE rid='::rid'", array("::rid" => $this->rid));
+            $res = $db->query("DELETE FROM " . SystemTables::DB_TBL_ROLE_PERMISSION . " WHERE rid='::rid'", array("::rid" => $this->rid));
 
             if (!$res)
             {
@@ -151,7 +145,7 @@
                     '::rid' => $this->rid,
                     '::permission' => $perm,
                 );
-                return $db->query("INSERT INTO " . Role::DB_TBL_ROLE_PERMISSION . " (rid, permission) VALUES ('::rid', '::permission')", $args);
+                return $db->query("INSERT INTO " . SystemTables::DB_TBL_ROLE_PERMISSION . " (rid, permission) VALUES ('::rid', '::permission')", $args);
             }
         }
 
@@ -200,7 +194,7 @@
                 '::role' => $this->role,
                 '::description' => $this->description,
             );
-            $sql = "INSERT INTO " . Role::DB_TBL_ROLE . " (role, description) VALUES ('::role', '::description')";
+            $sql = "INSERT INTO " . SystemTables::DB_TBL_ROLE . " (role, description) VALUES ('::role', '::description')";
             if ($db->query($sql, $args))
             {
                 $this->rid = $db->lastInsertId();
@@ -245,8 +239,8 @@
             $args = array("::rid" => $rid);
             if ($db->query("DELETE FROM " . SystemTables::DB_TBL_USER_ROLE . " WHERE rid = '::rid'", $args))
             {
-                $db->query("DELETE FROM " . Role::DB_TBL_ROLE_PERMISSION . " WHERE rid = '::rid'", $args);
-                if ($db->query("DELETE FROM " . Role::DB_TBL_ROLE . " WHERE rid = '::rid'", $args))
+                $db->query("DELETE FROM " . SystemTables::DB_TBL_ROLE_PERMISSION . " WHERE rid = '::rid'", $args);
+                if ($db->query("DELETE FROM " . SystemTables::DB_TBL_ROLE . " WHERE rid = '::rid'", $args))
                 {
                     return true;
                 }

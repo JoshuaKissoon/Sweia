@@ -381,7 +381,7 @@
         {
             $db = Sweia::getInstance()->getDB();
 
-            $res = $db->query("SELECT role FROM " . Role::DB_TBL_ROLE . " WHERE rid='::rid'", array('::rid' => $rid));
+            $res = $db->query("SELECT role FROM " . SystemTables::DB_TBL_ROLE . " WHERE rid='::rid'", array('::rid' => $rid));
             $role = $db->fetchObject($res);
             if (isset($role->role) && valid($role->role))
             {
@@ -471,7 +471,7 @@
             $db = Sweia::getInstance()->getDB();
 
             $rids = implode(", ", array_keys($this->roles));
-            $rs = $db->query("SELECT permission FROM " . Role::DB_TBL_ROLE_PERMISSION . " WHERE rid IN ($rids)");
+            $rs = $db->query("SELECT permission FROM " . SystemTables::DB_TBL_ROLE_PERMISSION . " WHERE rid IN ($rids)");
             while ($perm = $db->fetchObject($rs))
             {
                 $this->permissions[$perm->permission] = $perm->permission;
