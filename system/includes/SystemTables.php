@@ -13,11 +13,19 @@
     class SystemTables
     {
 
+        /**
+         * User management tables
+         */
         const DB_TBL_USER = "user";
         const DB_TBL_USER_STATUS = "user_status";
         const DB_TBL_USER_ROLE = "user_role";
         const DB_TBL_ROLE = "role";
         const DB_TBL_ROLE_PERMISSION = "role_permission";
+
+        /**
+         * Session Management tables
+         */
+        const DB_TBL_USER_SESSION = "user_session";
 
     }
     

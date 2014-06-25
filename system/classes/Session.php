@@ -10,8 +10,6 @@
     class Session
     {
 
-        public static $USER_SESSION_TBL = "user_session";
-
         /**
          * Initialize the session
          */
@@ -67,7 +65,7 @@
 
             /* Save the session data to the database */
             $db = Sweia::getInstance()->getDB();
-            $db->query("INSERT INTO " . self::$USER_SESSION_TBL . " (uid, sid, ipaddress, status, data) VALUES('::uid', '::sid', '::ipaddress', '::status', '::data')", $args);
+            $db->query("INSERT INTO " . SystemTables::DB_TBL_USER_SESSION . " (uid, sid, ipaddress, status, data) VALUES('::uid', '::sid', '::ipaddress', '::status', '::data')", $args);
         }
 
         /**
@@ -85,7 +83,7 @@
             /* If there is a cookie, check if there exists a valid database session and load it */
             $db = Sweia::getInstance()->getDB();
 
-            $res = $db->query("SELECT * FROM " . self::$USER_SESSION_TBL . " WHERE sid='::sid' LIMIT 1", array("::sid" => $_COOKIE['jsmartsid']));
+            $res = $db->query("SELECT * FROM " . SystemTables::DB_TBL_USER_SESSION . " WHERE sid='::sid' LIMIT 1", array("::sid" => $_COOKIE['jsmartsid']));
             if ($db->resultNumRows() < 1)
             {
                 /* The session is non-existent, delete it */
@@ -116,7 +114,7 @@
 
             /* update the session id to the database */
             $args = array("::usid" => $row->usid, "::sid" => session_id());
-            return $db->query("UPDATE " . self::$USER_SESSION_TBL . " SET sid = '::sid' WHERE usid='::usid'", $args);
+            return $db->query("UPDATE " . SystemTables::DB_TBL_USER_SESSION . " SET sid = '::sid' WHERE usid='::usid'", $args);
         }
 
         /**
@@ -148,7 +146,7 @@
         {
             $db = Sweia::getInstance()->getDB();
             /* Set the session's status to 0 in the database */
-            $db->query("UPDATE " . self::$USER_SESSION_TBL . " SET status = '0' WHERE sid='::sid'", array("::sid" => $session_id));
+            $db->query("UPDATE " . SystemTables::DB_TBL_USER_SESSION . " SET status = '0' WHERE sid='::sid'", array("::sid" => $session_id));
         }
 
         /**
