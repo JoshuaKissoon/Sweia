@@ -6,7 +6,7 @@
     /* Require the configuration files */
     require_once 'site/includes/BaseConfig.php';
     require_once 'utilities/SystemConfig.php';
-    require_once 'site/includes/SiteConfig.php';
+    require_once 'site/utilities/SiteConfig.php';
 
     /* Autoloader for classes and interfaces */
     spl_autoload_register("jsmart_load_system_classes");
