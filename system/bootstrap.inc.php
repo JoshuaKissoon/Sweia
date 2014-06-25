@@ -5,7 +5,7 @@
      */
     /* Require the configuration files */
     require_once 'site/includes/BaseConfig.php';
-    require_once 'includes/SystemConfig.php';
+    require_once 'utilities/SystemConfig.php';
     require_once 'site/includes/SiteConfig.php';
 
     /* Autoloader for classes and interfaces */
@@ -22,6 +22,12 @@
         }
         
         $file = SystemConfig::includesPath() . $class . '.php';
+        if (file_exists($file))
+        {
+            require_once $file;
+        }
+        
+        $file = SystemConfig::utilitiesPath() . $class . '.php';
         if (file_exists($file))
         {
             require_once $file;
