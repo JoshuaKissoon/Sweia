@@ -65,6 +65,22 @@
         {
             return SystemConfig::systemsDirPath() . 'includes/';
         }
+        
+        /**
+         * @return String The Path of the directory containing include files of the core system
+         */
+        public static function includesUrl()
+        {
+            return SystemConfig::systemsDirUrl() . 'includes/';
+        }
+        
+        /**
+         * @return String The Path of the directory containing include files of the core system
+         */
+        public static function utilitiesPath()
+        {
+            return SystemConfig::systemsDirPath() . 'utilities/';
+        }
 
         /**
          * @return String The Path of the directory containing class files of the core system
