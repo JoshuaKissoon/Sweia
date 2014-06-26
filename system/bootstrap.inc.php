@@ -68,16 +68,6 @@
         die("Database connectivity error, please check the database access details");
     }
 
-    /* Loading User */
-    if (Session::isLoggedIn())
-    {
-        $sweia->setUser(new JSmartUser($_SESSION['uid']));
-    }
-    else
-    {
-        $sweia->setUser(new JSmartUser());
-    }
-
     /* Load the core site and system files */
     require_once SystemConfig::includesPath() . 'system.inc.php';
     require_once SiteConfig::includesPath() . 'site.inc.php';
