@@ -167,7 +167,29 @@
          */
         public static function filesDirectory()
         {
-            return SystemConfig::basePath() . "files/";
+            if (BaseConfig::FILES_DIR_RELATIVE)
+            {
+                return SystemConfig::basePath() . BaseConfig::FILES_DIR . "/";
+            }
+            else
+            {
+                return BaseConfig::FILES_DIR . "/";
+            }
+        }
+
+        /**
+         * @return String The url of the directory that is used to store files such as images, etc
+         */
+        public static function filesUrl()
+        {
+            if (BaseConfig::FILES_URL_RELATIVE)
+            {
+                return SystemConfig::basePath() . BaseConfig::FILES_URL . "/";
+            }
+            else
+            {
+                return BaseConfig::FILES_URL . "/";
+            }
         }
 
         /**
