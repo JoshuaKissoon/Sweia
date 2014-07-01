@@ -65,7 +65,7 @@
         {
             return SystemConfig::systemsDirPath() . 'includes/';
         }
-        
+
         /**
          * @return String The Path of the directory containing include files of the core system
          */
@@ -73,7 +73,7 @@
         {
             return SystemConfig::systemsDirUrl() . 'includes/';
         }
-        
+
         /**
          * @return String The Path of the directory containing include files of the core system
          */
@@ -136,6 +136,22 @@
         public static function themesUrl()
         {
             return SystemConfig::baseUrl() . "themes/";
+        }
+
+        /**
+         * @return String The URL of the directory containing scripts for the currently in-use theme
+         */
+        public static function scriptsUrl()
+        {
+            return SystemConfig::systemsDirUrl() . "scripts/";
+        }
+
+        /**
+         * @return String The path of the directory containing templates for the currently in-use theme
+         */
+        public static function templatesPath()
+        {
+            return SystemConfig::systemsDirPath() . "templates/";
         }
 
     }
