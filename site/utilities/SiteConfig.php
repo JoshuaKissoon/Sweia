@@ -197,7 +197,7 @@
          */
         public static function filesTemporaryDirectory()
         {
-            return SystemConfig::basePath() . "files/tmp/";
+            return SiteConfig::filesDirectory() . "tmp/";
         }
 
         /**
