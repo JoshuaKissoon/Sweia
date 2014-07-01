@@ -34,7 +34,7 @@
          */
         public function __construct($uid = null)
         {
-            if (isset($uid) && self::isUser($uid))
+            if (isset($uid) && self::isExistent($uid))
             {
                 $this->uid = $uid;
                 return $this->load();
@@ -49,7 +49,7 @@
          * 
          * @return Boolean Whether this is a system user or not
          */
-        public static function isUser($uid)
+        public static function isExistent($uid)
         {
             if (!valid($uid))
             {
@@ -161,26 +161,34 @@
             $salted = md5($this->password . BaseConfig::PASSWORD_SALT);
             return sha1($salted);
         }
+        
+        /**
+         * @todo
+         */
+        public function hasMandatoryData()
+        {
+            
+        }
 
         /**
          * Save the data of this user to the database, if it's a new user, then create this new user
          */
         public function save()
         {
-            if (isset($this->uid) && self::isUser($this->uid))
+            if (isset($this->uid) && self::isExistent($this->uid))
             {
-                return $this->updateUser();
+                return $this->update();
             }
             else
             {
-                return $this->addUser();
+                return $this->insert();
             }
         }
 
         /**
          * Adds a new user to the system
          */
-        private function addUser()
+        public function insert()
         {
             if (self::isEmailInUse($this->email))
             {
@@ -220,7 +228,7 @@
          * Updates the user data to the database
          * @todo
          */
-        private function updateUser()
+        private function update()
         {
             
         }
@@ -272,7 +280,7 @@
          */
         public static function delete($uid)
         {
-            if (!self::isUser($uid))
+            if (!self::isExistent($uid))
             {
                 return false;
             }
@@ -347,7 +355,7 @@
         /**
          * @return Integer - The userId
          */
-        public function getUserID()
+        public function getId()
         {
             return $this->uid;
         }
@@ -398,7 +406,7 @@
          */
         public function saveRoles()
         {
-            if (!self::isUser($this->uid))
+            if (!self::isExistent($this->uid))
             {
                 return false;
             }

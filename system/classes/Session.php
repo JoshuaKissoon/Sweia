@@ -41,10 +41,9 @@
         public static function loginUser(User $user)
         {
             session_regenerate_id(true);
-            $_SESSION['uid'] = $user->getUserID();
+            $_SESSION['uid'] = $user->getId();
             $_SESSION['logged_in'] = true;
             $_SESSION['logged_in_email'] = $user->getEmail();
-            $_SESSION['user_type'] = $user->getUserType();
 
             /* Add the necessary data to the class */
             $_SESSION['ipaddress'] = $_SERVER['REMOTE_ADDR'];
@@ -59,7 +58,6 @@
                 "::sid" => session_id(),
                 "::ipaddress" => $_SESSION['ipaddress'],
                 "::status" => $_SESSION['status'],
-                "::user_type" => $_SESSION['user_type'],
                 "::data" => json_encode($_SESSION),
             );
 
@@ -128,7 +126,6 @@
             /* Destroy the session variables */
             unset($_SESSION['uid']);
             unset($_SESSION['logged_in']);
-            unset($_SESSION['user_type']);
             unset($_SESSION['logged_in_email']);
             unset($_SESSION['ipaddress']);
             unset($_SESSION['status']);

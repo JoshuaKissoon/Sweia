@@ -28,7 +28,7 @@
             }
         }
 
-        if ($user->addUser())
+        if ($user->insert())
         {
             ScreenMessage::setMessage("Successfully added a new user.", "success");
         }
@@ -47,7 +47,7 @@
 
                 /* Here we handle deleting a user */
                 $user = Sweia::getInstance()->getUser();
-                if ($user->hasPermission("delete_user") && JSmartUser::isUser($_GET['uid']))
+                if ($user->hasPermission("delete_user") && JSmartUser::isExistent($_GET['uid']))
                 {
                     JSmartUser::delete($_GET['uid']);
                 }
