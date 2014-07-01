@@ -16,9 +16,9 @@
             $themeRegistry = Sweia::getInstance()->getThemeRegistry();
 
             /* Adding foundation */
-            $themeRegistry->addCss(SiteConfig::themeLibrariessUrl() . "foundation/foundation-5.2.3/css/foundation.min.css");
-            $themeRegistry->addScript(SiteConfig::themeLibrariessUrl() . "foundation/foundation-5.2.3/js/vendor/modernizr.js", 1);
-            $themeRegistry->addScript(SiteConfig::themeLibrariessUrl() . "foundation/foundation-5.2.3/js/foundation.min.js");
+            $themeRegistry->addCss(SiteConfig::themeLibrariessUrl() . "foundation/foundation-5.3.0/css/foundation.min.css");
+            $themeRegistry->addScript(SiteConfig::themeLibrariessUrl() . "foundation/foundation-5.3.0/js/vendor/modernizr.js", 1);
+            $themeRegistry->addScript(SiteConfig::themeLibrariessUrl() . "foundation/foundation-5.3.0/js/foundation.min.js");
 
             /* Adding JQuery */
             $themeRegistry->addScript(SiteConfig::themeLibrariessUrl() . "jquery/jquery-2.1.1.min.js", 2);
