@@ -15,3 +15,11 @@
     {
         SiteConfig::$useAdminTheme = true;
     }
+    
+    /**
+     * Check if the user is logged in and load the login form if necessary 
+     */
+    if (!Session::isLoggedIn() || !Session::validateUserSessionData())
+    {
+        /* include a file for login template */
+    }
