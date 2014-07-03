@@ -43,31 +43,37 @@
         public static function loginUser(User $user)
         {
             session_regenerate_id(true);
-            $_SESSION['uid'] = $user->getUserID();
+            $_SESSION['auid'] = $user->getUserID();
             $_SESSION['logged_in'] = true;
             $_SESSION['logged_in_email'] = $user->getEmail();
             $_SESSION['user_type'] = $user->getUserType();
 
             /* Add the necessary data to the class */
             $_SESSION['ipaddress'] = $_SERVER['REMOTE_ADDR'];
-            $_SESSION['status'] = 1;
+            $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+            $_SESSION['aussid'] = 1;
 
             /* Now we create the necessary cookies for the user and save the session data */
             setcookie("jsmartsid", session_id(), time() + 3600 * 300, "/");
 
             /* Save the entire session data to the database */
             $args = array(
-                "::uid" => $_SESSION['uid'],
+                "::auid" => $_SESSION['auid'],
                 "::sid" => session_id(),
                 "::ipaddress" => $_SESSION['ipaddress'],
-                "::status" => $_SESSION['status'],
-                "::user_type" => $_SESSION['user_type'],
+                "::aussid" => $_SESSION['aussid'],
                 "::data" => json_encode($_SESSION),
+                "::user_agent"=>$_SERVER['HTTP_USER_AGENT']
             );
 
             /* Save the session data to the database */
             $db = Sweia::getInstance()->getDB();
-            $db->query("INSERT INTO " . self::$USER_SESSION_TBL . " (uid, sid, ipaddress, status, data) VALUES('::uid', '::sid', '::ipaddress', '::status', '::data')", $args);
+            $db->query("INSERT INTO " . SystemTables::DB_TBL_USER_SESSION . " (auid, sid, ipaddress, aussid, data, user_agent) VALUES('::auid', '::sid', '::ipaddress', '::aussid', '::data', '::user_agent')", $args);
+            if($db->lastInsertId()<1)
+            {
+                ScreenMessage::setMessage("Fail");
+                return false;
+            }
         }
 
         /**
