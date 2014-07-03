@@ -3,11 +3,15 @@
     $usermod_path = JModuleManager::getModulePath("usermanager");
     $usermod_url = JModuleManager::getModuleURL("usermanager");
     $usermod_rel_url = "admin/usermanager/";
-
-    $REGISTRY->addContent("left_sidebar", users_get_menu());
-    $REGISTRY->addCss($usermod_url . "usermanager.css");
     
-    switch(@$URL[2])
+    $themeRegistry = Sweia::getInstance()->getThemeRegistry();
+
+    $themeRegistry->addContent("left_sidebar", users_get_menu());
+    $themeRegistry->addCss($usermod_url . "usermanager.css");
+    
+    $url = Sweia::getInstance()->getURL();
+    
+    switch(@$url[2])
     {
        case "users":
           require "users.php";

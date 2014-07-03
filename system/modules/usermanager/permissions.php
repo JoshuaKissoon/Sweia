@@ -4,41 +4,46 @@
      * Here we manage role-permission mapping
      */
 
-    if (@$_POST['submit'] == "save-permissions")
+
+    $db = Sweia::getInstance()->getDB();
+
+    if (isset($_POST['submit']) && $_POST['submit'] == "save-permissions")
     {
-       /* Handle saving role-permissions */
-       /* We load all roles from the database because there may some roles that all permissions are removed from that won't be in the roles list in $_POST */
-       $rs = $DB->query("SELECT rid FROM role");
-       while ($rid = $DB->fetchObject($rs))
-       {
-          $role = new Role($rid->rid);
-          $role->clearPermissions();
-          foreach ((array) @$_POST['roles'][$role->rid] as $perm)
-          {
-             /* For each of the roles, we load it and add the necessary permissions */
-             $role->addAndSavePermission($perm);
-          }
-          $role->save();
-       }
-       ScreenMessage::setMessage("Role Permissions have successfully been updated", "success");
+        /* Handle saving role-permissions */
+        /* We load all roles from the database because there may some roles that all permissions are removed from that won't be in the roles list in $_POST */
+        $rs = $db->query("SELECT rid FROM role");
+        while ($rid = $db->fetchObject($rs))
+        {
+            $role = new Role($rid->rid);
+            $role->clearPermissions();
+            foreach ((array) @$_POST['roles'][$role->rid] as $perm)
+            {
+                /* For each of the roles, we load it and add the necessary permissions */
+                $role->addAndSavePermission($perm);
+            }
+            $role->save();
+        }
+        ScreenMessage::setMessage("Role Permissions have successfully been updated", "success");
     }
 
     /* Load Permissions */
-    $rs = $DB->query("SELECT * FROM permission ORDER BY module");
+    $rs = $db->query("SELECT * FROM permission ORDER BY module");
     $permissions = array();
-    while ($perm = $DB->fetchObject($rs))
+    while ($perm = $db->fetchObject($rs))
     {
-       $permissions[$perm->permission] = $perm;
+        $permissions[$perm->permission] = $perm;
     }
 
     /* Load Roles */
-    $rs = $DB->query("SELECT rid FROM role");
+    $rs = $db->query("SELECT rid FROM role");
     $roles = array();
-    while ($role = $DB->fetchObject($rs))
+    while ($role = $db->fetchObject($rs))
     {
-       $roles[$role->rid] = new Role($role->rid);
+        $roles[$role->rid] = new Role($role->rid);
     }
     $tpl = new Template($usermod_path . "templates/forms/role-permissions");
     $tpl->permissions = $permissions;
     $tpl->roles = $roles;
-    $REGISTRY->addContent("content", $tpl->parse());
+
+    Sweia::getInstance()->getThemeRegistry()->addContent("content", $tpl->parse());
+    

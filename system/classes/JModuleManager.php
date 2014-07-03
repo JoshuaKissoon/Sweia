@@ -1,17 +1,18 @@
 <?php
 
     /**
+     * Class that handles all management operations on module
+     * 
      * @author Joshua Kissoon
-     * @description Class that handles all management operations on module
-     * @date 20121219
+     * @since 20121219
      */
     class JModuleManager
     {
 
-        private static $modtbl = "module";
+        const DB_TBL_MODULES = "module";
 
         /**
-         * @desc Here we simply load the main module handler file for this module: modulename.php
+         * Load the main module handler file for this module: modulename.php
          */
         public static function getModule($modname)
         {
@@ -19,50 +20,54 @@
         }
 
         /**
-         * @desc Here we simply load the main module handler file for this module: modulename.php
+         * Get the folder path for the module
          */
         public static function getModulePath($modname)
         {
-            global $DB;
-            $temp = $DB->fetchObject($DB->query("SELECT type FROM module WHERE name = '::mod'", array("::mod" => $modname)));
+            $db = Sweia::getInstance()->getDB();
+
+            $temp = $db->fetchObject($db->query("SELECT type FROM module WHERE name = '::mod'", array("::mod" => $modname)));
             if (isset($temp->type) && $temp->type == "system")
             {
-                return SYSTEM_MODULES_PATH . "$modname/";
+                return SystemConfig::modulesPath() . "$modname/";
             }
             else
             {
-                return SITE_MODULES_PATH . "$modname/";
+                return SiteConfig::modulesPath() . "$modname/";
             }
         }
 
         /**
-         * @desc Here we simply load the main module handler file for this module: modulename.php
+         * Here we simply load the main module handler file for this module: modulename.php
+         * 
          * @param $modname The module for which to get it's URL
          */
         public static function getModuleURL($modname)
         {
-            global $DB;
-            $temp = $DB->fetchObject($DB->query("SELECT type FROM module WHERE name = '::mod'", array("::mod" => $modname)));
+            $db = Sweia::getInstance()->getDB();
+
+            $temp = $db->fetchObject($db->query("SELECT type FROM module WHERE name = '::mod'", array("::mod" => $modname)));
             if (isset($temp->type) && $temp->type == "system")
             {
-                $path = SYSTEM_MODULES_URL . "$modname/";
+                $path = SystemConfig::modulesUrl() . "$modname/";
             }
             else
             {
-                $path = SITE_MODULES_URL . "$modname/";
+                $path = SiteConfig::modulesUrl() . "$modname/";
             }
             return $path;
         }
 
         /**
-         * @desc Return a list of all modules within the system
+         * Return a list of all modules within the system
          */
         public static function getModules()
         {
-            global $DB;
+            $db = Sweia::getInstance()->getDB();
+
             $ret = array();
-            $res = $DB->query("SELECT * FROM module");
-            while ($mod = $DB->fetchObject($res))
+            $res = $db->query("SELECT * FROM module");
+            while ($mod = $db->fetchObject($res))
             {
                 $ret[$mod->name] = $mod;
             }
@@ -70,15 +75,15 @@
         }
 
         /**
-         * @desc Scan the modules path for all modules, check for module changes and do updates on site and system modules
+         * Scan the modules path for all modules, check for module changes and do updates on site and system modules
          */
         public static function setupModules()
         {
-            $current_modules = array();                         // Stores all the modules that are currently in the site
+            $current_modules = array();   // Stores all the modules that are currently in the site
 
             /* Setup system modules */
             $sys_modtype = "system";
-            $sys_modules = self::scanModulesDir(SYSTEM_MODULES_PATH);
+            $sys_modules = self::scanModulesDir(SystemConfig::modulesPath());
             foreach ($sys_modules as $modname => $modpath)
             {
                 if (self::setupModule($modname, $modpath, $sys_modtype))
@@ -89,7 +94,7 @@
 
             /* Setup site modules */
             $site_modtype = "site";
-            $site_modules = self::scanModulesDir(SITE_MODULES_PATH);
+            $site_modules = self::scanModulesDir(SiteConfig::modulesPath());
             foreach ($site_modules as $modname => $modpath)
             {
                 if (self::setupModule($modname, $modpath, $site_modtype))
@@ -103,8 +108,11 @@
         }
 
         /**
-         * @desc Scan a specified modules directory for modules 
+         * Scan a specified modules directory for modules 
+         * 
          * @param The module directory to scan
+         * 
+         * @return Array - An array of all modules in the given directory
          */
         public static function scanModulesDir($dir)
         {
@@ -132,7 +140,8 @@
         }
 
         /**
-         * @desc Load the module data from the module file into the database
+         * Load the module data from the module file into the database
+         * 
          * @param $modname The name of the module to setup
          * @param $modpath Where is the module located
          * @param $modtype Whether it's a site or system module
@@ -166,13 +175,13 @@
                 /* Adding the permissions */
                 if (isset($modinfo['permissions']['permission']) && is_array($modinfo['permissions']['permission']))
                 {
-                    if(!isset($modinfo['permissions']['permission'][0]))
+                    if (!isset($modinfo['permissions']['permission'][0]))
                     {
                         $temp = $modinfo['permissions']['permission'];
                         unset($modinfo['permissions']['permission']);
                         $modinfo['permissions']['permission'] = array($temp);
                     }
-                    
+
                     foreach ($modinfo['permissions']['permission'] as $perm)
                     {
                         $module->addPermission($perm['perm'], $perm['title']);
@@ -188,9 +197,9 @@
                         {
                             $data['permission'] = $url['permission'];
                         }
-                        
-                        if(isset($url['link']))
-                        {                            
+
+                        if (isset($url['link']))
+                        {
                             $link = $url['link'];
                         }
                         else
@@ -207,17 +216,19 @@
         }
 
         /**
-         * @desc Removes from the database all modules not in the current modules list
+         * Removes from the database all modules not in the current modules list
+         * 
          * @param $currentmods A list of current modules
          */
         public static function deleteNullModules($currentmods = array())
         {
-            global $DB;
-            $currentmods = "'" . implode("', '", $currentmods) . "'";
-            $sql = "SELECT name FROM " . self::$modtbl . " WHERE name NOT IN ($currentmods)";
-            $rs = $DB->query($sql);
+            $db = Sweia::getInstance()->getDB();
 
-            while ($modname = $DB->fetchObject($rs))
+            $currentmods = "'" . implode("', '", $currentmods) . "'";
+            $sql = "SELECT name FROM " . JModuleManager::DB_TBL_MODULES . " WHERE name NOT IN ($currentmods)";
+            $rs = $db->query($sql);
+
+            while ($modname = $db->fetchObject($rs))
             {
                 /* Delete all modules that are not in the set of current modules */
                 $mod = new JModule($modname->name);

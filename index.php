@@ -11,6 +11,6 @@
     /**
      * @section Render the theme after the necessary module is finished with its operations 
      */
-    $REGISTRY->renderPage();
+    Sweia::getInstance()->getThemeRegistry()->renderPage();
     exit;
     

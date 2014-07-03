@@ -1,7 +1,7 @@
 <?php
 
     /* Define config module constants */
-    define("CONFIG_URL", BASE_URL . "config/");
+    define("CONFIG_URL", SystemConfig::baseUrl() . "config/");
     define("CONFIG_PATH", JModuleManager::getModulePath("config"));
 
     $url = JPath::urlArgs();
@@ -12,13 +12,15 @@
             break;
     }
 
+    $themeRegistry = Sweia::getInstance()->getThemeRegistry();
+    
     /* Set the site title */
-    $REGISTRY->setSiteTitle(JSmart::getSiteName() . " Configuration");
+    $themeRegistry->setSiteTitle(Utility::getSiteName() . " Configuration");
 
     /* Load the admin site navbar and sidebar */
     $navbar = new Template(CONFIG_PATH . "templates/menus/navbar");
     $navbar->items = config_navbar();
-    $REGISTRY->addContent("header_left", $navbar->parse());
+    $themeRegistry->addContent("header_left", $navbar->parse());
 
 
 

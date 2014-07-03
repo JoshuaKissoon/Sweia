@@ -1,12 +1,12 @@
 <?php
 
     /**
+     * Class that handles pagination throughout the website
+     * 
      * @author Joshua Kissoon
-     * @date 20121211
-     * @desc Class that handles pagination throughout the website
+     * @since 20121211
+     * @updated 20140615
      */
-    require_once CLASSES_PATH . 'URL.php';
-
     class JPager
     {
         /* Pageination variables */
@@ -20,18 +20,14 @@
         private $url = "";   // The URL to add to the pager links
         private $pageno_url_key = "pager_page";   // The Pager class url variable to use
 
-        /**
-         * @desc 
-         * @return
-         */
-
         public function __construct()
         {
             return $this;
         }
 
         /**
-         * @desc Setup the pager query and links
+         *  Setup the pager query and links
+         * 
          * @param $params all parameters are in the $params array containing
          *      -> total_records - the total records to be displayed
          *      -> rows_per_page - the total records to be displayed per page
@@ -46,9 +42,9 @@
 
             $this->total_records = isset($params['total_records']) ? $params['total_records'] : $this->total_records;
             $this->rows_per_page = isset($params['rows_per_page']) ? $params['rows_per_page'] : $this->rows_per_page;
-            $this->current_page = (@$params['current_page'] > 0) ? $params['current_page'] : $this->current_page;
-            $this->delta = (@$params['delta'] > 0) ? $params['delta'] : $this->delta;
-            $this->html_options = is_array(@$params['html_options']) ? $params['html_options'] : array();
+            $this->current_page = (isset($params['current_page']) && ($params['current_page'] > 0)) ? $params['current_page'] : $this->current_page;
+            $this->delta = (isset($params['delta']) && ($params['delta'] > 0)) ? $params['delta'] : $this->delta;
+            $this->html_options = (isset($params['html_options']) && is_array($params['html_options'])) ? $params['html_options'] : array();
             $this->total_records = $params['total_records'];
             $this->pageno_url_key = isset($params['url_var']) ? $params['url_var'] : $this->pageno_url_key;
 
@@ -60,7 +56,7 @@
             }
 
             /* Remove the page number from the URL if it exists */
-            $url = new URL($this->url);
+            $url = new UrlManipulator($this->url);
             $url->removeArg($this->pageno_url_key);
             $this->url = $url->getURL();
 
@@ -70,7 +66,7 @@
         }
 
         /**
-         * @desc Calculates the number of pages of records we will have 
+         * Calculates the number of pages of records we will have 
          */
         private function calculatePages()
         {
@@ -78,7 +74,7 @@
         }
 
         /**
-         * @desc calculate offset based on rows per page and then update the query
+         * Calculate offset based on rows per page and then update the query
          */
         public function getRowOffset()
         {
@@ -95,7 +91,7 @@
         }
 
         /**
-         * @desc Returns the number of rows per page
+         * @return Integer - the number of rows per page
          */
         public function getRowsPerPage()
         {
@@ -103,7 +99,7 @@
         }
 
         /**
-         * @desc Returns the url key for the page number
+         * @return String - the url key for the page number
          */
         public function getPageNoUrlKey()
         {
@@ -111,7 +107,7 @@
         }
 
         /**
-         * @desc This method will build pagination links
+         * Build pagination links
          */
         public function buildLinks()
         {
@@ -133,14 +129,14 @@
                 }
                 $this->links[$i] = "<a href='$this->url&$this->pageno_url_key=$i'>$i</a>";
             }
-            if (valid(@$next))
+            if (isset($next) && valid($next))
             {
                 $this->links["next"] = $next;
             }
         }
 
         /**
-         * @desc Method that generates the html links
+         * Method that generates the html links
          */
         public function getLinks()
         {
@@ -148,7 +144,8 @@
         }
 
         /**
-         * @desc Generates the HTML code for the pagination links
+         * Generates the HTML code for the pagination links
+         * 
          * @return HTML code for the pagination links
          */
         public function getLinksHtmlCode()

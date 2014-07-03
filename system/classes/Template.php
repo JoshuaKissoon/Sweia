@@ -1,9 +1,11 @@
 <?php
 
     /**
+     * The template class that is used to load, set variables and output a template in HTML form
+     * 
      * @author Joshua Kissoon
-     * @date 20120712
-     * @description The template class that is used to load, set variables and output a template
+     * @since 20120712
+     * @updated 20140623
      */
     class Template
     {
@@ -12,7 +14,8 @@
         private $variables = array();
 
         /**
-         * @desc This constructor method takes in the template file, if it's specified, we load the template
+         * This constructor method takes in the template file, if it's specified, we load the template
+         * 
          * @param $template The path to the template file
          */
         function __construct($template = null)
@@ -24,19 +27,16 @@
         }
 
         /**
-         * @desc Load the template file
+         * Load the template file
+         * 
          * @param $template The path to the template file
          */
         public function load($template)
         {
             $template = $template . ".tpl.php";
-            if (!is_file($template))
+            if (!is_file($template) || !is_readable($template))
             {
-                ScreenMessage::setMessage("File not found: $template", "error");
-            }
-            elseif (!is_readable($template))
-            {
-                ScreenMessage::setMessage("Could not access file: $template", "error");
+                throw new InvalidTemplateException("Template file " . $template . " not found or not readable.");
             }
             else
             {
@@ -45,7 +45,8 @@
         }
 
         /**
-         * @desc Implementation of PHP __set construct, sets a variable to our variables array if they try to set it directly
+         * Implementation of PHP __set construct, sets a variable to our variables array if they try to set it directly
+         * 
          * @param $name The name of the variable
          * @param $value The value to store under this name
          */
@@ -56,6 +57,7 @@
 
         /**
          * Set a variable within the template
+         * 
          * @param $name The name of the variable
          * @param $value The value to store under this name
          */
@@ -68,8 +70,9 @@
         }
 
         /**
-         * @desc Passes the variables into the template and get the HTML code
-         * @return The HTML code for the template
+         * Passes the variables into the template and get the HTML code
+         * 
+         * @return String - The HTML code for the template
          */
         public function parse()
         {
@@ -85,20 +88,14 @@
         }
 
         /**
-         * @desc Passes the variables into the template and get the HTML code
+         * Passes the variables into the template and get the HTML code
+         * 
          * @return Outputs the HTML code to the end user
          */
         public function publish()
         {
-            if (!$this->template)
-            {
-                return false;
-            }
-            ob_start();
-            extract($this->variables, EXTR_SKIP);
-            require $this->template;
-            $content = ob_get_clean();
-            print $content;
+            print $this->parse();
         }
+
     }
     

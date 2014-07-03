@@ -1,10 +1,11 @@
 <?php
 
     /**
-     * Class that handles Images
-     * 
+     * Class that handles Image resizing, cropping, etc
+     *
      * @author Joshua Kissoon
-     * @date 20121212
+     * @since 20130808
+     * @updated 20140615
      */
     class Image
     {
@@ -12,7 +13,32 @@
         private $image, $width, $height, $resized_image;
 
         /**
-         * If image filename is passed, Load the image file then get the width and height of the image
+         * Option to scale the image to suit the smaller axis(horiz or vertical), then crop out the edges of the larger axis to get the specified size
+         * 
+         * This option makes sure the image is not skewed, and it also keeps the aspect ration of the image. 
+         * This option may cut out parts of the image.
+         */
+        const OPTION_CROP = "crop";
+
+        /**
+         * Option used to keep the image at the exact size specified, even if this means skewing the image
+         * 
+         * This option may edit the aspect ration of the image
+         */
+        const OPTION_EXACT = "exact";
+
+        /**
+         *  Option to scale the image to suit the vertical size specified keeping the image's aspect ration in tact
+         */
+        const OPTION_PORTRAIT = "portrait";
+
+        /**
+         * Option to scale the image to suit the horizontal size specified keeping the image's aspect ration in tact
+         */
+        const OPTION_LANDSCAPE = "landscape";
+
+        /**
+         * If a filename is passed, load the image file then get the width and height of the image
          * 
          * @param $filename The image to be loaded
          */
@@ -25,7 +51,7 @@
                     return false;
                 }
                 $this->width = imagesx($this->image);
-                $this->height = imagesy($this->image);
+                $this->height = imimagesxagesy($this->image);
             }
         }
 
@@ -36,8 +62,10 @@
          */
         public function loadImage($file)
         {
-            /* Get the extension */
+            /* Get the image extension type */
             $extension = strtolower(strrchr($file, '.'));
+            
+            /* Load the image based on the extension */
             switch ($extension)
             {
                 case '.jpg':
@@ -60,32 +88,28 @@
         /**
          * This is where we call the necessary resize Image function to resize the image
          * 
-         * @param $option This parameter contains which resize option we want, options include:
-         *          - exact - If we want the exact image the exact size specified
-         *          - portrait - Scale the image to suit the vertical size specified
-         *          - landscape - Scale the image to suit the horizontal size specified
-         *          - crop Scale the image to suit the smaller axis(horiz or vertical), then crop out the edges of the larger axis to get the specified size
+         * @param $option Which resize option to use when resizing the image. Either of (OPTION_CROP, OPTION_EXACT, OPTION_LANDSCAPE or OPTION_PORTRAIT)
          */
-        public function resizeImage($new_img_data = array(), $option = "crop")
+        public function resizeImage($new_img_data = array(), $option = Image::OPTION_CROP)
         {
             $new_width = $new_img_data['width'];
             $new_height = $new_img_data['height'];
 
             switch ($option)
             {
-                case 'exact':
+                case Image::OPTION_EXACT:
                     $optimal_width = $new_width;
                     $optimal_height = $new_height;
                     break;
-                case 'portrait':
+                case Image::OPTION_PORTRAIT:
                     $optimal_width = $this->getWidthByFixedHeight($new_height);
                     $optimal_height = $new_height;
                     break;
-                case 'landscape':
+                case Image::OPTION_LANDSCAPE:
                     $optimal_width = $new_width;
                     $optimal_height = $this->getHeightByFixedWidth($new_width);
                     break;
-                case 'crop':
+                case Image::OPTION_CROP:
                     $optionArray = $this->getOptimalCrop($new_width, $new_height);
                     $optimal_width = $optionArray['optimal_width'];
                     $optimal_height = $optionArray['optimal_height'];
@@ -97,7 +121,7 @@
             imagecopyresampled($this->resized_image, $this->image, 0, 0, 0, 0, $optimal_width, $optimal_height, $this->width, $this->height);
 
             /* After resampling the image, crop it if specified */
-            if ($option == 'crop')
+            if ($option == Image::OPTION_CROP)
             {
                 $this->crop($optimal_width, $optimal_height, $new_width, $new_height);
             }
@@ -134,7 +158,8 @@
          * Computes the new width of an image given a fixed height
          * 
          * @param $new_height The required new height of the image
-         * @return The width the image will be given a height
+         * 
+         * @return Integer The width the image will be given a height
          */
         private function getWidthByFixedHeight($new_height)
         {
@@ -147,7 +172,8 @@
          * Computes the new height of an image given a fixed width
          * 
          * @param $new_width The required new width of the image
-         * @return The height the image will be given a width
+         * 
+         * @return Integer - The height the image will be given a width
          */
         private function getHeightByFixedWidth($new_width)
         {
@@ -161,6 +187,8 @@
          * 
          * @param $new_width The preferred width
          * @param $new_height The preferred height
+         * 
+         * @return Array - with the optimal width and height to crop the image to
          */
         private function getOptimalCrop($new_width, $new_height)
         {
@@ -191,20 +219,19 @@
          * 
          * @param $optimal_width
          * @param $optimal_height
+         * 
          * @param $new_width
          * @param $new_height         * 
          */
         private function crop($optimal_width, $optimal_height, $new_width, $new_height)
         {
-            /*
-             * Here we find the center height and center of width to crop out the
-             * edges of the longer side so we can have a square image
-             */
+            /* Find the center height and center of width to crop out the edges of the longer side so we can have a square image */
             $crop_start_x = ( $optimal_width / 2) - ( $new_width / 2 );
             $crop_start_y = ( $optimal_height / 2) - ( $new_height / 2 );
 
             $crop = $this->resized_image;
-            /* Here we start cropping to get the exact requested size */
+            
+            /* Start cropping to get the exact requested size */
             $this->resized_image = imagecreatetruecolor($new_width, $new_height);
             imagecopyresampled($this->resized_image, $crop, 0, 0, $crop_start_x, $crop_start_y, $new_width, $new_height, $new_width, $new_height);
         }
@@ -246,5 +273,6 @@
             /* Remove the image from memory after it has been saved */
             imagedestroy($this->resized_image);
         }
+
     }
     

@@ -1,25 +1,29 @@
 <?php
 
     /**
+     * Class that handles messages that are outputted to the user
+     * 
      * @author Joshua Kissoon
      * @date 20121212
-     * @description Class that handles messages that are outputted to the user
      */
     class ScreenMessage
     {
-        /* Constants */
-
-        public static $MESSAGE_TYPE_INFO = "info";
-        public static $MESSAGE_TYPE_SUCCESS = "success";
-        public static $MESSAGE_TYPE_WARNING = "warning";
-        public static $MESSAGE_TYPE_ERROR = "error";
 
         /**
-         * @desc Saves a message in session to show to the user on the next page load
+         * Message Type Constants 
+         */
+        const MESSAGE_TYPE_INFO = "info";
+        const MESSAGE_TYPE_SUCCESS = "success";
+        const MESSAGE_TYPE_WARNING = "warning";
+        const MESSAGE_TYPE_ERROR = "error";
+
+        /**
+         * Saves a message in session to show to the user on the next page load
+         * 
          * @param $message Message to store
          * @param $type Either info, success, warning or error
          */
-        public static function setMessage($message, $type = 'info')
+        public static function setMessage($message, $type = ScreenMessage::MESSAGE_TYPE_INFO)
         {
             if (!isset($_SESSION['screen_messages']) || !is_array($_SESSION['screen_messages']))
             {
@@ -40,9 +44,10 @@
         }
 
         /**
-         * @desc Add multiple messages at once
+         * Add multiple messages at once
+         * 
          * @param $messages An array of messages to store
-         * @param $type Either info, success, warning or error
+         * @param $itype Either info, success, warning or error
          */
         public static function setMessages($messages, $itype = "info")
         {
@@ -60,8 +65,9 @@
         }
 
         /**
-         * @desc Messages are stored in an array in session, This method grabs, formats and returns these messages
-         * @return An array with the messages that are in session
+         * Messages are stored in an array in session, This method grabs, formats and returns these messages
+         * 
+         * @return Array - messages that are in the session
          */
         public static function getMessages()
         {

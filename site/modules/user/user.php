@@ -4,7 +4,7 @@
     ini_set('display_errors', TRUE);
 
     include 'user.settings.php';
-    include LIBRARIES_PATH . 'recaptcha/recaptchalib.php';
+    include SiteConfig::librariesPath() . 'recaptcha/recaptchalib.php';
 
     if (isset($_POST['submit']))
     {
@@ -18,19 +18,22 @@
                 break;
         }
     }
+    
+    $url = Sweia::getInstance()->getURL();
+    $themeRegistry = Sweia::getInstance()->getThemeRegistry();
 
-    if (isset($URL[1]))
+    if (isset($url[1]))
     {
-        switch ($URL[1])
+        switch ($url[1])
         {
             case "signup":
-                $REGISTRY->addContent("content", user_signup_page());
+                $themeRegistry->addContent("content", user_signup_page());
                 break;
             case "email-verification":
                 user_email_verify($_GET);
                 break;
             case "login":
-                $REGISTRY->addContent("content", user_login_page());
+                $themeRegistry->addContent("content", user_login_page());
                 break;
             case "logout":
                 if (isset($_GET['redirect_to']))
@@ -74,7 +77,7 @@
         $errors = user_signup_form_validate($values);
         if ($errors)
         {
-            ScreenMessage::setMessages($errors, ScreenMessage::$MESSAGE_TYPE_ERROR);
+            ScreenMessage::setMessages($errors, ScreenMessage::MESSAGE_TYPE_ERROR);
             return;
         }
 
@@ -85,26 +88,27 @@
         if ($user->save())
         {
             /* Send email verification email */
-            global $DB;
+            $sweia = Sweia::getInstance();
+            $db = $sweia->getDB();
             $url_code = random_alphanumeric_string(45);
             $args = array("::uid" => $user->uid, "::url_code" => $url_code);
-            $DB->query("INSERT INTO user_email_verification (uid, url_code) VALUES ('::uid', '::url_code')", $args);
+            $db->query("INSERT INTO user_email_verification (uid, url_code) VALUES ('::uid', '::url_code')", $args);
 
             $emailtpl = new Template(USER_MODULE_PATH . "templates/email/verification-email");
             $emailtpl->link = JPath::absoluteUrl("user/email-verification/&code=$url_code&email=$user->email&uid=$user->uid");
 
             $mail = new EMail();
-            $mail->setSubject("Email Verification")->setMessage($emailtpl->parse())->addRecipient($user->email)->setSender(JSmart::variableGet("site_sender_email"));
+            $mail->setSubject("Email Verification")->setMessage($emailtpl->parse())->addRecipient($user->email)->setSender(Utility::variableGet("site_sender_email"));
             $mail->sendMail();
 
             /* redirect this user to the main landing page showing a message to verify email */
-            $message = "Congratulations!! You have successfully signed up for " . JSmart::getSiteName() . ". Please verify your email address and enjoy using the site :).";
-            ScreenMessage::setMessage($message, ScreenMessage::$MESSAGE_TYPE_SUCCESS);
-            redirect_to(BASE_URL);
+            $message = "Congratulations!! You have successfully signed up for " . Utility::getSiteName() . ". Please verify your email address and enjoy using the site :).";
+            ScreenMessage::setMessage($message, ScreenMessage::MESSAGE_TYPE_SUCCESS);
+            System::redirectTo(SystemConfig::baseUrl());
         }
         else
         {
-            ScreenMessage::setMessages("Sorry, we were unable to create your account.", ScreenMessage::$MESSAGE_TYPE_SUCCESS);
+            ScreenMessage::setMessages("Sorry, we were unable to create your account.", ScreenMessage::MESSAGE_TYPE_SUCCESS);
         }
     }
 
@@ -152,27 +156,28 @@
         if (Session::isLoggedIn())
         {
             ScreenMessage::setMessage("You are already Logged In, no verification possible", "warning");
-            redirect_to(BASE_URL);
+            System::redirectTo(SystemConfig::baseUrl());
         }
 
         /* Check if the code in the URL is that of a valid user */
-        global $DB;
+        $sweia = Sweia::getInstance();
+        $db = $sweia->getDB();
         $sql = "SELECT uevid, uid, status FROM user_email_verification WHERE url_code = '::url_code' LIMIT 1";
         $args = array("::url_code" => $_GET['code']);
-        $ver_data = $DB->fetchObject($DB->query($sql, $args));
+        $ver_data = $db->fetchObject($db->query($sql, $args));
         if (!isset($ver_data->uid) || !valid($ver_data->uid) || $ver_data->uid != intval($values['uid']))
         {
             /* Invalid verification code, show error message */
             ScreenMessage::setMessage("Invalid Verification Data", "error");
-            redirect_to(BASE_URL);
+            System::redirectTo(SystemConfig::baseUrl());
         }
 
         /* Check that the user's status is awaiting email verification */
-        $usrstatus = $DB->fetchObject($DB->query("SELECT status FROM user WHERE uid='$ver_data->uid'"));
+        $usrstatus = $db->fetchObject($db->query("SELECT status FROM user WHERE uid='$ver_data->uid'"));
         if ($usrstatus->status != 5 && $ver_data->status != 2)
         {
             ScreenMessage::setMessage("Email verification was completed earlier.", "warning");
-            redirect_to(BASE_URL);
+            System::redirectTo(SystemConfig::baseUrl());
         }
 
         /* If all data was valid, now confirm this user's email address by setting the user to active and login the user */
@@ -180,11 +185,11 @@
         $user->setStatus(1);
 
         $args2 = array("::uevid" => $ver_data->uevid, "::date_verified" => date("Y-m-d H:i:s"));
-        $DB->query("UPDATE user_email_verification SET status='1', date_verified = '::date_verified' WHERE uevid='::uevid'", $args2);
+        $db->query("UPDATE user_email_verification SET status='1', date_verified = '::date_verified' WHERE uevid='::uevid'", $args2);
 
         /* Tell the user they have successfully verified their email address and redirect them to the home page to login */
         ScreenMessage::setMessage("Your email address was successfully verifed, please login to continue. ", "success");
-        redirect_to(BASE_URL);
+        System::redirectTo(SystemConfig::baseUrl());
     }
 
     function user_login_page()
@@ -220,12 +225,12 @@
         {
             /* The user is authenticated, lets log them in */
             Session::loginUser($user);
-            ScreenMessage::setMessage("Logged in Successfully.", ScreenMessage::$MESSAGE_TYPE_SUCCESS);
-            redirect_to(BASE_URL);
+            ScreenMessage::setMessage("Logged in Successfully.", ScreenMessage::MESSAGE_TYPE_SUCCESS);
+            System::redirectTo(SystemConfig::baseUrl());
         }
         else
         {
-            ScreenMessage::setMessages("Invalid email and/or password. Please try again.", ScreenMessage::$MESSAGE_TYPE_WARNING);
+            ScreenMessage::setMessages("Invalid email and/or password. Please try again.", ScreenMessage::MESSAGE_TYPE_WARNING);
         }
     }
 
@@ -236,14 +241,14 @@
     {
         if (!$redirect_url)
         {
-            $redirect_url = BASE_URL;
+            $redirect_url = SystemConfig::baseUrl();
         }
 
         if (Session::isLoggedIn())
         {
             Session::logoutUser();
         }
-        ScreenMessage::setMessage("Logged out Successfully.", ScreenMessage::$MESSAGE_TYPE_SUCCESS);
-        redirect_to(JPath::absoluteUrl($redirect_url));
+        ScreenMessage::setMessage("Logged out Successfully.", ScreenMessage::MESSAGE_TYPE_SUCCESS);
+        System::redirectTo(JPath::absoluteUrl($redirect_url));
     }
     
